@@ -32,6 +32,7 @@ const AdminPaginateArticle = ({ totalCount }: { totalCount: number }) => {
     <>
       <div className="flex flex-col gap-5">
         <ReactPaginate
+          initialPage={pageNumber - 1}
           previousLabel={<GrFormPrevious />}
           nextLabel={<GrFormNext />}
           pageClassName="page-item"

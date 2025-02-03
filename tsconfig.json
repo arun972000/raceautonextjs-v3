@@ -56,6 +56,6 @@
     "app/admin/article/slider/page.tsx",
     "app/admin/article/slider/slider.jsx",
     "app/loader.js"
-, "next-sitemap.config.js", "app/admin/article/breaking/Breaking.jsx"  ],
+, "next-sitemap.config.js", "app/admin/article/breaking/Breaking.jsx", "app/magazine/[title_slug]/FlipBook_v2.jsx"  ],
   "exclude": ["node_modules"]
 }

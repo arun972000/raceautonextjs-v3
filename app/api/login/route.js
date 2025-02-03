@@ -12,6 +12,16 @@ export async function POST(req) {
       `SELECT * FROM users WHERE email = ?`,
       [email]
     );
+    // const [isSubscriber] = await db.execute(
+    //   `SELECT * FROM subscriber_list WHERE email_id = ?`,
+    //   [email]
+    // );
+
+    // if (isSubscriber.length == 0) {
+    //   await db.execute(`INSERT INTO subscriber_list (email_id) VALUES (?)`, [
+    //     email,
+    //   ]);
+    // }
 
     if (verifyEmail.length === 0) {
       return NextResponse.json({ message: "No user found" }, { status: 404 });

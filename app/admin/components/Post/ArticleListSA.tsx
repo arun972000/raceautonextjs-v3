@@ -49,9 +49,8 @@ const ArticleListV2 = ({ page }: { page: string }) => {
   const [smShow, setSmShow] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
 
-  const query = `username=${selectedUsers}&mainCategory=${category_main}&subCategory=${category_sub}&page=${
-    page || 1
-  }`;
+  const query = `username=${selectedUsers}&mainCategory=${category_main}&subCategory=${category_sub}&market=${marketValue}&create
+At=${scheduledAt}&page=${page || 1}`;
 
   const handleRemoveAvailable = async (id: number, type: string) => {
     const toastId = toast.loading("Processing...");
@@ -244,7 +243,7 @@ const ArticleListV2 = ({ page }: { page: string }) => {
       <Link href="/admin/article/create">
         <button className="btn btn-primary my-3">Create</button>
       </Link>
-      {/* <div className="mb-4">
+      <div className="mb-4">
         <Form>
           <Row className="">
             <Col md={2}>
@@ -274,7 +273,7 @@ const ArticleListV2 = ({ page }: { page: string }) => {
                   onChange={(e) => setCategory_main(e.target.value)}
                   required
                 >
-                  <option value="none">None</option>
+                  <option value="">None</option>
                   {mainCategory_array.map((item: any) => (
                     <option key={item.id} value={item.id}>
                       {item.name}
@@ -312,7 +311,7 @@ const ArticleListV2 = ({ page }: { page: string }) => {
                   onChange={(e) => setMarketValue(e.target.value)}
                   required
                 >
-                  <option value="none">None</option>
+                  <option value="">None</option>
                   {marketArray.map((item: any) => (
                     <option key={item.id} value={item.id}>
                       {item.title}
@@ -322,12 +321,11 @@ const ArticleListV2 = ({ page }: { page: string }) => {
               </Form.Group>
             </Col>
 
-
             <Col md={2}>
               <Form.Group controlId="schedule">
                 <Form.Label className="form-label">Date</Form.Label>
                 <Form.Control
-                  type="date"
+                  type="month"
                   name="schedule"
                   value={scheduledAt}
                   onChange={(e) => setScheduledAt(e.target.value)}
@@ -345,9 +343,8 @@ const ArticleListV2 = ({ page }: { page: string }) => {
               </Button>
             </Col>
           </Row>
-
         </Form>
-      </div> */}
+      </div>
       <div className="table-responsive">
         <table className="table table-bordered text-center">
           <thead>
@@ -363,6 +360,7 @@ const ArticleListV2 = ({ page }: { page: string }) => {
             </tr>
           </thead>
           <tbody>
+            {data.length == 0 && <p className="text-muted text-center">No posts available for the selected filter.</p>}
             {data.map((item) => (
               <tr key={item.id}>
                 <th scope="row">{item.id}</th>

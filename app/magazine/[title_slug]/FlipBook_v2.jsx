@@ -42,7 +42,8 @@ function Test() {
   const [pdfloading, setPdfloading] = useState(true);
   const [volume, setVolume] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
+  const [isAutoplay, setIsAutoplay] = useState(false);
+  const autoplayRef = useRef(null);
 
   const pdfData = async () => {
     try {
@@ -54,7 +55,11 @@ function Test() {
       console.log(err);
     }
   };
+  const flipNextPage = () => {
 
+      book.current.pageFlip().flipNext("top");
+      setCurrentPage((prev) => prev + 1);
+  };
 
   const handleLoadSuccess = async(pdfObject) => {
     const totalPages = pdfObject.numPages;
@@ -69,7 +74,26 @@ function Test() {
     setLoadingProgress((loaded / total) * 100); // Calculate loading progress as a percentage
   };
 
+  const startAutoplay = () => {
+    if (!isAutoplay) {
+      setIsAutoplay(true);
+      autoplayRef.current = setInterval(flipNextPage, 2000);
+    }
+  };
 
+  const stopAutoplay = () => {
+    setIsAutoplay(false);
+    clearInterval(autoplayRef.current);
+    autoplayRef.current = null;
+  };
+
+  const toggleAutoplay = () => {
+    if (isAutoplay) {
+      stopAutoplay();
+    } else {
+      startAutoplay();
+    }
+  };
 
   
   // const onFlip = useCallback(() => {
@@ -136,15 +160,25 @@ function Test() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  const frameRef = useRef(null)
 
+  useEffect(()=>{
+    if (currentPage > totalPage) {
+    stopAutoplay()
+    }
+
+  },[currentPage])
 
   return (
     <>
     
-
+    {file && (
+        <iframe ref={frameRef} src={file} style={{ display: 'none' }}></iframe>
+      )}
+      <button onClick={()=>frameRef?.current?.contentWindow.print()}>print</button>
 
     {pdfloading && <div className="d-flex justify-content-center mt-2"><Skeleton height={510} width={360}/></div>}
-   
+   <div style={{position:'absolute', left:0, backgroundColor:'black', width:300, height:500}}>he</div>
       <Document
         file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdf_url}`}
         style={{ width: "100%", aspectRatio: "1.4/1" }}
@@ -246,7 +280,12 @@ function Test() {
             className=""
             size={25}
           />
-
+          <button onClick={toggleAutoplay}>
+        {isAutoplay ? "Stop Autoplay" : "Start Autoplay"}
+      </button>
+      <div>
+        Current Page: {currentPage}/{totalPage}
+      </div>
           {/* {volume ? (
             <IoVolumeMuteSharp
               onClick={() => {

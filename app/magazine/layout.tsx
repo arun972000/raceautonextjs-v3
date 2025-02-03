@@ -1,7 +1,5 @@
-import Navbar from "@/components/Navbar/Navbar";
-import Footer from "@/components/Footer/Footer";
 import BreakingNews from "@/components/BreakingNews/BreakingNews";
-import GreenBar from "@/components/GreenBar/MagazineBar";
+import Navbar from "@/components/Navbar/Navbar";
 
 export default function MagazineLayout({
   children,
@@ -12,7 +10,7 @@ export default function MagazineLayout({
     <>
       <BreakingNews />
       <Navbar />
-     {children}
+      {children}
     </>
   );
 }

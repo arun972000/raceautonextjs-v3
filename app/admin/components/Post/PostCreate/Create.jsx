@@ -4,8 +4,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 "use client";
 import {
-  Key,
-  SetStateAction,
   useEffect,
   useMemo,
   useRef,
@@ -25,6 +23,7 @@ import { jwtDecode } from "jwt-decode";
 export default function AdminPost({ token }) {
   const decoded = jwtDecode(token);
   const [title, setTitle] = useState("");
+  const router = useRouter()
   const [slug, setSlug] = useState("");
   const [content, setContent] = useState("");
   const [summary, setSummary] = useState("");
@@ -337,6 +336,9 @@ export default function AdminPost({ token }) {
         isLoading: false,
         closeOnClick: true,
       });
+      setTimeout(() => {
+        router.push(`/post/${slug}`)
+      }, 2000);
 
     } catch (err) {
       // Change the toast to error message
@@ -353,8 +355,6 @@ export default function AdminPost({ token }) {
       setIsSubmitting(false);
     }
   };
-
-
 
   useEffect(() => {
     categoryApi();

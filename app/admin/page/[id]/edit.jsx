@@ -13,7 +13,7 @@ import Link from "next/link";
 const AdminPageEdit = () => {
   const { id } = useParams();
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState("")
   const [keywords, setKeywords] = useState("");
   const [parentLink, setParentLink] = useState(7);
   const [location, setLocation] = useState("top menu");

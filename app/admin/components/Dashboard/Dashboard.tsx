@@ -20,17 +20,18 @@ export type viewsCardType = {
 
 const Dashboard = async () => {
   const cardResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/dashboard/card-numbers`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/dashboard/card-numbers`,
+    { cache: "no-store" }
   );
 
   const cardData = await cardResponse.json();
 
-  const viewsCardResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/dashboard/most-views`,
-    { cache: "no-store" }
-  );
+  // const viewsCardResponse = await fetch(
+  //   `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/dashboard/most-views`,
+  //   { cache: "no-store" }
+  // );
 
-  const viewsCardData = await viewsCardResponse.json();
+  // const viewsCardData = await viewsCardResponse.json();
 
   return (
     <div className="row mt-4">

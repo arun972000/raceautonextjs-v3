@@ -26,9 +26,6 @@ const DashboardCard = ({
       <Link href={url}>
         <div
           className="card mb-3 border-0 shadow dashboard__card"
-          style={{
-            background: bgcolor,
-          }}
         >
           <div className="d-flex justify-content-between card-body">
             <div className="p-4">
