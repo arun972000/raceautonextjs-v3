@@ -13,6 +13,7 @@ const FeaturedArticles = () => {
 
     const [data, setData] = useState([]);
     const [orderValues, setOrderValues] = useState({});
+    const [selectedOption, setSelectedOption] = useState(1);
 
     const months = [
         "January",
@@ -104,6 +105,17 @@ const FeaturedArticles = () => {
         }
     };
 
+    const sliderApi = async () => {
+        try {
+            const res = await axios.get(
+                `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/post/slider`,
+            );
+            setSelectedOption(res.data[0].slider_type);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     const handleAddAvailable = async (id, type) => {
         const toastId = toast.loading("Processing...");
         try {
@@ -134,10 +146,12 @@ const FeaturedArticles = () => {
 
 
     useEffect(() => {
-        handlePostType()
+        handlePostType();
+        sliderApi();
     }, [])
     return (
         <>
+        <p className="mt-3">Note: Maximum Feature Card count is <span>{selectedOption == 1 ? '4' : selectedOption == 2 ? '5' : selectedOption == 3 ? '2' : '3'}</span></p>
             <div className="container-fluid mt-4">
                 <Table className="text-center">
                     <thead>

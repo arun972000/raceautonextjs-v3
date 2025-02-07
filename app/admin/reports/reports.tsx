@@ -113,7 +113,7 @@ const ReportsForm = () => {
           <Form.Group controlId="formSummary" className="mb-3">
             <Form.Label>Summary</Form.Label>
             <Form.Control
-              type="text"
+               as="textarea"
               placeholder="Enter summary"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}

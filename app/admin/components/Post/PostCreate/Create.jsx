@@ -337,7 +337,7 @@ export default function AdminPost({ token }) {
         closeOnClick: true,
       });
       setTimeout(() => {
-        router.push(`/post/${slug}`)
+        router.push(`/post/${slug.trim().replace(/\s+/g, " ").toLowerCase().split(" ").join("-")}`)
       }, 2000);
 
     } catch (err) {
@@ -477,6 +477,7 @@ export default function AdminPost({ token }) {
               </div>
               <Form.Group className="mb-4" controlId="content">
                 <Form.Label className="form-label">Content</Form.Label>
+                <p className="text-muted">Note: Set the image property to 'width: 100%; height: auto;' for proper display within the content.</p>
                 <Editor
                   id="raceautoindia"
                   apiKey="3fr142nwyhd2jop9d509ekq6i2ks2u6dmrbgm8c74gu5xrml"

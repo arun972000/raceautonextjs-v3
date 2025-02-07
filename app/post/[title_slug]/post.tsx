@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import PostSlider from "./Slider";
 import Link from "next/link";
@@ -31,6 +32,10 @@ export type postType = {
   image_mid: string;
   tag: TagType[];
   keywords: [];
+  main_category_color: string;
+  sub_category_color: string;
+  main_category: string;
+  sub_category: string;
 };
 
 async function incrementPageView(pageUrl: string) {
@@ -94,6 +99,30 @@ const Post = async ({ title }: { title: string }) => {
           <h1>
             <b>{post.title}</b>
           </h1>
+          <div className="my-2">
+            <span
+              style={{
+                backgroundColor: post.main_category_color,
+                borderRadius: 30,
+                fontSize: "small",
+              }}
+              className="py-1 px-2 me-1"
+            >
+              {post.main_category}
+            </span>{" "}
+            {"|"}
+            <span
+              style={{
+                backgroundColor: post.sub_category_color,
+                borderRadius: 30,
+                fontSize: "small",
+              }}
+              className="ms-2 py-1 px-2"
+            >
+              {post.sub_category}
+            </span>
+          </div>
+
           <p className="post-summary">{post.summary}</p>
           <small className="">Date: {formatDate(post.created_at)} </small>
           <SocialButton title_slug={title} />
@@ -119,11 +148,11 @@ const Post = async ({ title }: { title: string }) => {
           style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
         >
           <a href="https://raceinnovations.in/contact/" target="_blank">
-          <Image
-            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${adBottomData[0].ad_code_728}`}
-            alt="index top"
-            fill
-          />
+            <Image
+              src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${adBottomData[0].ad_code_728}`}
+              alt="index top"
+              fill
+            />
           </a>
         </div>
       </div>

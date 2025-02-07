@@ -111,6 +111,8 @@ const RecommendedArticles = () => {
     }, [])
     return (
         <>
+            <p>Currently Recommended news count - <span className={data.length > 5 ? 'text-danger' : 'text-success'}><b>{data.length}</b></span>  {data.length > 5 && <span className="text-warning" style={{fontSize:'small'}}> (Note: Maximum limit of recommended news count - 5)</span>}</p>
+           
             <div className="container-fluid mt-4">
                 <Table className="text-center">
                     <thead>
