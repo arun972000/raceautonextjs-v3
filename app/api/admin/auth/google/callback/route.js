@@ -94,7 +94,7 @@ export async function GET(req) {
     }
 
     // Create a redirect URL with a timestamp query parameter to force a full reload.
-    const redirectUrl = new URL(`/?verified=true`, req.url);
+    const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}?verified=true`, req.url);
 
     const response = NextResponse.redirect(redirectUrl);
 
