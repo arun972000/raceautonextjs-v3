@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
+import { Row, Col, Form, Button, Card } from "react-bootstrap";
 import emailjs from "@emailjs/browser";
 
 function HelpSupport() {

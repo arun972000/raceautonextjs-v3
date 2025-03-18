@@ -24,6 +24,7 @@ export default function PostSlider({ images, title }: SliderType) {
         autoplay={{
           delay: 2000,
           disableOnInteraction: false,
+          pauseOnMouseEnter: true
         }}
         pagination={{
           dynamicBullets: true,

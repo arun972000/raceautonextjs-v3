@@ -56,6 +56,6 @@
     "app/admin/article/slider/page.tsx",
     "app/admin/article/slider/slider.jsx",
     "app/loader.js"
-, "next-sitemap.config.js", "app/admin/article/breaking/Breaking.jsx", "app/magazine/[title_slug]/FlipBook_v2.jsx"  ],
+, "next-sitemap.config.js", "app/admin/article/breaking/Breaking.jsx", "app/magazine/[title_slug]/FlipBook_v2.jsx", "components/Sidebar/ExclusiveNewsList.jsx", "app/test/components/OTPLogin.jsx", "app/api/admin/subscription/subscribers/[id]/route.js", "app/test/components/ImageNode.jsx", "app/test/components/TextEditor.tsx", "app/test/components/ExampleTheme.jsx", "app/login/GoogleLogin.jsx", "app/api/admin/auth/google/callback/route.js", "app/subscription/component/subscriptionCard.jsx", "utils/TransactionalEmail.js", "app/api/admin/transactional-email/route.js", "utils/Mailer.js"  ],
   "exclude": ["node_modules"]
 }

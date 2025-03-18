@@ -18,7 +18,7 @@ const RecommendedPost = ({ item }: { item: RecommendedType }) => {
                 >
                   <Image
                     crossOrigin="anonymous"
-                    src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_small}`}
+                    src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_mid}`}
                     alt={item.title}
                     fill
                     priority

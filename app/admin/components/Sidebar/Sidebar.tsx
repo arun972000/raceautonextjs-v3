@@ -33,7 +33,11 @@ import { AiOutlineGlobal } from "react-icons/ai";
 import { FaUsersGear } from "react-icons/fa6";
 import { GrArticle } from "react-icons/gr";
 import { TfiLayoutSlider } from "react-icons/tfi";
-import { TbCategoryMinus, TbCategoryPlus, TbReportAnalytics } from "react-icons/tb";
+import {
+  TbCategoryMinus,
+  TbCategoryPlus,
+  TbReportAnalytics,
+} from "react-icons/tb";
 import Image from "next/image";
 const AdminSidebar = async () => {
   const logoRes = await fetch(
@@ -122,6 +126,7 @@ const AdminSidebar = async () => {
               <span className="ms-1 d-none d-sm-inline">Pages</span>
             </Link>
           </li>
+          
           <li>
             <Link
               href="/admin/subscription"
@@ -131,11 +136,44 @@ const AdminSidebar = async () => {
               <span className="ms-1 d-none d-sm-inline">Subscription</span>
             </Link>
           </li>
-          <li>
+          <li style={{ width: "100%" }}>
             <Link
-              href="/admin/reports"
-              className="nav-link px-0 align-middle"
+              href="#subscribemenu"
+              data-bs-toggle="collapse"
+              className="nav-link px-0 align-middle d-flex align-items-center"
             >
+              <MdPriceChange />{" "}
+              <span className="ms-1 d-none d-sm-inline">Subscription</span>{" "}
+              <span className="d-none d-sm-inline ms-auto">
+                <FaAngleDown />
+              </span>
+            </Link>
+            <ul
+              className="collapse nav flex-column ms-1"
+              id="subscribemenu"
+              data-bs-parent="#menu"
+            >
+              <li className="w-100">
+                <Link href="/admin/subscription" className="nav-link px-0">
+                  <MdEventAvailable className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary text-primary">
+                    Plan
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/subscription/subscribers" className="nav-link px-0">
+                  <FaSitemap className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary">
+                    Subscribers
+                  </span>
+                </Link>
+              </li>
+              
+            </ul>
+          </li>
+          <li>
+            <Link href="/admin/reports" className="nav-link px-0 align-middle">
               <TbReportAnalytics />{" "}
               <span className="ms-1 d-none d-sm-inline">Reports</span>
             </Link>
@@ -228,10 +266,7 @@ const AdminSidebar = async () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/admin/article/breaking"
-                  className="nav-link px-0"
-                >
+                <Link href="/admin/article/breaking" className="nav-link px-0">
                   <PiNewspaperClippingDuotone className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary">
                     Breaking

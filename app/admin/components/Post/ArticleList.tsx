@@ -135,7 +135,7 @@ const ArticleList = async ({ page }: { page: string }) => {
                           color: "white",
                         }}
                       >
-                        Recommended
+                        Exclusive
                       </span>
                     )}
                   </div>

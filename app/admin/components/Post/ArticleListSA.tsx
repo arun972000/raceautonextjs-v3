@@ -521,7 +521,7 @@ At=${scheduledAt}&page=${page || 1}`;
                             handleRemoveAvailable(item.id, "is_recommended")
                           }
                         >
-                          <FaCheck color="green" /> Recommended
+                          <FaCheck color="green" /> Exclusive
                         </Dropdown.Item>
                       )}
                       {item.is_recommended == 0 && (
@@ -530,7 +530,7 @@ At=${scheduledAt}&page=${page || 1}`;
                             handleAddAvailable(item.id, "is_recommended")
                           }
                         >
-                          <MdClose size={20} color="red" /> Recommended
+                          <MdClose size={20} color="red" /> Exclusive
                         </Dropdown.Item>
                       )}
                       {item.is_slider == 1 && (

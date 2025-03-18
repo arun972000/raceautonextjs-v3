@@ -14,6 +14,7 @@ export type User = {
   avatar: string;
   email: string;
   role: string;
+  subscription: number;
 };
 
 const UserTable = () => {
@@ -100,6 +101,7 @@ const UserTable = () => {
                 <th>Avatar</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Subscription</th>
                 {/* <th>Date</th> */}
                 <th>Options</th>
               </tr>
@@ -122,6 +124,15 @@ const UserTable = () => {
                   </td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
+                  <td>
+                    {user.subscription == 1
+                      ? "Silver"
+                      : user.subscription == 2
+                      ? "Gold"
+                      : user.subscription == 3
+                      ? "Platinum"
+                      : "Bronze"}
+                  </td>
                   {/* <td>{user.created_date}</td> */}
                   <td>
                     <Link href={`/admin/user/${user.id}`}>

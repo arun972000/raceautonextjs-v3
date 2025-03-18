@@ -36,6 +36,7 @@ export type postType = {
   sub_category_color: string;
   main_category: string;
   sub_category: string;
+  is_recommended: any;
 };
 
 async function incrementPageView(pageUrl: string) {
@@ -52,11 +53,12 @@ async function incrementPageView(pageUrl: string) {
   }
 }
 
-const Post = async ({ title }: { title: string }) => {
+const Post = async ({ title, is_recommended }: { title: string;
+  is_recommended: any; }) => {
   await incrementPageView(title);
 
   const cookieStore = await cookies();
-  const token: any = cookieStore.get("authToken");
+  const token = cookieStore.get("authToken");
 
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${title}`
@@ -77,6 +79,7 @@ const Post = async ({ title }: { title: string }) => {
 
   return (
     <>
+
       <div className="col-lg-8 mt-3">
         <div
           style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
@@ -135,7 +138,7 @@ const Post = async ({ title }: { title: string }) => {
         >
           {post.image_description}
         </p>
-        <PostContent content={post.content} />
+        <PostContent content={post.content} token={token?.value} is_recommended={is_recommended}/>
         {post.tag.map((item) => (
           <Link href={`/tag/${item.tag_slug}`} key={item.id}>
             <span className="badge badge-primary mr-3" style={{ color: "red" }}>

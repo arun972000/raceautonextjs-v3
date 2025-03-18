@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     const title_slug = pathname.split("/").pop();
 
     const [results] = await db.execute<RowDataPacket[]>(
-      `SELECT id, title, image_big, image_default, image_mid, summary, image_description, keywords, content, category_id, created_at FROM posts WHERE title_slug = ?`,
+      `SELECT id, title, image_big, image_default, image_mid, summary, is_recommended, image_description, keywords, content, category_id, created_at FROM posts WHERE title_slug = ?`,
       [title_slug]
     );
 

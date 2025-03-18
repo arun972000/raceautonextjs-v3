@@ -83,7 +83,7 @@ const MagazineAd_2 = () => {
                   <div
                     style={{
                       position: "relative",
-                      aspectRatio: "1/1",
+                      aspectRatio: "1/1.414",
                       width: "100%",
                     }}
                   >

@@ -217,7 +217,7 @@ const FeaturedArticles = () => {
                                             padding: 5,
                                             fontWeight: 700,
                                             color: "white",
-                                        }}>Recommended</span>}
+                                        }}>Exclusive</span>}
                                     </div>
                                 </td>
                                 <td>
@@ -309,7 +309,7 @@ const FeaturedArticles = () => {
                                                         handleRemoveAvailable(item.id, "is_recommended")
                                                     }
                                                 >
-                                                    <FaCheck color="green" /> Recommended
+                                                    <FaCheck color="green" /> Exclusive
                                                 </Dropdown.Item>
                                             )}
                                             {item.is_recommended == 0 && (
@@ -318,7 +318,7 @@ const FeaturedArticles = () => {
                                                         handleAddAvailable(item.id, "is_recommended")
                                                     }
                                                 >
-                                                    <MdClose size={20} color="red" /> Recommended
+                                                    <MdClose size={20} color="red" /> Exclusive
                                                 </Dropdown.Item>
                                             )}
                                             {item.is_slider == 1 && (

@@ -12,6 +12,7 @@ type Feature = {
   title: string;
   title_slug: string;
   image_big: string;
+  image_default:string;
   created_at: any;
   featured_order: number;
   summary: string;
@@ -51,7 +52,7 @@ const HomeBanner_3 = async () => {
       <div className={`${styles.pc_homebanner} row mb-4 mt-4`}>
         <div className="col-lg-4">
           <div className="card" style={{ borderRadius: 0, height: "100%" }}>
-            <div
+          <Link href={`/post/${recommendedData[0].title_slug}`}><div
               className={`${styles.banner__hover_v3}`}
               style={{
                 position: "relative",
@@ -76,6 +77,7 @@ const HomeBanner_3 = async () => {
                 style={{ objectFit: "cover" }} // Ensure the image covers the card
               />
             </div>
+            </Link>
             <div
               className="card-body"
               style={{
@@ -84,10 +86,10 @@ const HomeBanner_3 = async () => {
               }}
             >
               <h4 className="card-title mt-2">{recommendedData[0].title}</h4>
-              <p className="mt-3">{recommendedData[0].summary}</p>
-              <Link href={`/post/${recommendedData[0].title_slug}`}>
+              <p className="mt-1">{recommendedData[0].summary}</p>
+              {/* <Link href={`/post/${recommendedData[0].title_slug}`}>
                 <button className="btn btn-primary mt-3">Read more</button>
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
@@ -96,7 +98,7 @@ const HomeBanner_3 = async () => {
             <div className="col-12">
               <Slider_3 />
             </div>
-            {FeatureCardData1}
+            {/* {FeatureCardData1} */}
           </div>
         </div>
       </div>

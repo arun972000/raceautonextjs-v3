@@ -1,3 +1,4 @@
+
 import MainComponent from "@/components/HomeCategories/MainComponent";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import BreakingNews from "@/components/BreakingNews/BreakingNews";
@@ -14,6 +15,7 @@ import HomeBanner from "@/components/Homebanner/HomeBanner";
 import HomeBanner_2 from "@/components/Homebanner/Homebanner-2/HomeBanner-2";
 import LinkedinPage from "@/components/LinkedinForm/LinkedinPage";
 import Services from "@/components/Servicesbar/ServiceBar";
+import RefreshOnVerified from "./Verifies";
 
 const Home = async () => {
   const sliderRes = await fetch(
@@ -25,6 +27,8 @@ const Home = async () => {
   const sliderType = slide[0].slider_type;
   return (
     <>
+      {/* This component will check for "verified" query param and reload if present */}
+      <RefreshOnVerified />
       <div>
         <BreakingNews />
         <Navbar />
@@ -53,7 +57,7 @@ const Home = async () => {
             </div>
             <LinkedinPage />
           </div>
-          <hr/>
+          <hr />
           <Services />
         </div>
         <Footer />

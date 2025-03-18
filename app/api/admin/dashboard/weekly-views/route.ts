@@ -7,7 +7,7 @@ export async function GET() {
     const [results] = await db.execute(
       `SELECT DATE_FORMAT(created_at, '%Y-%m-%d') AS post_date, SUM(pageviews) AS total_pageviews 
        FROM posts 
-       WHERE created_at >= CURDATE() - INTERVAL 7 DAY 
+       WHERE created_at >= CURDATE() - INTERVAL 30 DAY 
        GROUP BY post_date 
        ORDER BY post_date ASC`
     );

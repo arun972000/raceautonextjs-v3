@@ -9,6 +9,9 @@ import './signup.css'
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { auth } from "@/firebase"; // Import Firebase auth
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import GoogleLoginButton from "../login/GoogleLogin";
 
 // Validation schema for form fields with strong password
 const validationSchema = Yup.object().shape({
@@ -35,9 +38,9 @@ const SignupForm = () => {
     try {
       setError(""); // Clear previous error messages
       await axios.post("/api/register", values);
-      toast.success("User Registered Successfully", {
+      toast.info("Verification email sent! Please check your inbox.", {
         position: "top-right",
-        autoClose: 2000,
+        autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -45,6 +48,12 @@ const SignupForm = () => {
         progress: undefined,
         theme: "light",
       });
+
+      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+
+      await sendEmailVerification(user);
+
       router.push('/login')
     } catch (error) {
       if (error.response) {
@@ -70,7 +79,7 @@ const SignupForm = () => {
           <div className="signup-box p-4">
             <div className="text-center mb-4">
               <Image src="/images/black logo with text.png" alt="Logo" width={60} height={70} />
-              <h2 className="mt-2">Sign Up</h2>
+              {/* <h2 className="mt-2">Sign Up</h2> */}
             </div>
             {error && <Alert variant="danger">{error}</Alert>}
             <Formik
@@ -131,6 +140,8 @@ const SignupForm = () => {
                   <Button variant="primary" type="submit" disabled={isSubmitting} className="w-100">
                     {isSubmitting ? "Signing up..." : "Sign Up"}
                   </Button>
+                  <p className="text-center text-muted mt-2 mb-1 p-0 m-0">or</p>
+                  <div className="d-flex justify-content-center mb-3"><GoogleLoginButton/></div>
                   <div className="text-center mt-3">
                     <span>Already have an account? </span><Link href="/login" className="text-primary">Login</Link>
                   </div>

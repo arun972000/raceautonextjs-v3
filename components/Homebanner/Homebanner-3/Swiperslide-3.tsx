@@ -15,6 +15,7 @@ type SliderType = {
   title: string;
   title_slug: string;
   image_big: string;
+  image_default:string;
   slider_order: number;
 };
 
@@ -52,7 +53,7 @@ export default function SwiperSlide_3({
         <SwiperSlide key={item.id}>
           <Link href={`/post/${item.title_slug}`}>
             <ImageWithPlaceholder
-              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_big}
+              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
               alt={item.title}
             />
             <div
@@ -87,7 +88,7 @@ function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div style={{ width: "100%", position: "relative", aspectRatio: "2.73/1" }}>
+    <div style={{ width: "100%", position: "relative", aspectRatio: "16/9" }}>
       {loading && (
         <div
           style={{

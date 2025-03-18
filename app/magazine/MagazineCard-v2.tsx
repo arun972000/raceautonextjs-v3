@@ -15,7 +15,7 @@ const MagazineCard_v2 = ({ item }: { item: magazineCardType }) => {
         className={styles.magazinecardcontainer}
           style={{
             position: "relative",
-            aspectRatio: "1/1",
+            aspectRatio: "1/1.414",
             width: "100%",
           }}
         >

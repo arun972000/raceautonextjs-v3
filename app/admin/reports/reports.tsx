@@ -12,6 +12,7 @@ const ReportsForm = () => {
   const [summary, setSummary] = useState("");
   const [preview, setPreview] = useState("");
   const [imageUrl, setImageUrl] = useState<any>([]);
+  const [url, setUrl] = useState("");
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,7 +47,7 @@ const ReportsForm = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (!title || !summary) {
+    if (!title || !summary || !url) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -55,13 +56,11 @@ const ReportsForm = () => {
 
     formData.append("title", title);
     formData.append("summary", summary);
-    formData.append("image_url", imageUrl);
+    // formData.append("image_url", imageUrl);
+    formData.append("url", url)
 
     try {
-      await axios.put(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/reports`,
-        formData
-      );
+      await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/reports`, formData);
       toast.success("Updated successfully!", {
         position: "top-right",
         autoClose: 2000,
@@ -113,13 +112,20 @@ const ReportsForm = () => {
           <Form.Group controlId="formSummary" className="mb-3">
             <Form.Label>Summary</Form.Label>
             <Form.Control
-               as="textarea"
+              as="textarea"
               placeholder="Enter summary"
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
               required
             />
           </Form.Group>
+          <Form.Control
+            type="text"
+            placeholder="Enter Youtube"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+          />
           {imageUrl && (
             <Image
               src={preview}

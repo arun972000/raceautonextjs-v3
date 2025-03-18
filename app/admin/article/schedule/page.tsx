@@ -140,7 +140,7 @@ const page = async () => {
                           color: "white",
                         }}
                       >
-                        Recommended
+                        Exclusive
                       </span>
                     )}
                   </div>

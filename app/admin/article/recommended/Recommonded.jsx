@@ -111,7 +111,7 @@ const RecommendedArticles = () => {
     }, [])
     return (
         <>
-            <p>Currently Recommended news count - <span className={data.length > 5 ? 'text-danger' : 'text-success'}><b>{data.length}</b></span>  {data.length > 5 && <span className="text-warning" style={{fontSize:'small'}}> (Note: Maximum limit of recommended news count - 5)</span>}</p>
+                
            
             <div className="container-fluid mt-4">
                 <Table className="text-center">
@@ -178,7 +178,7 @@ const RecommendedArticles = () => {
                                             padding: 5,
                                             fontWeight: 700,
                                             color: "white",
-                                        }}>Recommended</span>}
+                                        }}>Exclusive</span>}
                                     </div>
                                 </td>
                                 <td>
@@ -261,7 +261,7 @@ const RecommendedArticles = () => {
                                                         handleRemoveAvailable(item.id, "is_recommended")
                                                     }
                                                 >
-                                                    <FaCheck color="green" /> Recommended
+                                                    <FaCheck color="green" /> Exclusive
                                                 </Dropdown.Item>
                                             )}
                                             {item.is_recommended == 0 && (
@@ -270,7 +270,7 @@ const RecommendedArticles = () => {
                                                         handleAddAvailable(item.id, "is_recommended")
                                                     }
                                                 >
-                                                    <MdClose size={20} color="red" /> Recommended
+                                                    <MdClose size={20} color="red" /> Exclusive
                                                 </Dropdown.Item>
                                             )}
                                             {item.is_slider == 1 && (

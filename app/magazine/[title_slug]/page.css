@@ -1,4 +1,4 @@
-* {
+/* * {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -20,5 +20,9 @@
   display: flex;
   justify-content: center;
 }
+ */
 
+ .magazine-page{
+  height: 100vh;
+ }
 

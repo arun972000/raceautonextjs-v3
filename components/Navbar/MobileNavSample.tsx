@@ -11,6 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ThemeToggle from "../NextThemes";
 import SearchBarServer from "../SearchBar/SearchBarServer";
+import LoginNavButton from "../Navbuttons/LoginNavButton";
 
 export default function MobileNavbarSample({
   Main_Category,
@@ -43,6 +44,7 @@ export default function MobileNavbarSample({
         </Link>
         <ThemeToggle />
         <SearchBarServer />
+        <LoginNavButton/>
         <button
           onClick={toggleMenu}
           className="hamburger"

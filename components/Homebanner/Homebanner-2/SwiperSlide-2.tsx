@@ -9,13 +9,13 @@ import Image from "next/image";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
 import "../HomeSwiper.css";
-import { formatDate } from "@/components/Time";
 
 type SliderType = {
   id: number;
   title: string;
   title_slug: string;
   image_big: string;
+  image_default:string;
   slider_order: number;
   summary: string;
   created_at: any;
@@ -53,7 +53,7 @@ export default function SwiperSilde_2({ slides }: { slides: SliderType[] }) {
             <div className="row g-0" >
               <div className="col-lg-8">
                 <ImageWithPlaceholder
-                  src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_big}
+                  src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
                   alt={item.title}
                 />
               </div>
@@ -82,7 +82,7 @@ function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div style={{ width: "100%", position: "relative", aspectRatio: "2.03/1" }}>
+    <div style={{ width: "100%", position: "relative", aspectRatio: "16/9" }}>
       {loading && (
         <div
           style={{

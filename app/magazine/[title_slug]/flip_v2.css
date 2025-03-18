@@ -1,0 +1,108 @@
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media screen and (max-width: 480px) {
+  .react-pdf__Page {
+    width: 360px;
+    height: auto;
+  }
+
+  .react-pdf__Page__canvas {
+    height: auto !important;
+    width: 360px !important;
+  }
+
+  .react-pdf__Document {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (min-width: 481px) {
+  .react-pdf__Page {
+    width: 460px;
+    height: auto;
+  }
+
+  .react-pdf__Page__canvas {
+    height: auto !important;
+    width: 460px !important;
+  }
+
+  .react-pdf__Document {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .magazine-slider {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1250px) and (max-width: 1500px) {
+  .magazine-slider {
+    /* position: 'absolute', minWidth:150, width:200, maxWidth: 150, height: 350 */
+    position: absolute;
+    left: 0;
+    margin-left: 5px;
+    margin-top: 5px;
+    min-width: 175px;
+    width: 250px;
+    max-width: 175px;
+    height: 400px;
+  }
+}
+
+/* style={{ position: 'absolute', left: 0, minWidth:200, width:300, maxWidth: 300, height: 500 }} */
+
+@media screen and (min-width: 1500px) {
+  .magazine-slider {
+    /* position: 'absolute', minWidth:150, width:200, maxWidth: 150, height: 350 */
+    position: absolute;
+    left: 0;
+    margin-left: 5px;
+    margin-top: 5px;
+    min-width: 200px;
+    width: 300px;
+    max-width: 300px;
+    height: 500px;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .magazine-ad {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1250px) and (max-width: 1500px) {
+  .magazine-ad {
+    /* position: 'absolute', minWidth:150, width:200, maxWidth: 150, height: 350 */
+    position: absolute;
+    top: 1px;
+    right: 0;
+    width: 250px;
+    height: 250px;
+  }
+}
+
+/* style={{ position: 'absolute', left: 0, minWidth:200, width:300, maxWidth: 300, height: 500 }} */
+
+@media screen and (min-width: 1500px) {
+  .magazine-ad {
+    /* position: 'absolute', minWidth:150, width:200, maxWidth: 150, height: 350 */
+    position: absolute;
+    top: 1px;
+    right: 0;
+    min-width: 100px;
+    width: 300px;
+    max-width: 300px;
+    height: 300px;
+  }
+}

@@ -32,7 +32,6 @@ const MagazineCard_v2 = ({ item }: { item: magazineCardType }) => {
         </Link>
         <Card.Body>
           <Card.Title>{item.title}</Card.Title>
-          <Card.Text></Card.Text>
         </Card.Body>
       </Card>
     </div>

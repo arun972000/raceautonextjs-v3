@@ -1,7 +1,6 @@
 "use client";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -26,7 +25,7 @@ const ProfileButton = ({ token }: { token: string }) => {
         progress: undefined,
         theme: "light",
       });
-      router.refresh();
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }

@@ -1,25 +1,25 @@
 .image-container {
-    overflow: hidden;
-    width: 100%;
-    position: relative;
-    aspect-ratio: 16/9;
-  }
-  
-  .varient-image {
-    transition: transform 0.5s;
-    object-fit: "cover";
-    border-radius: 0;
-  }
-  
-  .varient-image:hover {
-    transform: scale(1.1);
-    overflow: hidden;
-  }
-  
-  .market-heading:hover{
-    color:red;
-  }
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  aspect-ratio: 16/9;
+}
 
-  .market-title:hover{
-    color:rgb(61, 61, 255);
-  }
+.varient-image {
+  transition: transform 0.5s;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.varient-image:hover {
+  transform: scale(1.1);
+  overflow: hidden;
+}
+
+.market-heading:hover {
+  color: red;
+}
+
+.market-title:hover {
+  color: rgb(61, 61, 255);
+}

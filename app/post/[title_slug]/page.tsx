@@ -1,6 +1,8 @@
 import React from "react";
 import Post, { postType } from "./post";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import ContentComponent from "./SubscribedModel";
+import { cookies } from "next/headers";
 
 export async function generateMetadata({
   params,
@@ -10,7 +12,7 @@ export async function generateMetadata({
   const { title_slug } = params;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${title_slug}`
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${title_slug}`,{cache:'no-store'}
   );
   const data: postType[] = await res.json();
 
@@ -51,18 +53,25 @@ export async function generateMetadata({
   };
 }
 
-const PostPage = ({
+const PostPage = async ({
   params,
 }: {
   params: {
     title_slug: string;
   };
 }) => {
+  const cookieStore = await cookies();
+  const token: any = cookieStore.get("authToken");
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${params.title_slug}`,{cache:'no-store'}
+  );
+  const data: postType[] = await res.json();
   return (
     <>
+      {/* <ContentComponent token={token?.value} is_recommended={data[0].is_recommended}/> */}
       <div className="container">
         <div className={`row`}>
-          <Post title={params.title_slug} />
+          <Post title={params.title_slug} is_recommended={data[0].is_recommended}/>
           <Sidebar />
         </div>
       </div>

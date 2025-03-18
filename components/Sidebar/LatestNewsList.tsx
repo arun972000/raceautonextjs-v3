@@ -8,12 +8,12 @@ import LatestNews from "./LatestNews"; // Adjust the import path based on your f
 import { Autoplay } from "swiper/modules";
 
 interface LatestNewsSwiperProps {
-  latestNewsData: Array<{ id: number; [key: string]: any, title:any; title_slug:any }>;
+  latestNewsData: Array<{ id: number; [key: string]: any, title:any; title_slug:any }>
 }
 
 const LatestNewsSwiper: React.FC<LatestNewsSwiperProps> = ({ latestNewsData }) => {
   return (
-    <div style={{ height: "400px", overflow: "hidden" }}>
+    <div style={{ height: "300px", overflow: "hidden" }}>
       <Swiper
         direction="vertical"
         slidesPerView={4}

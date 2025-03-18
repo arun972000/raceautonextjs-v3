@@ -11,6 +11,7 @@ import {
   FaSignOutAlt,
   FaPen,
 } from "react-icons/fa";
+import { HiBellAlert } from "react-icons/hi2";
 
 function ProfileCard() {
   return (
@@ -26,14 +27,19 @@ function ProfileCard() {
             <FaUser className="me-2 my-3" /> My Profile
           </ListGroup.Item>
         </Link>
-        <Link href="/magazine">
+        {/* <Link href="/magazine">
           <ListGroup.Item action>
             <FaBook className="me-2 my-3" /> Magazine
           </ListGroup.Item>
-        </Link>
+        </Link> */}
         <Link href="/profile/support">
           <ListGroup.Item action>
             <FaQuestionCircle className="me-2 my-3" /> Help & Support
+          </ListGroup.Item>
+        </Link>
+        <Link href="/profile/subscription">
+          <ListGroup.Item action>
+            <HiBellAlert className="me-2 my-3" /> Subscribe
           </ListGroup.Item>
         </Link>
         <Link href="/user/settings">

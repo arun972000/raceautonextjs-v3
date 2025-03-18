@@ -1,5 +1,5 @@
-import BreakingNews from "@/components/BreakingNews/BreakingNews";
-import Navbar from "@/components/Navbar/Navbar";
+// import BreakingNews from "@/components/BreakingNews/BreakingNews";
+// import Navbar from "@/components/Navbar/Navbar";
 
 export default function MagazineLayout({
   children,
@@ -8,8 +8,8 @@ export default function MagazineLayout({
 }>) {
   return (
     <>
-      <BreakingNews />
-      <Navbar />
+      {/* <BreakingNews />
+      <Navbar /> */}
       {children}
     </>
   );

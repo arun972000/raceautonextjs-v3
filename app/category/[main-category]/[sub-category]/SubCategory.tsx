@@ -49,36 +49,43 @@ const SubCategory = async ({
 
   return (
     <>
-      <div
-        style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
-      >
-        <a href="https://raceinnovations.in/contact/" target="_blank">
+      <a href="https://raceinnovations.in/contact/" target="_blank">
+        <div
+          style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
+        >
           <Image
             src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${adTopData[0].ad_code_728}`}
             alt="index top"
             fill
           />
-        </a>
-      </div>
+        </div>
+      </a>
+
       <div className="row my-3">
         {post.map((item) => (
           <PostListCard key={item.id} item={item} />
         ))}
-        <div
-          style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
-        >
-          <a href="https://raceinnovations.in/contact/" target="_blank">
+
+        <a href="https://raceinnovations.in/contact/" target="_blank">
+          <div
+            style={{
+              position: "relative",
+              aspectRatio: "8.9/1",
+              width: "100%",
+            }}
+          >
             <Image
               src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${adBottomData[0].ad_code_728}`}
               alt="index top"
               fill
             />
-          </a>
-        </div>
+          </div>
+        </a>
         <div className="d-flex justify-content-center my-4">
           <PaginateComponent totalCount={totalCount} />
         </div>
       </div>
+      <p>testing</p>
     </>
   );
 };

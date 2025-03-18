@@ -4,18 +4,21 @@
 import "core-js/full/promise/with-resolvers";
 import { GrFormNext, GrFormPrevious } from "react-icons/gr";
 import { IoExit, IoVolumeHighSharp, IoVolumeMuteSharp } from "react-icons/io5";
-import { IoMdDownload } from "react-icons/io";
+import { IoIosPlay, IoMdDownload, IoMdExit, IoMdPause } from "react-icons/io";
 import HTMLFlipBook from "react-pageflip";
 import { pdfjs, Document, Page as ReactPdfPage } from "react-pdf";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaPrint } from "react-icons/fa";
 import { useRouter, useParams } from "next/navigation";
-import "./page.css";
+import "./flip_v2.css";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { MagazineSlider } from "./SliderMagazine/Slider";
+import { jwtDecode } from "jwt-decode";
+import Image from "next/image";
 
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -23,18 +26,18 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/b
 const Page = forwardRef(({ pageNumber }, ref) => {
   return (
     <div ref={ref}>
-      <ReactPdfPage pageNumber={pageNumber} width={400} />
+      <ReactPdfPage pageNumber={pageNumber} width={460} />
     </div>
   );
 });
 
-function Test() {
+function Test({ token }) {
   const book = useRef();
   const router = useRouter(); // Next.js router for navigation
   const params = useParams(); // Use Next.js useParams hook for dynamic route
   const { title_slug } = params;
   const [pdf_url, setPdf_url] = useState("");
-  const [file, setFile]=useState(null)
+  const [file, setFile] = useState(null)
   const [totalPage, setTotalPage] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
@@ -43,6 +46,8 @@ function Test() {
   const [volume, setVolume] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isAutoplay, setIsAutoplay] = useState(false);
+  const [subcriptionData, setSubcriptionData] = useState([]);
+  const decoded = token ? jwtDecode(token) : { email: "test@gmail.com", role:'user'};
   const autoplayRef = useRef(null);
 
   const pdfData = async () => {
@@ -55,13 +60,25 @@ function Test() {
       console.log(err);
     }
   };
-  const flipNextPage = () => {
 
-      book.current.pageFlip().flipNext("top");
-      setCurrentPage((prev) => prev + 1);
+  const subscriptionApi = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/purchase/${decoded.email}`
+      );
+      setSubcriptionData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleLoadSuccess = async(pdfObject) => {
+  const flipNextPage = () => {
+
+    book.current.pageFlip().flipNext("top");
+    setCurrentPage((prev) => prev + 1);
+  };
+
+  const handleLoadSuccess = async (pdfObject) => {
     const totalPages = pdfObject.numPages;
     setTotalPage(totalPages);
     setPdfloading(false);
@@ -95,15 +112,15 @@ function Test() {
     }
   };
 
-  
-  // const onFlip = useCallback(() => {
-  //   const audio = new Audio(pageFlipSound);
-  //   if (!volume) {
-  //     audio.play();
-  //   } else {
-  //     audio.pause();
-  //   }
-  // }, [volume]);
+
+  const onFlip = useCallback(() => {
+    const audio = new Audio('/turnpage-99756.mp3');
+    if (!volume) {
+      audio.play();
+    } else {
+      audio.pause();
+    }
+  }, [volume]);
 
   const pagesMap = new Array(totalPage).fill(0);
 
@@ -162,23 +179,28 @@ function Test() {
   }, []);
   const frameRef = useRef(null)
 
-  useEffect(()=>{
+  useEffect(() => {
     if (currentPage > totalPage) {
-    stopAutoplay()
+      stopAutoplay()
     }
 
-  },[currentPage])
+  }, [currentPage])
+
+  useEffect(() => {
+    if (decoded.email !== "test@gmail.com") {
+      subscriptionApi();
+    }
+  }, []);
 
   return (
     <>
-    
-    {file && (
+
+      {file && (
         <iframe ref={frameRef} src={file} style={{ display: 'none' }}></iframe>
       )}
-      <button onClick={()=>frameRef?.current?.contentWindow.print()}>print</button>
 
-    {pdfloading && <div className="d-flex justify-content-center mt-2"><Skeleton height={510} width={360}/></div>}
-   <div style={{position:'absolute', left:0, backgroundColor:'black', width:300, height:500}}>he</div>
+      {pdfloading && <div className="d-flex justify-content-center mt-2"><Skeleton height={510} width={360} /></div>}
+      <div className='magazine-slider ms-4' ><MagazineSlider /></div>
       <Document
         file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdf_url}`}
         style={{ width: "100%", aspectRatio: "1.4/1" }}
@@ -190,40 +212,45 @@ function Test() {
         }}
       >
         <HTMLFlipBook
-          width={360}
-          height={510}
+          width={460}
+          height={640}
           ref={book}
           showCover={true}
-          // onFlip={onFlip}
+          onFlip={onFlip}
           flippingTime={500}
           disableFlipByClick={!isMobile}
           swipeDistance={20}
           clickEventForward={false}
           showPageCorners={false}
           style={{ overflow: "hidden" }}
-          className="mt-2"
+
         >
           {pagesMap.map((item, i) => (
             <Page key={i} pageNumber={i + 1} scale={2.0}></Page>
           ))}
         </HTMLFlipBook>
       </Document>
-      <div className="row mt-2  justify-content-center align-items-center">
+
+      {!pdfloading && <div className="row mt-2  justify-content-center align-items-center">
         <div
           className="d-flex justify-content-center pt-1"
-          style={{ zIndex: 99, backgroundColor: "white", color: "black" }}
+          style={{ zIndex: 99, color: "black" }}
         >
+
           <GrFormPrevious
+          title="Previous"
             onClick={() => {
               book.current.pageFlip().flipPrev("top");
               if (currentPage !== 1) {
                 setCurrentPage((pre) => pre - 1);
               }
             }}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }}
             className="mx-2"
+            color="white"
             size={25}
           />
+
           <div>
             <input
               type="number"
@@ -243,8 +270,10 @@ function Test() {
               style={{ width: "50px" }}
             />
             <button
-              className="btn btn-dark p-0 px-1 m-0 mb-1"
-              style={{ borderRadius: 0 }}
+            title='Go To'
+              className="btn btn-dark p-0 px-1 m-0 mb-1 me-1"
+              style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 0 }}
+
               onClick={() => {
                 const pageNumberInt = parseInt(pageNumber);
                 if (pageNumberInt > totalPage) {
@@ -259,76 +288,96 @@ function Test() {
           </div>
           {book.current && (
             <p
-              className="mx-3"
-              style={{
-                backgroundColor: "#212529",
-                padding: 2,
-                color: "white",
-              }}
+            title='Total Page'
+              className="mx-2"
+              style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', padding: 2, borderRadius: 100, color: 'white' }}
             >
               <b>{totalPage}</b>
             </p>
           )}
           <GrFormNext
+          title="Next"
             onClick={() => {
               book.current.pageFlip().flipNext("top");
               if (currentPage !== totalPage / 2) {
                 setCurrentPage((pre) => pre + 1);
               }
             }}
-            style={{ cursor: "pointer" }}
-            className=""
+            style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', color: 'white', borderRadius: 100 }}
+            className="mx-2"
             size={25}
           />
-          <button onClick={toggleAutoplay}>
-        {isAutoplay ? "Stop Autoplay" : "Start Autoplay"}
-      </button>
-      <div>
-        Current Page: {currentPage}/{totalPage}
-      </div>
-          {/* {volume ? (
+          {(subcriptionData.length !== 0 && subcriptionData[0]?.status == 'Active') && <div onClick={toggleAutoplay}>
+            {isAutoplay ? <IoMdPause title="Pause" className="mx-2 p-1"
+              color="white"
+              size={25} style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }} /> : <IoIosPlay title="AutoPlay" className="mx-2 p-1"
+                color="white"
+                size={25} style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }} />}
+          </div>}
+          {volume ? (
             <IoVolumeMuteSharp
+            title="Volume"
               onClick={() => {
                 setVolume(false);
               }}
-              style={{ cursor: "pointer" }}
-              className="mx-3"
+              style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }}
+              className="mx-2 p-1"
               size={25}
             />
           ) : (
             <IoVolumeHighSharp
+            title="Volume"
               onClick={() => {
                 setVolume(true);
               }}
-              style={{ cursor: "pointer" }}
-              className="mx-3"
+              color="white"
+              style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }}
+              className="mx-2 p-1"
               size={25}
             />
-          )} */}
-          {/* <a
+          )}
+          {(subcriptionData.length !== 0 && subcriptionData[0]?.status == 'Active') && (<a
             href={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdf_url}`}
             style={{
               cursor: "pointer",
               textDecoration: "none",
               color: "inherit",
             }}
-            className="mx-2"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <IoMdDownload size={25} />
-          </a> */}
-          <IoExit
+            <IoMdDownload size={25}
+            title='Download'
+              color="white"
+              className="mx-2 p-1"
+              style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }} />
+          </a>)}
+          {(subcriptionData.length !== 0 && subcriptionData[0]?.status == 'Active') && (<FaPrint
+            onClick={() => frameRef?.current?.contentWindow.print()}
+            title='Print'
+            color="white"
+            style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }}
+            className="mx-2 p-1"
+            size={25}
+          />)}
+          <audio ref={autoplayRef}>
+            <source src="/turnpage-99756.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+          </audio>
+          <IoMdExit
+          title='Exit'
+            color="white"
             onClick={() => {
               router.push("/magazine");
             }}
-            style={{ cursor: "pointer" }}
-            className="mx-3"
+            style={{ cursor: "pointer", background: 'linear-gradient(rgba(217, 146, 232, 1), rgba(124, 111, 244, 1))', borderRadius: 100 }}
+            className="mx-2 p-1"
             size={25}
           />
         </div>
-      </div>
-     
+        <div className='magazine-ad' ><div className="mt-5" style={{ position: 'absolute', aspectRatio: '0.5/1', width: '90%' }}><Image src="/images/magazine_page_poster.jpg" alt='magazine-ad' fill /></div></div>
+      </div>}
+
     </>
   );
 }

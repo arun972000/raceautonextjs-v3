@@ -1,5 +1,9 @@
 import React from "react";
-import Test from "./FlipBook";
+import TestMobile from "./flipkv3";
+import Test from "./FlipBook_v2";
+import "./pdfpage.css"
+import { cookies } from "next/headers";
+
 
 
 async function incrementPageView(pageUrl: string) {
@@ -17,8 +21,20 @@ async function incrementPageView(pageUrl: string) {
 }
 
 const PdfPage = async ({ title }: { title: string }) => {
+
+    const cookieStore = await cookies();
+    const token: any = cookieStore.get("authToken");
   await incrementPageView(title);
-  return <Test />;
+  return (
+    <>
+    <div className="mobile__flipbook">
+      <TestMobile token={token?.value}/>
+    </div>
+    <div className="desktop__flipbook">
+      <Test token={token?.value}/>
+    </div>
+    </>
+  );
 };
 
 export default PdfPage;

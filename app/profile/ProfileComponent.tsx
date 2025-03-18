@@ -1,17 +1,13 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 import { Row, Col, Card, Button, Form } from "react-bootstrap";
-import {
-  FaFacebook,
-  FaInstagram,
-  FaLinkedin,
-  FaPen,
-} from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaPen } from "react-icons/fa";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
+import { formatDate } from "@/components/Time";
 
 function ProfileDashboard({ token }: { token: string }) {
   const [data, setData] = useState([]);
@@ -22,8 +18,54 @@ function ProfileDashboard({ token }: { token: string }) {
   const [facebook, setFacebook] = useState<string>("");
   const [linkedin, setLinkedin] = useState<string>("");
   const [twitter, setTwitter] = useState<string>("");
+  const [subscription, setSubscription] = useState([]);
+  const [subscriptionPack, setSubscriptionPack] = useState<any>([]);
+  const [plan, setPlan] = useState([]);
 
-  const decoded: any = jwtDecode(token);
+  const subscriptionApi = async () => {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription`
+    );
+    setSubscription(res.data);
+  };
+
+  const packApi = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/profile/subscription/${decoded.email}`
+      );
+      setSubscriptionPack(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const currentPlan =
+    subscriptionPack.length === 0 || subscriptionPack[0]?.status === "expired"
+      ? "bronze"
+      : subscriptionPack[0]?.plan_name;
+  const isActive = subscriptionPack[0]?.status === "Active";
+  const isExpired = subscriptionPack[0]?.status === "expired";
+
+  // Dynamic class assignment based on the current plan
+  const planClass = (plan: string) => {
+    switch (plan) {
+      case "bronze":
+        return "text-warning";
+      case "silver":
+        return "text-secondary";
+      case "gold":
+        return "text-success";
+      case "platinum":
+        return "text-primary";
+      default:
+        return "text-muted";
+    }
+  };
+
+  const decoded: any = token
+    ? jwtDecode(token)
+    : { email: "test@gmail.com", role: "user" };
   const userInfo = async () => {
     try {
       const res = await axios.get(
@@ -45,6 +87,25 @@ function ProfileDashboard({ token }: { token: string }) {
   useEffect(() => {
     userInfo();
   }, []);
+
+  useEffect(() => {
+    subscriptionApi();
+    packApi();
+  }, []);
+
+  useEffect(() => {
+    if (subscription.length !== 0) {
+      const planName =
+        subscriptionPack.length === 0 ||
+        subscriptionPack[0]?.status === "expired"
+          ? "bronze"
+          : subscriptionPack[0]?.plan_name;
+      const filteredPlan = subscription.filter(
+        (item: any) => item[planName] === 1
+      );
+      setPlan(filteredPlan);
+    }
+  }, [subscriptionPack, subscription]);
   return (
     <Row className="">
       {/* Subscription Card */}
@@ -52,14 +113,37 @@ function ProfileDashboard({ token }: { token: string }) {
         <Card className="p-3 shadow-sm rounded-3">
           <Card.Body>
             <Card.Title className="text-center">Subscription</Card.Title>
-            <Card.Text className="text-center">
-              Read, explore, and enjoy - without a subscription.
-            </Card.Text>
-            <div className="d-flex justify-content-center">
-              <Button variant="outline-secondary" className="px-4">
-                Free
-              </Button>
-            </div>
+            {isExpired ? (
+              <Card.Text className="text-danger">
+                Your plan has expired. Showing Bronze plan details.
+              </Card.Text>
+            ) : (
+              <>
+                <div className="text-center">
+                  <Card.Text>
+                    You are currently on the{" "}
+                    <span className={planClass(currentPlan)}>
+                      {currentPlan}
+                    </span>{" "}
+                    plan now.
+                  </Card.Text>
+                  <Card.Title className="text-center mt-3">
+                    Validity
+                  </Card.Title>
+                  <Card.Text>
+                    Start Date: {formatDate(subscriptionPack[0]?.start_date)}
+                  </Card.Text>
+                  <Card.Text>
+                    End Date: {formatDate(subscriptionPack[0]?.end_date)}
+                  </Card.Text>
+                </div>
+                {/* <div className="d-flex justify-content-center">
+                  <Button variant="outline-secondary" className="px-4">
+                    Free
+                  </Button>
+                </div> */}
+              </>
+            )}
           </Card.Body>
         </Card>
       </Col>
@@ -68,18 +152,14 @@ function ProfileDashboard({ token }: { token: string }) {
       <Col md={6} className="mb-3 mb-lg-0">
         <Card className="p-3 shadow-sm rounded-3">
           <Card.Body>
-            <Card.Title className="text-center">
-              Plan Subscription & Validity
-            </Card.Title>
-            <Card.Text className="text-center">
-              "Stay tuned and get ready to upgrade to our new subscription
-              plans."
-            </Card.Text>
-            <div className="d-flex justify-content-center">
-              <Button variant="outline-secondary" className="px-4">
-                Upgrade
-              </Button>
-            </div>
+          <Card.Title className="text-center mt-3">
+                    Plan Details
+                  </Card.Title>
+            {plan.map((item: any, i) => (
+              <li key={i} className="py-1">
+                {item.plan}
+              </li>
+            ))}
           </Card.Body>
         </Card>
       </Col>

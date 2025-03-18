@@ -22,14 +22,37 @@ const EditUser = () => {
   const [telegramUrl, setTelegramUrl] = useState("");
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [role, setRole] = useState("");
+  const [plan, setPlan] = useState<any>(0);
   const [rolesTypes, setRoleTypes] = useState([]);
-
+  const [planDuration, setPlanDuration] = useState("annual");
+  const [subscriptionData, setSubscriptionData] = useState([]);
   const roleData = async () => {
     try {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/role/roles`
       );
+
+      const subscriptionRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/user_id/${id}`
+      );
+
       setRoleTypes(res.data);
+      setSubscriptionData(subscriptionRes.data);
+      const date1 = new Date(subscriptionRes.data[0].start_date);
+    const date2 = new Date(subscriptionRes.data[0].end_date);
+
+    // Calculate the difference in milliseconds
+    const differenceInMs = date2.getTime() - date1.getTime();
+    
+    // Convert milliseconds to days
+    const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+
+    // Determine if it's Monthly (<31 days) or Annual (≥365 days)
+    if (differenceInDays < 31) {
+      setPlanDuration("monthly");
+    } else if (differenceInDays >= 365) {
+      setPlanDuration("annual");
+    }
     } catch (err) {
       console.log(err);
     }
@@ -52,6 +75,7 @@ const EditUser = () => {
       setLinkedinUrl(data.linkedin_url);
       setVkUrl(data.vk_url);
       setRole(data.role);
+      setPlan(data.subscription);
       setTelegramUrl(data.telegram_url);
       setYoutubeUrl(data.youtube_url);
     } catch (err) {
@@ -66,6 +90,7 @@ const EditUser = () => {
       formData.append("username", username);
       formData.append("slug", slug);
       formData.append("role", role);
+      formData.append("subscription", plan);
       formData.append("about_me", aboutMe);
       formData.append("facebook_url", facebookUrl);
       formData.append("twitter_url", twitterUrl);
@@ -178,6 +203,46 @@ const EditUser = () => {
                   </option>
                 ))}
               </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="Plan" className="mb-3">
+              <Form.Label>Plan</Form.Label>
+              <Form.Control
+                as="select"
+                value={plan}
+                onChange={(e) => setPlan(e.target.value)}
+              >
+                {[
+                  { id: 0, name: "Bronze", value: 0 },
+                  { id: 1, name: "Silver", value: 1 },
+                  { id: 2, name: "Gold", value: 2 },
+                  { id: 3, name: "Platinum", value: 3 },
+                ].map((item) => (
+                  <option key={item.id} value={item.value}>
+                    {item.name}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="PlanDuration" className="mb-3">
+              <Form.Label>Plan Duration</Form.Label>
+              <div>
+                <Form.Check
+                  type="radio"
+                  id="monthly"
+                  label="Monthly"
+                  value="monthly"
+                  checked={planDuration === "monthly"}
+                  onChange={(e) => setPlanDuration(e.target.value)}
+                />
+                <Form.Check
+                  type="radio"
+                  id="annual"
+                  label="Annual"
+                  value="annual"
+                  checked={planDuration === "annual"}
+                  onChange={(e) => setPlanDuration(e.target.value)}
+                />
+              </div>
             </Form.Group>
             <div className="mb-3">
               <label htmlFor="aboutMe" className="form-label">

@@ -9,7 +9,7 @@ const TextArea = () => {
     <>
     <div className="text-center mt-4">
       <h3 className="my-2">
-        We’ve reached <CountUp end={500000} duration={7} className="text-danger"/> lakh subscribers and counting!"
+        We’ve reached <CountUp end={1000000} duration={9} className="text-danger"/> subscribers and counting!"
       </h3>
       <SubscriptionForm/>
     </div>

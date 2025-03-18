@@ -667,7 +667,7 @@ export default function AdminPost({ token }) {
               <Form.Check
                 type="checkbox"
                 id="recommendedCheckbox"
-                label="Recommended"
+                label="Exclusive"
                 checked={isRecommended === 1}
                 onChange={() => toggleCheckbox(setIsRecommended)}
               />

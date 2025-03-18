@@ -459,7 +459,7 @@ const ArticleEdit = () => {
 
               <Editor
                 id="raceautoindia"
-                apiKey="3fr142nwyhd2jop9d509ekq6i2ks2u6dmrbgm8c74gu5xrml"
+                apiKey="1yrfk0cv60kmc9zke9nscwofwats8qf2317zimj60jz5l3zf"
                 onInit={(_evt, editor) => (editorRef.current = editor)}
                 value={content}
                 init={{
@@ -606,7 +606,7 @@ const ArticleEdit = () => {
               type="checkbox"
               id="recommendedCheckbox"
               name="isRecommended"
-              label="Recommended"
+              label="Exclusive"
               checked={isRecommended === 1}
               onChange={handleCheckboxChange}
             />
@@ -724,7 +724,7 @@ const ArticleEdit = () => {
               onClick={handleSubmit}
               className={`${draft ? "btn-danger" : "btn-primary"} btn`}
             >
-              {draft ? "Save to Draft" : "Publish"}
+              {draft ? "Save to Draft" : "Save"}
             </Button>
           </div>
         </div>
