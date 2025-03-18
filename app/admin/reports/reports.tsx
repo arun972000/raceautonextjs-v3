@@ -126,7 +126,7 @@ const ReportsForm = () => {
             onChange={(e) => setUrl(e.target.value)}
             required
           />
-          {imageUrl && (
+          {/* {imageUrl && (
             <Image
               src={preview}
               alt="Preview image"
@@ -138,7 +138,7 @@ const ReportsForm = () => {
           <Form.Group controlId="formFile" className="mb-3">
             <Form.Label>Select image</Form.Label>
             <Form.Control type="file" onChange={handleFileChange} />
-          </Form.Group>
+          </Form.Group> */}
           <Button variant="primary" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Updating..." : "Submit"}
           </Button>

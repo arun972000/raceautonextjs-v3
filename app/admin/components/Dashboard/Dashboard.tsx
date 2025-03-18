@@ -21,7 +21,7 @@ export type viewsCardType = {
 const Dashboard = async () => {
   const cardResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/dashboard/card-numbers`,
-    { cache: "no-store" }
+    { cache: "no-cache" }
   );
 
   const cardData = await cardResponse.json();

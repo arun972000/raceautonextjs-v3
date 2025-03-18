@@ -127,7 +127,7 @@ const AdminSidebar = async () => {
             </Link>
           </li>
           
-          <li>
+          {/* <li>
             <Link
               href="/admin/subscription"
               className="nav-link px-0 align-middle"
@@ -135,7 +135,7 @@ const AdminSidebar = async () => {
               <MdPriceChange />{" "}
               <span className="ms-1 d-none d-sm-inline">Subscription</span>
             </Link>
-          </li>
+          </li> */}
           <li style={{ width: "100%" }}>
             <Link
               href="#subscribemenu"

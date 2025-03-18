@@ -78,7 +78,7 @@ export async function PUT(req) {
         <p>Congratulations! Your Silver Membership with <strong>RACE AUTO INDIA</strong> has been approved.</p>
         <p>You now have exclusive access to our reports, industry news, and other membership benefits.</p>
         <p>Click the link below to start exploring your membership perks:</p>
-        <a href="#" class="button">Access Your Membership</a>
+        <a href="https://raceautoindia.com/profile" class="button">Access Your Membership</a>
         <p>Welcome aboard!</p>
       </div>
       <div class="footer">
