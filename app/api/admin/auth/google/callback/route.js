@@ -26,7 +26,7 @@ export async function GET(req) {
           code,
           grant_type: "authorization_code",
           redirect_uri:
-            "http://localhost:3000/api/admin/auth/google/callback",
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/auth/google/callback`,
         },
       }
     );
