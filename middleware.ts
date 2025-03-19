@@ -46,7 +46,6 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/admin/:path*", // Apply to admin routes
-    "/profile/:path*", // Apply to profile routes
     "/user/:path*", // Apply to user routes
   ],
 };

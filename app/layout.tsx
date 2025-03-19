@@ -104,6 +104,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+      <meta name="google-adsense-account" content="ca-pub-5751151754746971"/>
         <link rel="preconnect" href="https://cdn.raceautoindia.com" />
         <link
           rel="dns-prefetch"
@@ -116,7 +117,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class">{children}</ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />
-      <GoogleAdsense/>
+      {/* <GoogleAdsense/> */}
     </html>
   );
 }

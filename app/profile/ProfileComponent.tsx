@@ -113,23 +113,21 @@ function ProfileDashboard({ token }: { token: string }) {
         <Card className="p-3 shadow-sm rounded-3">
           <Card.Body>
             <Card.Title className="text-center">Subscription</Card.Title>
-            {isExpired ? (
+            {isExpired || currentPlan === "bronze" ? (
               <Card.Text className="text-danger">
-                Your plan has expired. Showing Bronze plan details.
+                {isExpired
+                  ? "Your plan has expired. Showing Bronze plan details."
+                  : "You are currently on the Bronze plan now."}
               </Card.Text>
             ) : (
               <>
                 <div className="text-center">
                   <Card.Text>
-                    You are currently on the{" "}
-                    <span className={planClass(currentPlan)}>
-                      {currentPlan}
-                    </span>{" "}
+                    You are currently on the {" "}
+                    <span className={planClass(currentPlan)}>{currentPlan}</span>{" "}
                     plan now.
                   </Card.Text>
-                  <Card.Title className="text-center mt-3">
-                    Validity
-                  </Card.Title>
+                  <Card.Title className="text-center mt-3">Validity</Card.Title>
                   <Card.Text>
                     Start Date: {formatDate(subscriptionPack[0]?.start_date)}
                   </Card.Text>
@@ -137,11 +135,6 @@ function ProfileDashboard({ token }: { token: string }) {
                     End Date: {formatDate(subscriptionPack[0]?.end_date)}
                   </Card.Text>
                 </div>
-                {/* <div className="d-flex justify-content-center">
-                  <Button variant="outline-secondary" className="px-4">
-                    Free
-                  </Button>
-                </div> */}
               </>
             )}
           </Card.Body>
