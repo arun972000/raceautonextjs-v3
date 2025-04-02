@@ -53,14 +53,14 @@ export default function AdminPost({ token }) {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter" && inputValue) {
-      setTags([...tags, inputValue]);
-      setInputValue("");
+    if (event.key === "Enter") {
+      event.preventDefault(); // Prevent form submission
+      if (inputValue) {
+        setTags([...tags, inputValue]);
+        setInputValue("");
+      }
     }
   };
-
-
-
 
 
   const handleRemoveTag = (index) => {
@@ -480,7 +480,7 @@ export default function AdminPost({ token }) {
                 <p className="text-muted">Note: Set the image property to 'width: 100%; height: auto;' for proper display within the content.</p>
                 <Editor
                   id="raceautoindia"
-                  apiKey="3fr142nwyhd2jop9d509ekq6i2ks2u6dmrbgm8c74gu5xrml"
+                  apiKey={process.env.NEXT_PUBLIC_TINYMCE}
                   onInit={(_evt, editor) => (editorRef.current = editor)}
                   value={content}
                   init={{

@@ -1,4 +1,3 @@
-
 import MainComponent from "@/components/HomeCategories/MainComponent";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import BreakingNews from "@/components/BreakingNews/BreakingNews";
@@ -16,6 +15,9 @@ import HomeBanner_2 from "@/components/Homebanner/Homebanner-2/HomeBanner-2";
 import LinkedinPage from "@/components/LinkedinForm/LinkedinPage";
 import Services from "@/components/Servicesbar/ServiceBar";
 import RefreshOnVerified from "./Verifies";
+import ChatPopup from "@/components/ChatBot/MessangerContainer";
+import AdHeader from "@/components/GoogleAds/AdHeader";
+
 
 const Home = async () => {
   const sliderRes = await fetch(
@@ -46,6 +48,10 @@ const Home = async () => {
             ) : (
               <HomeBanner />
             )}
+            <h1>
+              Latest Car, Bike, Tractor & Construction Equipment News & Reviews
+            </h1>
+            <AdHeader />
             <MagazineAd_2 />
             <HomeMarket />
             <HomeReports />
@@ -60,8 +66,12 @@ const Home = async () => {
           <hr />
           <Services />
         </div>
-        <Footer />
-        <GreenBar />
+        <div className="container-fluid">
+
+          {/* <ChatPopup /> */}
+          <Footer />
+          <GreenBar />
+        </div>
       </div>
     </>
   );

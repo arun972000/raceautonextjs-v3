@@ -72,6 +72,7 @@ const SuccessPage = () => {
           src="/images/payment successful.png"
           width={300}
           height={300}
+          priority
         />
 
         <h2 className="fw-bold text-dark">

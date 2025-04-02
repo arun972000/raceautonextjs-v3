@@ -124,7 +124,7 @@ const EditPlan = () => {
                     />
                   </Form.Group>
                 </td>
-                {planName !== "Monthly price" && planName !== "Annual price" ? (
+                {planName !== "Monthly price" && planName !== "Annual price" && planName !=="usd" ? (
                   <>
                     <td>
                       <Form.Check

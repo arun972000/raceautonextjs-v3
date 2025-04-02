@@ -72,3 +72,14 @@ export async function POST(req: NextRequest) {
     console.log(err);
   }
 }
+
+export async function GET() {
+  try {
+    const [results] = await db.execute(`SELECT * FROM subscription_payment`);
+
+    return NextResponse.json(results);
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json(err, { status: 500 });
+  }
+}

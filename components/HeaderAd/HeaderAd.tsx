@@ -4,10 +4,12 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import AdHomeBanner from "../GoogleAds/AdHomeHeader";
 
 const HeaderAd = () => {
   const [data, setData] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isGoogle, setIsGoogle] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
 
   const handleClose = () => {
@@ -21,6 +23,8 @@ const HeaderAd = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/adspace/header`
       );
       setData(res.data[0]);
+      console.log(res.data[0].is_responsive)
+      setIsGoogle(res.data[0].is_responsive == 1 ? true : false);
     } catch (err) {
       console.log(err);
     } finally {
@@ -57,9 +61,14 @@ const HeaderAd = () => {
           />
         </div>
       ) : (
-        <div
+        !isGoogle ? (<div
           className={isVisible ? "my-4" : "d-none my-4"}
-          style={{ position: "relative", aspectRatio: "8/1", width: "100%", objectFit:'contain' }}
+          style={{
+            position: "relative",
+            aspectRatio: "8/1",
+            width: "100%",
+            objectFit: "contain",
+          }}
         >
           <Image
             src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_728}`}
@@ -82,7 +91,7 @@ const HeaderAd = () => {
           >
             ✕
           </button>
-        </div>
+        </div>) : <AdHomeBanner/>
       )}
     </>
   );

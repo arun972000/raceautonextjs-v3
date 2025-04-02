@@ -44,7 +44,7 @@ export default function MobileNavbarSample({
         </Link>
         <ThemeToggle />
         <SearchBarServer />
-        <LoginNavButton/>
+        <LoginNavButton />
         <button
           onClick={toggleMenu}
           className="hamburger"
@@ -81,42 +81,45 @@ export default function MobileNavbarSample({
                 </li>
               );
             })}
-                          <li
-                className={`${styles.dropdown} ${styles.nav_item} nav-item dropdown mx-1`}
+            <li
+              className={`${styles.dropdown} ${styles.nav_item} nav-item dropdown mx-1`}
+            >
+              <button
+                className={`${styles.dropdown_toggle} ${styles.nav_link} nav-link dropdown-toggle`}
+                id="navbarDropdown"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
               >
-                <button
-                  className={`${styles.dropdown_toggle} ${styles.nav_link} nav-link dropdown-toggle`}
-                  id="navbarDropdown"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  MORE
-                </button>
-                <div
-                  className={`${styles.dropdown_menu_custom} dropdown-menu`}
-                  aria-labelledby="navbarDropdown"
-                >
-                  {morePagefiltered.map((item: mainMenu) => (
-                    <Link
-                      key={item.id}
-                      className={`${styles.dropdown_item} dropdown-item`}
-                      href={`/page/${item.slug}`}
-                    >
-                      {item.title}
-                    </Link>
-                  ))}
-                </div>
-              </li>
-              <li className={`${styles.nav_item} nav-item`}>
-                <Link
-                  className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
-                  href="/magazine"
-                >
-                  <span>E-MAGAZINE</span>
-                </Link>
-              </li>
+                MORE
+              </button>
+              <div
+                className={`${styles.dropdown_menu_custom} dropdown-menu`}
+                aria-labelledby="navbarDropdown"
+              >
+                {morePagefiltered.map((item: mainMenu) => (
+                  <Link
+                    key={item.id}
+                    className={`${styles.dropdown_item} dropdown-item`}
+                    href={`/page/${item.slug}`}
+                  >
+                    {item.title}
+                  </Link>
+                ))}
+              </div>
+            </li>
+            <li className={`${styles.nav_item} nav-item`}>
+              <Link
+                className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
+                href="/magazine"
+              >
+                <span>E-MAGAZINE</span>
+              </Link>
+            </li>
           </ul>
+          <Link href="/subscription">
+            <button className={styles.subscribeButton}>Subscribe</button>
+          </Link>
         </div>
       )}
     </header>

@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import "./footer.css";
 import { FaXTwitter } from "react-icons/fa6";
+import ScrollToTopLogo from "./ScrollToImage";
 
 interface LogoData {
   logo_footer: string;
@@ -66,13 +67,14 @@ const Footer = async () => {
         <div className="row justify-content-center align-items-center mt-4">
           <div className=" col-md-2 mt-3">
             <div className="d-flex justify-content-center">
-              <Image
+              <ScrollToTopLogo logoData={logoData[0].logo_footer}/>
+              {/* <Image
                 src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoData[0].logo_footer}`}
                 width={130}
                 height={152}
                 priority
                 alt="logo_footer"
-              />
+              /> */}
             </div>
           </div>
           <div className="my-3 col-md-7 col-lg-5 px-3 text-align-left">

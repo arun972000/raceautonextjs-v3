@@ -27,6 +27,7 @@ const PdfPage = async ({ title }: { title: string }) => {
   await incrementPageView(title);
   return (
     <>
+    
     <div className="mobile__flipbook">
       <TestMobile token={token?.value}/>
     </div>

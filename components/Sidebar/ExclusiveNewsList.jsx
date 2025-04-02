@@ -22,6 +22,10 @@ const ExclusiveNewsSwiper = ({ ExclusiveNewsData }) => {
     return null;
   }
 
+  if (pathname.includes("tag")) {
+    return null;
+  }
+
   return (
     <>
       <div className="d-flex justify-content-center align-items-center mb-3">

@@ -1,22 +1,23 @@
 "use client";
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import axios from "axios";
-import Image from "next/image";
+import { Editor } from "@tinymce/tinymce-react";
 
 const ReportsForm = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [preview, setPreview] = useState("");
-  const [imageUrl, setImageUrl] = useState<any>([]);
+  const [imageUrl, setImageUrl] = useState([]);
   const [url, setUrl] = useState("");
+  const editorRef = useRef(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFileChange = (e: any) => {
+  const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     const maxSize = 5 * 1024 * 1024;
 
@@ -29,6 +30,10 @@ const ReportsForm = () => {
     }
   };
 
+  const handleEditorChange = (editContent) => {
+    setSummary(editContent);
+  };
+
   const fetchReportsData = async () => {
     try {
       const res = await axios.get(
@@ -36,15 +41,15 @@ const ReportsForm = () => {
       );
       setTitle(res.data[0].title);
       setSummary(res.data[0].summary);
-      setPreview(
-        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${res.data[0].image_url}`
+      setUrl(
+        res.data[0].image_url
       );
     } catch (err) {
       console.log(err);
     }
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title || !summary || !url) {
@@ -109,19 +114,73 @@ const ReportsForm = () => {
               required
             />
           </Form.Group>
-          <Form.Group controlId="formSummary" className="mb-3">
-            <Form.Label>Summary</Form.Label>
-            <Form.Control
-              as="textarea"
-              placeholder="Enter summary"
-              value={summary}
-              onChange={(e) => setSummary(e.target.value)}
-              required
-            />
-          </Form.Group>
+          <Editor
+            id="raceautoindia"
+            apiKey={process.env.NEXT_PUBLIC_TINYMCE}
+            onInit={(_evt, editor) => (editorRef.current = editor)}
+            value={summary}
+            init={{
+              height: 500,
+              menubar: true,
+              plugins: [
+                "advlist",
+                "autolink",
+                "lists",
+                "link",
+                "image",
+                "charmap",
+                "preview",
+                "anchor",
+                "searchreplace",
+                "visualblocks",
+                "code",
+                "fullscreen",
+                "insertdatetime",
+                "media",
+                "table",
+                "code",
+                "help",
+                "wordcount",
+              ],
+              image_dimensions: true,
+              // image_class_list: [
+              //   { title: "Responsive", value: "img-responsive" },
+              // ],
+              toolbar:
+                "undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help",
+              content_style:
+                "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
+              // images_upload_handler: handleImageUpload,
+              file_picker_callback: (callback, value, meta) => {
+                if (meta.filetype === "image") {
+                  const input = document.createElement("input");
+                  input.setAttribute("type", "file");
+                  input.setAttribute("accept", "image/*");
+                  input.onchange = function () {
+                    const file = this.files[0];
+                    const reader = new FileReader();
+                    reader.onload = function () {
+                      const id = "blobid" + new Date().getTime();
+                      const blobCache =
+                        editorRef.current.editorUpload.blobCache;
+                      const base64 = reader.result.split(",")[1];
+                      const blobInfo = blobCache.create(id, file, base64);
+                      blobCache.add(blobInfo);
+                      callback(blobInfo.blobUri(), { title: file.name });
+                    };
+                    reader.readAsDataURL(file);
+                  };
+                  input.click();
+                }
+              },
+            }}
+            onEditorChange={handleEditorChange}
+          />
+
           <Form.Control
             type="text"
             placeholder="Enter Youtube"
+            className="my-3"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             required

@@ -160,8 +160,9 @@ export async function POST(req) {
         console.log("Scheduled time is in the past. No action taken.");
       } else {
         schedule.scheduleJob(publishTime, async function () {
-          await db.execute(`UPDATE posts SET is_scheduled = 0 WHERE id = ?`, [
+          await db.execute(`UPDATE posts SET is_scheduled = 0, created_at = ? WHERE id = ?`, [
             postId,
+            publishTime
           ]);
           console.log(`Post with ID ${postId} is now published.`);
         });

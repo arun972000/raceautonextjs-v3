@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     const { pathname } = new URL(req.url);
     const category = pathname.split("/").pop();
     if (category == "0") {
-      const [result] = await db.execute("SELECT * FROM newsletter ORDER BY created_date DESC");
+      const [result] = await db.execute("SELECT * FROM newsletter ORDER BY id DESC");
       return NextResponse.json(result);
     }
 

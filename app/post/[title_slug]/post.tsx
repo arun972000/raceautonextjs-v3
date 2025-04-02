@@ -8,6 +8,7 @@ import PostContent from "./postContent";
 import { cookies } from "next/headers";
 import EditButton from "./AdminButtons";
 import Image from "next/image";
+import AdArticleMiddle from "@/components/GoogleAds/AdArticleMiddle";
 
 export type postsliderType = {
   image_default: string;
@@ -53,8 +54,13 @@ async function incrementPageView(pageUrl: string) {
   }
 }
 
-const Post = async ({ title, is_recommended }: { title: string;
-  is_recommended: any; }) => {
+const Post = async ({
+  title,
+  is_recommended,
+}: {
+  title: string;
+  is_recommended: any;
+}) => {
   await incrementPageView(title);
 
   const cookieStore = await cookies();
@@ -79,7 +85,6 @@ const Post = async ({ title, is_recommended }: { title: string;
 
   return (
     <>
-
       <div className="col-lg-8 mt-3">
         <div
           style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
@@ -138,7 +143,12 @@ const Post = async ({ title, is_recommended }: { title: string;
         >
           {post.image_description}
         </p>
-        <PostContent content={post.content} token={token?.value} is_recommended={is_recommended}/>
+        <AdArticleMiddle />
+        <PostContent
+          content={post.content}
+          token={token?.value}
+          is_recommended={is_recommended}
+        />
         {post.tag.map((item) => (
           <Link href={`/tag/${item.tag_slug}`} key={item.id}>
             <span className="badge badge-primary mr-3" style={{ color: "red" }}>

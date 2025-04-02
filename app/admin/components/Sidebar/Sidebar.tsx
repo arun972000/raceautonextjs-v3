@@ -1,11 +1,14 @@
 import Link from "next/link";
 import React from "react";
-import { PiNewspaperClippingDuotone } from "react-icons/pi";
+import { PiFileAudioFill, PiNewspaperClippingDuotone } from "react-icons/pi";
 import {
   FaAd,
   FaAdversal,
   FaAngleDown,
   FaHome,
+  FaImage,
+  FaMicrochip,
+  FaRupeeSign,
   FaSitemap,
   FaThList,
   FaUsers,
@@ -39,6 +42,7 @@ import {
   TbReportAnalytics,
 } from "react-icons/tb";
 import Image from "next/image";
+import { CiBank, CiText } from "react-icons/ci";
 const AdminSidebar = async () => {
   const logoRes = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/general-settings/logo`
@@ -169,7 +173,65 @@ const AdminSidebar = async () => {
                   </span>
                 </Link>
               </li>
-              
+              <li>
+                <Link href="/admin/subscription/payment/upi-payment" className="nav-link px-0">
+                  <FaRupeeSign className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary">
+                    UPI-payments
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/subscription/payment/bank-payment" className="nav-link px-0">
+                  <CiBank className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary">
+                   Bank-payments
+                  </span>
+                </Link>
+              </li>
+            </ul>
+          </li>
+          <li style={{ width: "100%" }}>
+            <Link
+              href="#aipoweredmenu"
+              data-bs-toggle="collapse"
+              className="nav-link px-0 align-middle d-flex align-items-center"
+            >
+              <FaMicrochip />{" "}
+              <span className="ms-1 d-none d-sm-inline">AI Powered</span>{" "}
+              <span className="d-none d-sm-inline ms-auto">
+                <FaAngleDown />
+              </span>
+            </Link>
+            <ul
+              className="collapse nav flex-column ms-1"
+              id="aipoweredmenu"
+              data-bs-parent="#menu"
+            >
+              <li className="w-100">
+                <Link href="/admin/ai-powered/image-generate" className="nav-link px-0">
+                  <FaImage className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary text-primary">
+                    Image Generator
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/ai-powered/speech-to-text" className="nav-link px-0">
+                  <CiText className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary">
+                    Speech to Text
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin/ai-powered/text-to-speech" className="nav-link px-0">
+                  <PiFileAudioFill className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary">
+                    Text to Speech
+                  </span>
+                </Link>
+              </li>
             </ul>
           </li>
           <li>
@@ -261,7 +323,7 @@ const AdminSidebar = async () => {
                 >
                   <MdRecommend className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary">
-                    Recommended
+                    Exclusive
                   </span>
                 </Link>
               </li>

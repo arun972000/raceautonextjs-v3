@@ -11,7 +11,7 @@ const TextArea = () => {
       <h3 className="my-2">
         We’ve reached <CountUp end={1000000} duration={9} className="text-danger"/> subscribers and counting!"
       </h3>
-      {/* <SubscriptionForm/> */}
+      <SubscriptionForm/>
     </div>
     </>
   );

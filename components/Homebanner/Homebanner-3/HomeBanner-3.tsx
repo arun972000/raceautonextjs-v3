@@ -94,7 +94,7 @@ const HomeBanner_3 = async () => {
           </div>
         </div>
         <div className="col-lg-8 p-0">
-          <div className="row">
+          <div className="row m-0 p-0">
             <div className="col-12">
               <Slider_3 />
             </div>
@@ -104,7 +104,7 @@ const HomeBanner_3 = async () => {
       </div>
       <div className={`${styles.mobile_homebanner} row mb-4 mt-4`}>
         <div className="col-12 p-0">
-          <div className="row">
+          <div className="row m-0 p-0">
             <div className="col-12">
               <Slider_3 />
             </div>

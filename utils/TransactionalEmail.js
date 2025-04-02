@@ -73,7 +73,6 @@ export default async function sendTransactionalEmail(
   try {
     const command = new SendEmailCommand(params);
     const result = await sesClient.send(command);
-    console.log(result);
     return result;
   } catch (err) {
     console.error(err);

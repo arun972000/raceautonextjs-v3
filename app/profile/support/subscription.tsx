@@ -9,9 +9,7 @@ function SubscriptionProfile({ token }: { token: any }) {
   const [subscription, setSubscription] = useState([]);
   const [subscriptionPack, setSubscriptionPack] = useState<any>([]);
   const [plan, setPlan] = useState([]);
-  const decoded: any = token
-    ? jwtDecode(token)
-    : { email: "test@gmail.com", role: "user" };
+  const decoded: any = token ? jwtDecode(token) : { email: "", role: "user" };
 
   const subscriptionApi = async () => {
     const res = await axios.get(
@@ -68,7 +66,7 @@ function SubscriptionProfile({ token }: { token: any }) {
         return "text-success";
       case "platinum":
         return "text-primary";
-      default:  
+      default:
         return "text-muted";
     }
   };

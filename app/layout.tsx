@@ -6,7 +6,7 @@ import AddBootstrap from "@/components/BootstrapClient";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from '@next/third-parties/google'
-import GoogleAdsense from "./GoogleAdsense";
+import FloatingChatBot from "@/components/ChatBot/MessengerNon-ai";
 
 async function fetchLogoData() {
   try {
@@ -110,10 +110,16 @@ export default function RootLayout({
           rel="dns-prefetch"
           href="https://cdn.raceautoindia.com"
         />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5751151754746971"
+          crossOrigin="anonymous"
+        ></script>
       </head>
       <body>
         <AddBootstrap />
         <ToastContainer />
+        {/* <FloatingChatBot/> */}
         <ThemeProvider attribute="class">{children}</ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />

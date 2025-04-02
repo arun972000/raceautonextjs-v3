@@ -6,6 +6,8 @@ import LatestNewsSwiper from "./LatestNewsList";
 
 import { FaCrown } from "react-icons/fa";
 import ExclusiveNewsSwiper from "./ExclusiveNewsList";
+import AdSidebar from "../GoogleAds/AdSidebar";
+import AdSidebarBottom from "../GoogleAds/AdsidebarBottom";
 
 export type LatestNewsType = {
   id: number;
@@ -59,10 +61,10 @@ const Sidebar = async () => {
 
   return (
     <div className="col-lg-4 mb-4">
+      <AdSidebar />
       <div className="row mt-3">
         <div className="col-12">
           <div>
-            
             <div
               className="side-scrollbar side-scrollbar-primary"
               style={{ maxHeight: 300 }}
@@ -110,6 +112,7 @@ const Sidebar = async () => {
           fill
         />
       </div>
+      <AdSidebarBottom />
     </div>
   );
 };

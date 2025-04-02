@@ -63,9 +63,7 @@ function ProfileDashboard({ token }: { token: string }) {
     }
   };
 
-  const decoded: any = token
-    ? jwtDecode(token)
-    : { email: "test@gmail.com", role: "user" };
+  const decoded: any = token ? jwtDecode(token) : { email: "", role: "user" };
   const userInfo = async () => {
     try {
       const res = await axios.get(
@@ -123,8 +121,10 @@ function ProfileDashboard({ token }: { token: string }) {
               <>
                 <div className="text-center">
                   <Card.Text>
-                    You are currently on the {" "}
-                    <span className={planClass(currentPlan)}>{currentPlan}</span>{" "}
+                    You are currently on the{" "}
+                    <span className={planClass(currentPlan)}>
+                      {currentPlan}
+                    </span>{" "}
                     plan now.
                   </Card.Text>
                   <Card.Title className="text-center mt-3">Validity</Card.Title>
@@ -145,9 +145,7 @@ function ProfileDashboard({ token }: { token: string }) {
       <Col md={6} className="mb-3 mb-lg-0">
         <Card className="p-3 shadow-sm rounded-3">
           <Card.Body>
-          <Card.Title className="text-center mt-3">
-                    Plan Details
-                  </Card.Title>
+            <Card.Title className="text-center mt-3">Plan Details</Card.Title>
             {plan.map((item: any, i) => (
               <li key={i} className="py-1">
                 {item.plan}

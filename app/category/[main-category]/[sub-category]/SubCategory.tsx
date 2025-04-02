@@ -85,7 +85,6 @@ const SubCategory = async ({
           <PaginateComponent totalCount={totalCount} />
         </div>
       </div>
-      <p>testing</p>
     </>
   );
 };

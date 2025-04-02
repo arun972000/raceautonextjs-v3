@@ -116,7 +116,7 @@ const ContactForm = () => {
               <Form.Label>Content</Form.Label>
 
               <Editor
-                apiKey='3fr142nwyhd2jop9d509ekq6i2ks2u6dmrbgm8c74gu5xrml'
+                apiKey={process.env.NEXT_PUBLIC_TINYMCE}
                 onInit={(_evt, editor) => editorRef.current = editor}
                 value={contactText}
                 init={{

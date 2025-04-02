@@ -62,6 +62,10 @@ const Navbar = async () => {
       >
         <div className={styles.desktop_nav}>
           <div className={styles.d_navlogo}>
+          <Link
+                    className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
+                    href="/"
+                  >
             <Image
               src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoData[0].logo}`}
               alt="logo header"
@@ -69,6 +73,7 @@ const Navbar = async () => {
               height={40}
               className="ms-4"
             />
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
@@ -87,14 +92,14 @@ const Navbar = async () => {
               id="navbarSupportedContent"
             >
               <ul className="navbar-nav mr-auto">
-                <li className={`${styles.nav_item} nav-item`}>
+                {/* <li className={`${styles.nav_item} nav-item`}>
                   <Link
                     className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
                     href="/"
                   >
                     <span>Home</span>
                   </Link>
-                </li>
+                </li> */}
                 <li
                   className={`${styles.dropdown} ${styles.nav_item} nav-item dropdown mx-1`}
                 >

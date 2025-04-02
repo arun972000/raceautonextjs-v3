@@ -16,9 +16,7 @@ const ContentComponent = ({
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const [subcriptionData, setSubcriptionData] = useState<any>([]);
-  const decoded: any = token
-    ? jwtDecode(token)
-    : { email: "test@gmail.com", role: "user" };
+  const decoded: any = token ? jwtDecode(token) : { email: "", role: "user" };
 
   const subscriptionApi = async () => {
     try {
@@ -41,18 +39,15 @@ const ContentComponent = ({
   };
 
   useEffect(() => {
-    if (decoded.email !== "test@gmail.com") {
+    if (decoded.email !== "") {
       subscriptionApi();
     }
   }, []);
 
   if (
-    is_recommended == 1 
-    &&
-  (
-    decoded.role == "user" ||
-    (subcriptionData.length !== 0 && subcriptionData[0].status !== "Active")
-  )
+    is_recommended == 1 &&
+    (decoded.role == "user" ||
+      (subcriptionData.length !== 0 && subcriptionData[0].status !== "Active"))
   ) {
     return (
       <div>
@@ -60,7 +55,7 @@ const ContentComponent = ({
           <div className={styles.overlay}>
             <div className={styles.modal}>
               <h2 className={styles.title}>Please Subscribe</h2>
-              <p  className={styles.text}>
+              <p className={styles.text}>
                 You need a subscription to access this content. Please subscribe
                 to continue.
               </p>

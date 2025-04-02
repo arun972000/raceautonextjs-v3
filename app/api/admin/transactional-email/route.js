@@ -106,7 +106,6 @@ export async function PUT(req) {
 
   try {
     const result = await mailTransporter.sendMail(mailOptions);
-    console.log(result);
     return NextResponse.json("mail sent success");
   } catch (err) {
     console.error(err);
