@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import ChatBot from "react-chatbotify";
 import emailjs from "@emailjs/browser";
 import { toast } from 'react-toastify';
+
 // Detect if the user is on desktop or mobile
 const isDesktop = !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
