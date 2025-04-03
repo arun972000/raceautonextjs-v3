@@ -23,7 +23,6 @@ const HeaderAd = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/adspace/header`
       );
       setData(res.data[0]);
-      console.log(res.data[0].is_responsive)
       setIsGoogle(res.data[0].is_responsive == 1 ? true : false);
     } catch (err) {
       console.log(err);

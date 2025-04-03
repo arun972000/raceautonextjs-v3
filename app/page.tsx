@@ -18,7 +18,6 @@ import RefreshOnVerified from "./Verifies";
 import ChatPopup from "@/components/ChatBot/MessangerContainer";
 import AdHeader from "@/components/GoogleAds/AdHeader";
 
-
 const Home = async () => {
   const sliderRes = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/post/slider`,
@@ -48,9 +47,7 @@ const Home = async () => {
             ) : (
               <HomeBanner />
             )}
-            <h1>
-              Latest Car, Bike, Tractor & Construction Equipment News & Reviews
-            </h1>
+            <h1>Latest Updates on Automobiles, Agriculture & Construction</h1>
             <AdHeader />
             <MagazineAd_2 />
             <HomeMarket />
@@ -67,7 +64,6 @@ const Home = async () => {
           <Services />
         </div>
         <div className="container-fluid">
-
           {/* <ChatPopup /> */}
           <Footer />
           <GreenBar />

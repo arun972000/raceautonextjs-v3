@@ -41,7 +41,7 @@ export default function UPIPaymentsPage() {
                 <td>{payment.email}</td>
                 <td>{payment.phone_number}</td>
                 <td>
-                  <a href={payment.payment_proof} target="_blank" rel="noopener noreferrer">
+                  <a href={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${payment.payment_proof}`} target="_blank" rel="noopener noreferrer">
                     View Proof
                   </a>
                 </td>

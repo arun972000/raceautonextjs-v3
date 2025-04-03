@@ -16,7 +16,7 @@ import Link from "next/link";
 export const MagazineSlider = () => {
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
-  const [selectedCategory, setSelectedCatgeory] = useState(2);
+  const [selectedCategory, setSelectedCatgeory] = useState(0);
 
   const handleSelectChange = (event: any) => {
     setSelectedCatgeory(event.target.value);
@@ -74,7 +74,8 @@ export const MagazineSlider = () => {
             onChange={handleSelectChange}
             className="text-muted"
             style={{ fontSize: "13px", padding: 4, borderRadius: 10 }}
-          >
+          ><option className="text-muted"
+          style={{ fontSize: "13px" }} value={0}>All</option>
             {category.map((item: any) => (
               <option
                 key={item.id}
@@ -95,13 +96,13 @@ export const MagazineSlider = () => {
             delay: 3500,
             disableOnInteraction: false,
           }}
-          slidesPerView={3}
+          slidesPerView={2}
           spaceBetween={20}
-          centeredSlides={true}
+
           loop={true}
           modules={[Autoplay]}
           style={{
-            height: 630,
+            height: 650,
           }}
         >
           {data.map((item: any) => (
@@ -110,14 +111,13 @@ export const MagazineSlider = () => {
                 style={{
                   position: "relative",
                   aspectRatio: "1/1.414",
-                  width: "78%",
+                  width: "74%",
                 }}
               >
                 <Link href={`/magazine/${item.title_slug}`}>
                   <Image
                     alt={item.title}
-                    width={150}
-                    height={212}
+                    fill
                     priority
                     src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_url}`}
                     sizes="(max-width: 480px) 100vw, (max-width: 768px) 75vw, (max-width: 1200px) 40vw, 25vw"

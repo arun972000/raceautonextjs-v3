@@ -339,6 +339,16 @@ const SubscriptionForm = () => {
 
   const handleShow = () => {
     if (!token) {
+      toast.warn("Sign in to unlock your purchase!", {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "colored",
+            });
       return router.push("/login");
     }
     setShowModal(true);

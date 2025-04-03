@@ -94,7 +94,7 @@ const LoginForm = () => {
   
       // Redirect after login
       setTimeout(() => {
-        router.push("/");
+        router.back();
         router.refresh();
       }, 1000);
     } catch (error) {

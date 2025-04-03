@@ -20,12 +20,13 @@ import { MagazineSlider } from "./SliderMagazine/Slider";
 import { jwtDecode } from "jwt-decode";
 import Image from "next/image";
 import MagazineAd from "@/components/GoogleAds/MagazineAd";
+import Link from "next/link";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const Page = forwardRef(({ pageNumber }, ref) => {
   return (
-    <div ref={ref}>
+    <div ref={ref} className="mt-2">
       <ReactPdfPage pageNumber={pageNumber} width={460} />
     </div>
   );
@@ -434,30 +435,34 @@ function Test({ token }) {
                 size={28}
               />
             )}
-          
-              <IoMdExit
-                title="Exit"
-                color="white"
-                onClick={() => {
-                  router.push("/magazine");
-                }}
-                style={{
-                  cursor: "pointer",
-                  background: "#32bea6",
-                  borderRadius: 100,
-                }}
-                className="mx-2 p-1"
-                size={28}
-              />
-          
+
+            <IoMdExit
+              title="Exit"
+              color="white"
+              onClick={() => {
+                router.push("/magazine");
+              }}
+              style={{
+                cursor: "pointer",
+                background: "#32bea6",
+                borderRadius: 100,
+              }}
+              className="mx-2 p-1"
+              size={28}
+            />
+             <Link href="/subscription"><button className='subscribeButton_magazine ms-2'>Subscribe</button></Link>
           </div>
           <div className="magazine-ad">
+            <div className="text-center pt-3 position-relative"><Image style={{ cursor: 'pointer' }} alt='race logo' src='/images/white logo.png' width={60} height={60} onClick={() => router.back()} /></div>
+
             <div
-              className="mt-5"
+              className="mt-1"
               style={{
                 position: "absolute",
                 aspectRatio: "0.5/1",
                 width: "90%",
+                overflow: 'hidden'
+
               }}
             >
               <MagazineAd />

@@ -55,7 +55,7 @@
     min-width: 175px;
     width: 250px;
     max-width: 175px;
-    height: 400px;
+    height: 350px;
   }
 }
 
@@ -71,7 +71,7 @@
     min-width: 200px;
     width: 300px;
     max-width: 300px;
-    height: 500px;
+    height: 400px;
   }
 }
 
@@ -105,4 +105,35 @@
     max-width: 300px;
     height: 300px;
   }
+}
+
+
+.subscribeButton_magazine {
+  background-color: #ff6347; /* Tomato color */
+  color: #fff;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  animation: pulse 2s infinite ease-in-out; /* Pulsing animation */
+  transition: transform 0.3s ease;
+}
+
+/* Define the pulsing animation */
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 5px rgba(255, 99, 71, 0.7); /* Initial glow */
+  }
+  50% {
+    transform: scale(1.1); /* Slightly bigger */
+    box-shadow: 0 0 10 rgba(255, 99, 71, 1); /* Brighter glow */
+  }
+}
+
+.subscribeButton_magazine:hover {
+  /* background-color: white; */
+  color: black;
 }

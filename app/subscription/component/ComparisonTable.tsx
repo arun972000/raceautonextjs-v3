@@ -4,17 +4,15 @@ import "./ComparisonTable.css";
 import { Table, Container } from "react-bootstrap";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FaCheck, FaCheckCircle } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
 const PricingTable = () => {
   const [data, setData] = useState<any>([]);
 
   const planData = data.filter(
-    (item: any) => item.plan !== "Monthly price" && item.plan !== "Annual price"
+    (item: any) => item.plan !== "Monthly price" && item.plan !== "Annual price" && item.plan !== "usd"
   );
-  const priceData = data.filter(
-    (item: any) => item.plan == "Monthly price" || item.plan == "Annual price"
-  );
+
 
   const tableData = async () => {
     try {

@@ -4,11 +4,11 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Form } from "react-bootstrap";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const EditUser = () => {
   const { id } = useParams();
-
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [slug, setSlug] = useState("");
@@ -39,20 +39,20 @@ const EditUser = () => {
       setRoleTypes(res.data);
       setSubscriptionData(subscriptionRes.data);
       const date1 = new Date(subscriptionRes.data[0].start_date);
-    const date2 = new Date(subscriptionRes.data[0].end_date);
+      const date2 = new Date(subscriptionRes.data[0].end_date);
 
-    // Calculate the difference in milliseconds
-    const differenceInMs = date2.getTime() - date1.getTime();
-    
-    // Convert milliseconds to days
-    const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+      // Calculate the difference in milliseconds
+      const differenceInMs = date2.getTime() - date1.getTime();
 
-    // Determine if it's Monthly (<31 days) or Annual (≥365 days)
-    if (differenceInDays < 31) {
-      setPlanDuration("monthly");
-    } else if (differenceInDays >= 365) {
-      setPlanDuration("annual");
-    }
+      // Convert milliseconds to days
+      const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
+
+      // Determine if it's Monthly (<31 days) or Annual (≥365 days)
+      if (differenceInDays < 31) {
+        setPlanDuration("monthly");
+      } else if (differenceInDays >= 365) {
+        setPlanDuration("annual");
+      }
     } catch (err) {
       console.log(err);
     }
@@ -64,20 +64,57 @@ const EditUser = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/user/${id}`
       );
       const data = res.data[0];
+
       setEmail(data.email);
       setUsername(data.username);
       setSlug(data.slug);
-      setAboutMe(data.about_me);
-      setFacebookUrl(data.facebook_url);
-      setTwitterUrl(data.twitter_url);
-      setInstagramUrl(data.instagram_url);
-      setPinterestUrl(data.pinterest_url);
-      setLinkedinUrl(data.linkedin_url);
-      setVkUrl(data.vk_url);
-      setRole(data.role);
-      setPlan(data.subscription);
-      setTelegramUrl(data.telegram_url);
-      setYoutubeUrl(data.youtube_url);
+      setAboutMe(
+        data.about_me === null || data.about_me === "null" ? "" : data.about_me
+      );
+      setFacebookUrl(
+        data.facebook_url === null || data.facebook_url === "null"
+          ? ""
+          : data.facebook_url
+      );
+      setTwitterUrl(
+        data.twitter_url === null || data.twitter_url === "null"
+          ? ""
+          : data.twitter_url
+      );
+      setInstagramUrl(
+        data.instagram_url === null || data.instagram_url === "null"
+          ? ""
+          : data.instagram_url
+      );
+      setPinterestUrl(
+        data.pinterest_url === null || data.pinterest_url === "null"
+          ? ""
+          : data.pinterest_url
+      );
+      setLinkedinUrl(
+        data.linkedin_url === null || data.linkedin_url === "null"
+          ? ""
+          : data.linkedin_url
+      );
+      setVkUrl(
+        data.vk_url === null || data.vk_url === "null" ? "" : data.vk_url
+      );
+      setRole(data.role === null || data.role === "null" ? "" : data.role);
+      setPlan(
+        data.subscription === null || data.subscription === "null"
+          ? ""
+          : data.subscription
+      );
+      setTelegramUrl(
+        data.telegram_url === null || data.telegram_url === "null"
+          ? ""
+          : data.telegram_url
+      );
+      setYoutubeUrl(
+        data.youtube_url === null || data.youtube_url === "null"
+          ? ""
+          : data.youtube_url
+      );
     } catch (err) {
       console.log(err);
     }
@@ -90,7 +127,6 @@ const EditUser = () => {
       formData.append("username", username);
       formData.append("slug", slug);
       formData.append("role", role);
-      formData.append("subscription", plan);
       formData.append("about_me", aboutMe);
       formData.append("facebook_url", facebookUrl);
       formData.append("twitter_url", twitterUrl);
@@ -151,6 +187,9 @@ const EditUser = () => {
 
   return (
     <div className="row justify-content-center">
+      <button className="btn btn-secondery" onClick={() => router.back()}>
+        Back
+      </button>
       <div className="col-lg-6">
         <div className="shadow-sm p-3 mb-5 mt-5 bg-white rounded border-0">
           <form onSubmit={handleSubmit}>
@@ -204,7 +243,7 @@ const EditUser = () => {
                 ))}
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId="Plan" className="mb-3">
+            {/* <Form.Group controlId="Plan" className="mb-3">
               <Form.Label>Plan</Form.Label>
               <Form.Control
                 as="select"
@@ -243,7 +282,7 @@ const EditUser = () => {
                   onChange={(e) => setPlanDuration(e.target.value)}
                 />
               </div>
-            </Form.Group>
+            </Form.Group> */}
             <div className="mb-3">
               <label htmlFor="aboutMe" className="form-label">
                 About Me

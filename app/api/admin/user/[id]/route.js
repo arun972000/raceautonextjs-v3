@@ -44,7 +44,6 @@ export async function PUT(req) {
   const telegram_url = formData.get("telegram_url");
   const youtube_url = formData.get("youtube_url");
   const pinterest_url = formData.get("pinterest_url");
-  const subscription = formData.get('subscription')
 
   try {
     const [user] = await db.execute("SELECT * FROM users WHERE id = ?", [id]);
@@ -56,14 +55,13 @@ export async function PUT(req) {
 
 
     let query =
-      "UPDATE users SET email = ?, username = ?, slug = ?, role = ?, about_me = ?, facebook_url = ?, twitter_url = ?, instagram_url = ?, pinterest_url = ?, linkedin_url = ?, vk_url = ?, telegram_url = ?, youtube_url = ?, subscription = ?";
+      "UPDATE users SET email = ?, username = ?, slug = ?, role = ?, about_me = ?, facebook_url = ?, twitter_url = ?, instagram_url = ?, pinterest_url = ?, linkedin_url = ?, vk_url = ?, telegram_url = ?, youtube_url = ?";
 
     let values = [
       email,
       username,
       slug,
       role,
-      plans,
       about_me,
       facebook_url,
       twitter_url,
@@ -73,7 +71,6 @@ export async function PUT(req) {
       vk_url,
       telegram_url,
       youtube_url,
-      subscription
     ];
 
     if (avatar) {

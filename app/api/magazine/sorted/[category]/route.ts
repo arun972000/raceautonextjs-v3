@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     }
 
     const [results] = await db.execute(
-      `SELECT * FROM newsletter WHERE category = ?`,
+      `SELECT * FROM newsletter WHERE category = ? ORDER BY id DESC`,
       [category]
     );
     return NextResponse.json(results);
