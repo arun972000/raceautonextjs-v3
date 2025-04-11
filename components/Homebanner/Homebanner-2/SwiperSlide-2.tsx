@@ -55,7 +55,7 @@ export default function SwiperSilde_2({ slides }: { slides: SliderType[] }) {
               <div className="col-lg-8">
                 <ImageWithPlaceholder
                   src={
-                    process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_mid
+                    process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default
                   }
                   alt={item.title}
                 />

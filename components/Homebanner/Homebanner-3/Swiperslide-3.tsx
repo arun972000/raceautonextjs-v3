@@ -50,7 +50,7 @@ export default function SwiperSlide_3({ slides }: { slides: SliderType[] }) {
         <SwiperSlide key={item.id}>
           <Link href={`/post/${item.title_slug}`}>
             <ImageWithPlaceholder
-              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_mid}
+              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
               alt={item.title}
             />
             <div

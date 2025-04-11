@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 type SliderType = {
   id: number;
@@ -23,17 +24,20 @@ const SliderMobile = async () => {
 
   return (
     <div style={{ width: "100%", position: "relative", aspectRatio: "3/2" }}>
-      <Image
-        src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sortedSlider[0].image_mid}`}
-        alt={sortedSlider[0].title}
-        fill
-        style={{ objectFit: "cover" }}
-        priority
-        quality={60}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 40vw"
-        placeholder="blur"
-        blurDataURL="/images/dummy_600x400_ffffff_cccccc (1).png"
-      />
+      <Link href={`/post/${sortedSlider[0].title_slug}`}>
+        {" "}
+        <Image
+          src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sortedSlider[0].image_mid}`}
+          alt={sortedSlider[0].title}
+          fill
+          style={{ objectFit: "cover" }}
+          priority
+          quality={60}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 40vw"
+          placeholder="blur"
+          blurDataURL="/images/dummy_600x400_ffffff_cccccc (1).png"
+        />
+      </Link>
     </div>
   );
 };

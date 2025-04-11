@@ -53,7 +53,7 @@ export default function MySwiperComponent({
         <SwiperSlide key={item.id}>
           <Link href={`/post/${item.title_slug}`}>
             <ImageWithPlaceholder
-              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_mid}
+              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_big}
               alt={item.title}
             />
             <div

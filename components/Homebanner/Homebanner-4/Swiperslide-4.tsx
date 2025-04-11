@@ -15,6 +15,7 @@ type SliderType = {
   title: string;
   title_slug: string;
   image_mid: string;
+  image_default:string;
   slider_order: number;
 };
 
@@ -48,7 +49,7 @@ export default function SwiperSlide_4({ slides }: { slides: SliderType[] }) {
         <SwiperSlide key={item.id}>
           <Link href={`/post/${item.title_slug}`}>
             <ImageWithPlaceholder
-              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_mid}
+              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
               alt={item.title}
             />
             <div
