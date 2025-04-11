@@ -105,6 +105,8 @@ const MobileNavNew = () => {
               src="https://cdn.builder.io/api/v1/image/assets/TEMP/7e777268e3b3553a615a027fb85af09e61bcaf02"
               alt="Menu"
               className={styles.menuIcon}
+              onClick={toggleMenuSlide}
+              role="button"
             />
           </div>
         </nav>
