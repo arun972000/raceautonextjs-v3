@@ -74,40 +74,39 @@ const MobileNavNew = () => {
         </div>
 
         <nav className={styles.navigation}>
-          <NavigationItem icon={<AnalyticsIcon />} label="Analytics" />
-          <NavigationItem
-            icon={
+          <Link href="/">
+            <div className={styles.navItem}>
+              <AnalyticsIcon />
+            </div>
+          </Link>
+
+          <Link href="/">
+            <div className={styles.navItem}>
               <img
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/bea4fecc4446a86382647a281d085cc6da533bfd"
-                alt="News"
+                alt="Exclusive"
                 className={styles.navIcon}
               />
-            }
-            label="Exclusive"
-          />
-          <NavigationItem
-            icon={
+            </div>
+          </Link>
+
+          <Link href="/subscription">
+            <div className={styles.navItem}>
               <img
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/dd0a2d0065b792df2f57953f8ba1df037b02fbe5"
                 alt="Subscription"
                 className={styles.navIcon}
               />
-            }
-            label="Subscription"
-          />
-          <NavigationItem
-            icon={
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/7e777268e3b3553a615a027fb85af09e61bcaf02"
-                alt="Menu"
-                className={styles.menuIcon}
-                onClick={toggleMenuSlide}
-                role="button"
-              />
-            }
-            label=""
-            className={styles.menuItem}
-          />
+            </div>
+          </Link>
+
+          <div className={`${styles.navItem} ${styles.menuItem}`}>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/7e777268e3b3553a615a027fb85af09e61bcaf02"
+              alt="Menu"
+              className={styles.menuIcon}
+            />
+          </div>
         </nav>
       </div>
     </>

@@ -12,6 +12,27 @@
   right: 0;
 }
 
+.navItem {
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  display: flex;
+}
+
+.navLabel {
+  color: #252525;
+  font-family: Roboto, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+@media (width <= 640px) {
+  .navLabel {
+    font-size: 13px;
+  }
+}
+
+
 .navIcon {
   width: 23px;
   height: 23px;
@@ -63,3 +84,4 @@
     display: none;
   }
 }
+

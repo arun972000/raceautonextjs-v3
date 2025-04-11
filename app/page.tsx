@@ -69,7 +69,7 @@ const Home = async () => {
 
           {/* <ChatPopup /> */}
           <Footer />
-          {/* <GreenBar /> */}
+          <GreenBar />
 
       </div>
     </>
