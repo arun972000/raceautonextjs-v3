@@ -10,14 +10,17 @@ const LoginNavButton = () => {
   const [token, setToken] = useState(null);
 
   useEffect(() => {
-    const cookieToken:any = Cookies.get("authToken");
+    const cookieToken: any = Cookies.get("authToken");
     setToken(cookieToken);
   }, []);
 
   if (!token) {
     return (
       <Link href="/login">
-        <CiLogin size={25} className="me-3" />
+        <CiLogin
+          size={25}
+          className="ms-auto"
+        />
       </Link>
     );
   }

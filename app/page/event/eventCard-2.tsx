@@ -14,7 +14,6 @@ const EventCard_2 = async ({ item }: { item: eventType }) => {
         <div
           style={{ position: "relative", width: "100%", aspectRatio: "16/9" }}
         >
-          
             <Image
               src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_url}`}
               alt={item.title}

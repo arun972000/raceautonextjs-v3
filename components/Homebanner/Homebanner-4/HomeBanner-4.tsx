@@ -1,6 +1,8 @@
 import React from "react";
 import FeatureCard from "../FeatureCard";
 import Slider_4 from "./Slider-4";
+import styles from "../HomeBanner.module.css";
+import SliderMobile from "../SliderMobile";
 
 type Feature = {
   id: number;
@@ -27,12 +29,22 @@ const HomeBanner_4 = async () => {
     .slice(0, 3);
   return (
     <>
-      <div className={`row mb-4 mt-4`}>
-      <div className="col-lg-9 p-0">
+      <div className={`${styles.pc_homebanner} row mb-4 mt-4`}>
+        <div className="col-lg-9 p-0">
           <Slider_4 />
         </div>
         <div className="col-lg-3">
           <div className="row justify-content-center">{FeatureCardData1}</div>
+        </div>
+      </div>
+      <div className={`${styles.mobile_homebanner} row mb-4 mt-4`}>
+        <div className="col-12 p-0">
+          <div className="row m-0 p-0">
+            <div className="col-12">
+              <SliderMobile />
+            </div>
+            {/* {FeatureCardData1} */}
+          </div>
         </div>
       </div>
     </>

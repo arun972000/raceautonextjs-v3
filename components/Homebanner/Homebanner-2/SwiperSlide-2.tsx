@@ -15,6 +15,7 @@ type SliderType = {
   title: string;
   title_slug: string;
   image_big: string;
+  image_mid: string;
   image_default:string;
   slider_order: number;
   summary: string;
@@ -50,10 +51,12 @@ export default function SwiperSilde_2({ slides }: { slides: SliderType[] }) {
       {slides.map((item) => (
         <SwiperSlide key={item.id}>
           <Link href={`/post/${item.title_slug}`}>
-            <div className="row g-0" >
+            <div className="row g-0">
               <div className="col-lg-8">
                 <ImageWithPlaceholder
-                  src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
+                  src={
+                    process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_mid
+                  }
                   alt={item.title}
                 />
               </div>
@@ -83,7 +86,7 @@ function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
 
   return (
     <div style={{ width: "100%", position: "relative", aspectRatio: "16/9" }}>
-      {loading && (
+      {/* {loading && (
         <div
           style={{
             width: "100%",
@@ -104,10 +107,10 @@ function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
             highlightColor="#c7d2fe" // Slightly darker blue highlight
             className="my-4"
           />
-          {/* Replace this with any custom placeholder component, e.g., a spinner */}
+         
         </div>
-      )}
-      <Image
+      )} */}
+      {/* <Image
         src={src}
         alt={alt}
         fill
@@ -115,6 +118,17 @@ function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
         priority
         onLoad={() => setLoading(false)}
+      /> */}
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        style={{ objectFit: "cover" }}
+        priority
+        quality={60}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 40vw"
+        placeholder="blur"
+        blurDataURL="/images/dummy_600x400_ffffff_cccccc (1).png"
       />
     </div>
   );

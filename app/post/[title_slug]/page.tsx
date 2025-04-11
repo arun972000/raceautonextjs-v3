@@ -12,7 +12,8 @@ export async function generateMetadata({
   const { title_slug } = params;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${title_slug}`,{cache:'no-store'}
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${title_slug}`,
+    { cache: "no-store" }
   );
   const data: postType[] = await res.json();
 
@@ -63,7 +64,8 @@ const PostPage = async ({
   const cookieStore = await cookies();
   const token: any = cookieStore.get("authToken");
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${params.title_slug}`,{cache:'no-store'}
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/post/single-post/${params.title_slug}`,
+    { cache: "no-store" }
   );
   const data: postType[] = await res.json();
   return (
@@ -71,7 +73,10 @@ const PostPage = async ({
       {/* <ContentComponent token={token?.value} is_recommended={data[0].is_recommended}/> */}
       <div className="container">
         <div className={`row`}>
-          <Post title={params.title_slug} is_recommended={data[0].is_recommended}/>
+          <Post
+            title={params.title_slug}
+            is_recommended={data[0].is_recommended}
+          />
           <Sidebar />
         </div>
       </div>

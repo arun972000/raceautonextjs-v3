@@ -49,7 +49,7 @@ const ForexRates = () => {
   }
 
   return (
-    <div style={{ backgroundColor: "white" }}>
+    <div className={styles.stock_container} style={{ backgroundColor: "white" }}>
       <div className={`d-inline-flex ${styles.tickerContainer}`}>
         <div className={`badge bg-danger ${styles.liveBadge}`}>LIVE</div>
         <Swiper

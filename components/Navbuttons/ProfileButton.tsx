@@ -32,9 +32,11 @@ const ProfileButton = ({ token }: { token: string }) => {
   };
   return (
     <DropdownButton
-      variant="primary"
+      variant="secondary"
       id="dropdown-basic-button"
-      className="me-1"
+      drop="down" // ensures dropdown opens downward (default)
+      align="start" // aligns dropdown to the start (left side of the toggle)
+      className="ms-auto"
       title={<FaUser />}
     >
       <Dropdown.Item onClick={() => router.push("/profile")}>

@@ -53,3 +53,9 @@
     box-shadow: 0 0 10 rgba(255, 99, 71, 1); /* Brighter glow */
   }
 }
+
+@media (max-width: 768px) {
+  .stock_container {
+    display: none;
+  }
+}

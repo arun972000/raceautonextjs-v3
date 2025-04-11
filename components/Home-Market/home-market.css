@@ -23,3 +23,20 @@
 .market-title:hover {
   color: rgb(61, 61, 255);
 }
+
+
+
+
+.home_market_mobile {
+  display: none !important;
+}
+
+@media (max-width: 500px) {
+  .home_market_mobile {
+    display: block !important;
+  }
+
+  .home_market_desktop {
+    display: none !important;
+  }
+}

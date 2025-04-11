@@ -8,4 +8,15 @@ const s3Client = new S3Client({
   },
 });
 
+
+// export const s3Client = new S3Client({
+//   region: "us-east-1", // MinIO ignores this, just put any valid AWS region
+//   endpoint: "http://localhost:9000", // MinIO URL
+//   credentials: {
+//     accessKeyId: process.env.MINIO_ACCESS_KEY || "minioadmin",
+//     secretAccessKey: process.env.MINIO_SECRET_KEY || "minioadmin",
+//   },
+//   forcePathStyle: true, // Important for MinIO
+// });
+
 export default s3Client;

@@ -16,40 +16,54 @@ type SliderType = {
 
 export default function PostSlider({ images, title }: SliderType) {
   return (
-    <>
-      <Swiper
-        spaceBetween={30}
-        centeredSlides={true}
-        loop={true}
-        autoplay={{
-          delay: 2000,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true
-        }}
-        pagination={{
-          dynamicBullets: true,
-          clickable: true,
-        }}
-        modules={[Pagination, Autoplay]}
-      >
-        {images.map((item, i) => (
-          <SwiperSlide key={i}>
-            <ImageWithPlaceholder
-              src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
-              alt={title}
-            />
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </>
+    <Swiper
+      spaceBetween={30}
+      centeredSlides={true}
+      loop={true}
+      autoplay={{
+        delay: 2000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      }}
+      pagination={{
+        dynamicBullets: true,
+        clickable: true,
+      }}
+      modules={[Pagination, Autoplay]}
+    >
+      {images.map((item, i) => (
+        <SwiperSlide key={i}>
+          <ImageWithPlaceholder
+            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_default}`}
+            alt={title}
+            priority={i === 0} // Only first image gets priority
+          />
+        </SwiperSlide>
+      ))}
+    </Swiper>
   );
 }
 
-function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
+function ImageWithPlaceholder({
+  src,
+  alt,
+  priority,
+}: {
+  src: string;
+  alt: string;
+  priority?: boolean;
+}) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div style={{ position: "relative", aspectRatio: "16/9" }}>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        maxWidth: "100%",
+        aspectRatio: "16 / 9",
+      }}
+    >
       {loading && (
         <div
           style={{
@@ -72,10 +86,12 @@ function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
         src={src}
         alt={alt}
         fill
-        sizes="(max-width: 480px) 50vw, (max-width: 768px) 40vw, (max-width: 1200px) 60vw, 80vw"
-        priority
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 70vw, 50vw"
+        placeholder="blur"
+        blurDataURL="/images/dummy_600x400_ffffff_cccccc (1).png"
         style={{ objectFit: "cover" }}
         onLoad={() => setLoading(false)}
+        priority={priority}
       />
     </div>
   );

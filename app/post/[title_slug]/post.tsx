@@ -86,7 +86,7 @@ const Post = async ({
   return (
     <>
       <div className="col-lg-8 mt-3">
-        <div
+        {/* <div
           style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
           className="my-2"
         >
@@ -97,7 +97,7 @@ const Post = async ({
               fill
             />
           </a>
-        </div>
+        </div> */}
 
         <div>
           {(token || token !== undefined) && (
@@ -156,7 +156,7 @@ const Post = async ({
             </span>
           </Link>
         ))}
-        <div
+        {/* <div
           className="mt-2"
           style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
         >
@@ -167,7 +167,7 @@ const Post = async ({
               fill
             />
           </a>
-        </div>
+        </div> */}
       </div>
     </>
   );

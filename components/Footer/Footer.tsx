@@ -1,4 +1,4 @@
-import Image from "next/image";
+
 import Link from "next/link";
 import React from "react";
 import {
@@ -51,6 +51,8 @@ const Footer = async () => {
   const socialResponse = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/general-settings/social-media`
   );
+
+  
   const socialData: SocialData[] = await socialResponse.json();
 
   const pageResponse = await fetch(
@@ -62,6 +64,7 @@ const Footer = async () => {
   );
 
   return (
+
     <div className="footer mt-5 pb-2">
       <div className="container">
         <div className="row justify-content-center align-items-center mt-4">

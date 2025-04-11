@@ -45,10 +45,9 @@
   margin: 5px;
 }
 
-@media (max-width: 768px) {
-  .e-magazine-xm .d-flex.justify-content-evenly {
-    flex-direction: column;
-    text-align: center;
+@media (max-width: 1000px) {
+  .e-magazine-xm {
+    display: none;
   }
 
   .e-magazine-xm .d-flex.justify-content-evenly > div,

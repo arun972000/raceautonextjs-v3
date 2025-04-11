@@ -6,6 +6,7 @@ import Slider_3 from "./Slider-3";
 import FeatureCard_3 from "./FeatureCard_3";
 import Link from "next/link";
 import Image from "next/image";
+import SliderMobile from "../SliderMobile";
 
 type Feature = {
   id: number;
@@ -13,6 +14,7 @@ type Feature = {
   title_slug: string;
   image_big: string;
   image_default:string;
+  image_mid:string;
   created_at: any;
   featured_order: number;
   summary: string;
@@ -45,7 +47,7 @@ const HomeBanner_3 = async () => {
   );
   const FeatureCardData1 = orderedFeatures
     .map((item) => <FeatureCard_3 item={item} key={item.id} />)
-    .slice(0, 2);
+    .slice(0, 1);
 
   return (
     <>
@@ -106,9 +108,9 @@ const HomeBanner_3 = async () => {
         <div className="col-12 p-0">
           <div className="row m-0 p-0">
             <div className="col-12">
-              <Slider_3 />
+              <SliderMobile />
             </div>
-            {FeatureCardData1}
+            {/* {FeatureCardData1} */}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@ import React from "react";
 import Slider from "./Slider";
 import FeatureCard from "./FeatureCard";
 import styles from "./HomeBanner.module.css";
+import SliderMobile from "./SliderMobile";
 
 type Feature = {
   id: number;
@@ -45,7 +46,7 @@ const HomeBanner = async () => {
       </div>
       <div className={`${styles.mobile_homebanner} row mb-4`}>
         <div className="col-12 p-0">
-          <Slider />
+          <SliderMobile />
         </div>
         <div className="col-12">
           <div className="row">{FeatureCardData1}</div>

@@ -2,9 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-unescaped-entities */
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { FaFileImage } from "react-icons/fa";
@@ -16,7 +15,8 @@ const EventPost = () => {
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
-  const [event_date, setDate] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [location, setLocation] = useState("");
   const [referenceLink, setReferenceLink] = useState("");
   const [image_url, setImage_url] = useState<any>([]);
@@ -38,17 +38,9 @@ const EventPost = () => {
     transition: "border .24s ease-in-out",
   };
 
-  const focusedStyle = {
-    borderColor: "#2196f3",
-  };
-
-  const acceptStyle = {
-    borderColor: "#00e676",
-  };
-
-  const rejectStyle = {
-    borderColor: "#ff1744",
-  };
+  const focusedStyle = { borderColor: "#2196f3" };
+  const acceptStyle = { borderColor: "#00e676" };
+  const rejectStyle = { borderColor: "#ff1744" };
 
   const onDrop = useCallback((acceptedFiles: any) => {
     setImage_url(acceptedFiles[0]);
@@ -58,9 +50,7 @@ const EventPost = () => {
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
-      accept: {
-        "image/*": [],
-      },
+      accept: { "image/*": [] },
       onDrop,
     });
 
@@ -74,27 +64,47 @@ const EventPost = () => {
     [isFocused, isDragAccept, isDragReject]
   );
 
-  const handleKeywordsChange = (e: any) => {
-    setReferenceLink(e.target.value);
+  const formatDateWithSuffix = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const day = date.getDate();
+    const suffix =
+      day % 10 === 1 && day !== 11
+        ? "st"
+        : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+        ? "rd"
+        : "th";
+
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long",
+      year: "numeric",
+    };
+
+    return `${day}${suffix} ${date.toLocaleDateString("en-US", options)}`;
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
-
+    const formattedStart = formatDateWithSuffix(startDate);
+    const formattedEnd = formatDateWithSuffix(endDate);
+    const eventDateFormatted = `${formattedStart} - ${formattedEnd}`;
+  
     formData.append("title", title);
     formData.append("summary", summary);
-    formData.append("event_date", event_date);
+    formData.append("event_date", eventDateFormatted);
     formData.append("location", location);
     formData.append("referenceLink", referenceLink);
     formData.append("image_url", image_url);
-
+  
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/event`,
         formData
       );
+  
       toast.success("Event posted!", {
         position: "top-right",
         autoClose: 4000,
@@ -105,6 +115,18 @@ const EventPost = () => {
         progress: undefined,
         theme: "light",
       });
+  
+      // ✅ Reset all form fields here
+      setTitle("");
+      setSummary("");
+      setStartDate("");
+      setEndDate("");
+      setLocation("");
+      setReferenceLink("");
+      setImage_url([]);
+      setPreview("");
+      setIsFileSelected(false);
+  
     } catch (err) {
       toast.warn(
         "An error occurred while submitting the form. Please try again later.",
@@ -122,10 +144,11 @@ const EventPost = () => {
       console.log(err);
     }
   };
+  
 
   return (
     <div className="col-12">
-      <div className="shadow-sm p-3 mb-5  mt-5 bg-white rounded border-0">
+      <div className="shadow-sm p-3 mb-5 mt-5 bg-white rounded border-0">
         <Link href="/admin/event">
           <button className="btn btn-secondary my-3">Back</button>
         </Link>
@@ -153,13 +176,22 @@ const EventPost = () => {
               />
             </Form.Group>
 
-            <Form.Group controlId="formDate" className="mb-3">
-              <Form.Label>Date</Form.Label>
+            <Form.Group controlId="formStartDate" className="mb-3">
+              <Form.Label>Start Date</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Format: 18th November 2024 - 22nd November 2024"
-                value={event_date}
-                onChange={(e) => setDate(e.target.value)}
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formEndDate" className="mb-3">
+              <Form.Label>End Date</Form.Label>
+              <Form.Control
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
                 required
               />
             </Form.Group>
@@ -181,10 +213,11 @@ const EventPost = () => {
                 type="text"
                 placeholder="Enter Reference Link"
                 value={referenceLink}
-                onChange={handleKeywordsChange}
+                onChange={(e) => setReferenceLink(e.target.value)}
                 required
               />
             </Form.Group>
+
             {preview && (
               <Image
                 src={preview}
@@ -194,6 +227,7 @@ const EventPost = () => {
                 width={380}
               />
             )}
+
             <Form.Group controlId="formImage_url" className="mb-3">
               <Form.Label>Select Image</Form.Label>
               <div {...getRootProps({ style })}>

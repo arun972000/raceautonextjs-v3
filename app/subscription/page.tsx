@@ -10,8 +10,9 @@ import GreenBar from "@/components/GreenBar/MagazineBar";
 import Script from "next/script";
 import { cookies } from "next/headers";
 import PricingTable from "./component/ComparisonTable";
+import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 
-const page = async() => {
+const page = async () => {
   const cookieStore = await cookies();
   const token: any = cookieStore.get("authToken");
   return (
@@ -22,10 +23,10 @@ const page = async() => {
       />
       <BreakingNews />
       <Navbar />
-
+      <MobileNavNew />
       <div className="main_content__position">
         <SubscriptionPage />
-        <PricingTable/>
+        <PricingTable />
       </div>
       <Footer />
       <GreenBar />

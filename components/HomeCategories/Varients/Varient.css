@@ -32,3 +32,18 @@ a {
 .card-no-bg{
   background-color: transparent;
 }
+
+
+.home_categories_mobile {
+  display: none !important;
+}
+
+@media (max-width: 500px) {
+  .home_categories_mobile {
+    display: block !important;
+  }
+
+  .home_categories_desktop {
+    display: none !important;
+  }
+}

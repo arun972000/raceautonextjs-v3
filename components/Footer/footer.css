@@ -20,14 +20,15 @@
     font-size: smaller;
   }
   
-  @media screen and (max-width:600px) {
+  @media screen and (max-width:1000px) {
     .footer{
-      margin-bottom: 30px;
+      display: none;
+      /* margin-bottom: 30px; */
     }
   
-    .footer .footer-logo{
+    /* .footer .footer-logo{
       width: 100px;
-    }
+    } */
   }
   
   

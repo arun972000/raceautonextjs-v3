@@ -6,6 +6,10 @@ import Varient5 from "./Varients/Varient 5/Varient5";
 import Varient4 from "./Varients/Varient 4/Varient4";
 import { catgeorypropType } from "@/types/category";
 import Varient6 from "./Varients/Varient 6/V6";
+import "@/components/HomeCategories/Varients/Varient.css";
+import Image from "next/image";
+import Link from "next/link";
+import { formatDate } from "../Time";
 
 type varient = {
   id: number;
@@ -55,7 +59,7 @@ const HomeCategories = async ({ item }: catgeorypropType) => {
           </span>
         </h2>
       </div>
-      <div className="row">
+      <div className="row home_categories_desktop">
         <div className="col-12">
           <div className="row mt-3">
             {item.block_type == "block-1" &&
@@ -70,6 +74,33 @@ const HomeCategories = async ({ item }: catgeorypropType) => {
             {item.block_type == "block-5" && (
               <Varient5 item={v3data} single={v3Single} />
             )}
+          </div>
+        </div>
+      </div>
+      <div className="row home_categories_mobile">
+        <div className="mb-3 col-12">
+          <div className="card card-no-bg" style={{ height: "100%" }}>
+            <Link
+              className="link-style"
+              href={`/post/${v3Single[0].title_slug}`}
+            >
+              <div className="image-container">
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${v3Single[0].image_mid}`}
+                  className="varient-image"
+                  alt={v3Single[0].title}
+                  fill
+                  priority
+                  sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, (max-width: 1200px) 25vw, 15vw"
+                />
+              </div>
+              <div className="card-body">
+                <p className="mt-3 card-heading">{v3Single[0].title}</p>
+                <p className="card-text small">
+                  {formatDate(v3Single[0].created_at)}
+                </p>
+              </div>
+            </Link>
           </div>
         </div>
       </div>

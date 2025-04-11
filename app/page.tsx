@@ -17,6 +17,8 @@ import Services from "@/components/Servicesbar/ServiceBar";
 import RefreshOnVerified from "./Verifies";
 import ChatPopup from "@/components/ChatBot/MessangerContainer";
 import AdHeader from "@/components/GoogleAds/AdHeader";
+import styles from './page.module.css'
+import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 
 const Home = async () => {
   const sliderRes = await fetch(
@@ -30,9 +32,10 @@ const Home = async () => {
     <>
       {/* This component will check for "verified" query param and reload if present */}
       <RefreshOnVerified />
-      <div>
+      <div className="container-fluid m-0 p-0">
         <BreakingNews />
         <Navbar />
+        <MobileNavNew/>
         <div className="main_content__position">
           <div className="container">
             <HeaderAd />
@@ -63,11 +66,11 @@ const Home = async () => {
           <hr />
           <Services />
         </div>
-        <div className="container-fluid">
+
           {/* <ChatPopup /> */}
           <Footer />
-          <GreenBar />
-        </div>
+          {/* <GreenBar /> */}
+
       </div>
     </>
   );

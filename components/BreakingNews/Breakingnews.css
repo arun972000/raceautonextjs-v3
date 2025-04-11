@@ -25,19 +25,20 @@
     font-style: normal;
   }
   
-  @media only screen and (max-width: 600px) {
-    .breaking-news__content{
-      font-size: 11px !important;
+  @media only screen and (max-width: 1000px) {
+    .breaking-news__container{
+      display: none;
+      /* font-size: 11px !important;
       margin-left: 120px;
       padding: 5px 0px;
       font-family: "Roboto", sans-serif;
       font-weight: 600;
-      font-style: normal;
+      font-style: normal; */
     }
   }
   
   
-  @media only screen and (min-width: 600px) {
+  @media only screen and (min-width: 1000px) {
     .breaking-news__content{
       font-size: 16px !important;
       margin-left: 125px;

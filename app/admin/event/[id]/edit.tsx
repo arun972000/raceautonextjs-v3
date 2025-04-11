@@ -1,9 +1,8 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-unescaped-entities */
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { FaFileImage } from "react-icons/fa";
@@ -17,7 +16,8 @@ const EventEdit = () => {
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
-  const [event_date, setDate] = useState("");
+  const [start_date, setStartDate] = useState("");
+  const [end_date, setEndDate] = useState("");
   const [location, setLocation] = useState("");
   const [referenceLink, setReferenceLink] = useState("");
   const [image_url, setImage_url] = useState<any>([]);
@@ -40,17 +40,9 @@ const EventEdit = () => {
     transition: "border .24s ease-in-out",
   };
 
-  const focusedStyle = {
-    borderColor: "#2196f3",
-  };
-
-  const acceptStyle = {
-    borderColor: "#00e676",
-  };
-
-  const rejectStyle = {
-    borderColor: "#ff1744",
-  };
+  const focusedStyle = { borderColor: "#2196f3" };
+  const acceptStyle = { borderColor: "#00e676" };
+  const rejectStyle = { borderColor: "#ff1744" };
 
   const onDrop = useCallback((acceptedFiles: any) => {
     setImage_url(acceptedFiles[0]);
@@ -60,9 +52,7 @@ const EventEdit = () => {
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
-      accept: {
-        "image/*": [],
-      },
+      accept: { "image/*": [] },
       onDrop,
     });
 
@@ -81,30 +71,26 @@ const EventEdit = () => {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/event/${id}`
       );
-      setTitle(res.data[0].title);
-      setSummary(res.data[0].summary);
-      setLocation(res.data[0].location);
-      setReferenceLink(res.data[0].referenceLink);
-      setDate(res.data[0].event_date);
-      setPreview(
-        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${res.data[0].image_url}`
-      );
+      const event = res.data[0];
+      setTitle(event.title);
+      setSummary(event.summary);
+      setLocation(event.location);
+      setReferenceLink(event.referenceLink);
+      setStartDate(new Date(event.start_date).toISOString().split("T")[0]);
+      setEndDate(new Date(event.end_date).toISOString().split("T")[0]);
+      setPreview(`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${event.image_url}`);
     } catch (err) {
-      console.log(err);
+      console.error("Failed to fetch event data", err);
     }
-  };
-  const handleKeywordsChange = (e: any) => {
-    setReferenceLink(e.target.value);
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
     const formData = new FormData();
-
     formData.append("title", title);
     formData.append("summary", summary);
-    formData.append("event_date", event_date);
+    formData.append("start_date", start_date);
+    formData.append("end_date", end_date);
     formData.append("location", location);
     formData.append("referenceLink", referenceLink);
     formData.append("image_url", image_url);
@@ -118,11 +104,6 @@ const EventEdit = () => {
       toast.success("Event updated!", {
         position: "top-right",
         autoClose: 4000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: "light",
       });
     } catch (err) {
@@ -131,15 +112,11 @@ const EventEdit = () => {
         {
           position: "top-right",
           autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: "light",
         }
       );
-      console.log(err);
+      console.error("Error updating event:", err);
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -147,6 +124,7 @@ const EventEdit = () => {
   useEffect(() => {
     eventData();
   }, []);
+
   return (
     <div className="col-12">
       <div className="shadow-sm p-3 mb-5 mt-5 bg-white rounded border-0">
@@ -155,93 +133,102 @@ const EventEdit = () => {
         </Link>
         <div className="row justify-content-center">
           <div className="col-md-6">
-            <Form.Group controlId="formTitle" className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-            </Form.Group>
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="formTitle" className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  required
+                />
+              </Form.Group>
 
-            <Form.Group controlId="formSummary" className="mb-3">
-              <Form.Label>Summary</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter summary"
-                value={summary}
-                onChange={(e) => setSummary(e.target.value)}
-                required
-              />
-            </Form.Group>
+              <Form.Group controlId="formSummary" className="mb-3">
+                <Form.Label>Summary</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter summary"
+                  value={summary}
+                  onChange={(e) => setSummary(e.target.value)}
+                  required
+                />
+              </Form.Group>
 
-            <Form.Group controlId="formDate" className="mb-3">
-              <Form.Label>Date</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Format: 18th November 2024 - 22nd November 2024"
-                value={event_date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
-            </Form.Group>
+              <Form.Group controlId="formStartDate" className="mb-3">
+                <Form.Label>Start Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={start_date}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  required
+                />
+              </Form.Group>
 
-            <Form.Group controlId="formLocation" className="mb-3">
-              <Form.Label>Location</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter location"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                required
-              />
-            </Form.Group>
+              <Form.Group controlId="formEndDate" className="mb-3">
+                <Form.Label>End Date</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={end_date}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                />
+              </Form.Group>
 
-            <Form.Group controlId="formReferenceLink" className="mb-3">
-              <Form.Label>Reference Link</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter Reference Link"
-                value={referenceLink}
-                onChange={handleKeywordsChange}
-                required
-              />
-            </Form.Group>
-            {preview && (
-              <Image
-                src={preview}
-                alt="Banner Preview"
-                className="my-3"
-                height={200}
-                width={200}
-              />
-            )}
-            <Form.Group controlId="formImage_url" className="mb-3">
-              <Form.Label>Select Image</Form.Label>
-              <div {...getRootProps({ style })}>
-                <input {...getInputProps()} style={{ display: "none" }} />
-                {isFileSelected ? (
-                  <p>Image file selected</p>
-                ) : (
-                  <div className="text-center">
-                    <FaFileImage className="mb-3" style={{ fontSize: 35 }} />
-                    <p>
-                      Drag 'n' drop image files here, or click to select files
-                    </p>
-                  </div>
-                )}
-              </div>
-            </Form.Group>
+              <Form.Group controlId="formLocation" className="mb-3">
+                <Form.Label>Location</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  required
+                />
+              </Form.Group>
 
-            <Button
-              variant="primary"
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Updated" : "Submit"}
-            </Button>
+              <Form.Group controlId="formReferenceLink" className="mb-3">
+                <Form.Label>Reference Link</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Reference Link"
+                  value={referenceLink}
+                  onChange={(e) => setReferenceLink(e.target.value)}
+                  required
+                />
+              </Form.Group>
+
+              {preview && (
+                <Image
+                  src={preview}
+                  alt="Banner Preview"
+                  className="my-3"
+                  height={200}
+                  width={200}
+                />
+              )}
+
+              <Form.Group controlId="formImage_url" className="mb-3">
+                <Form.Label>Select Image</Form.Label>
+                <div {...getRootProps({ style })}>
+                  <input {...getInputProps()} />
+                  {isFileSelected ? (
+                    <p>Image file selected</p>
+                  ) : (
+                    <div className="text-center">
+                      <FaFileImage className="mb-3" style={{ fontSize: 35 }} />
+                      <p>
+                        Drag 'n' drop image files here, or click to select
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </Form.Group>
+
+              <Button variant="primary" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Updating..." : "Submit"}
+              </Button>
+            </Form>
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ async function verifyToken(token: any) {
 const routePermissions: any = {
   "/admin": "admin_panel",
   "/admin/ai-powered/:path*":"ai_powered",
-  "/admin/magazine/:path*": "magazine",
+  "/admin/magazine/:path*": "newsletter",
   "/admin/page": "pages",
   "/admin/subscription/:path*": "subscription",
   "/admin/reports": "pages",

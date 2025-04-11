@@ -62,17 +62,17 @@ const Navbar = async () => {
       >
         <div className={styles.desktop_nav}>
           <div className={styles.d_navlogo}>
-          <Link
-                    className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
-                    href="/"
-                  >
-            <Image
-              src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoData[0].logo}`}
-              alt="logo header"
-              width={40}
-              height={40}
-              className="ms-4"
-            />
+            <Link
+              className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
+              href="/"
+            >
+              <Image
+                src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoData[0].logo}`}
+                alt="logo header"
+                width={40}
+                height={40}
+                className="ms-4"
+              />
             </Link>
             <button
               className="navbar-toggler"
@@ -201,10 +201,10 @@ const Navbar = async () => {
         morePagefiltered={morePagefiltered}
         Main_Category={Main_Category}
       /> */}
-      <MobileNavbarSample  logoData={logoData[0]}
+      {/* <MobileNavbarSample  logoData={logoData[0]}
         morePagefiltered={morePagefiltered}
-        Main_Category={Main_Category}/>
-        <ForexRates/>
+        Main_Category={Main_Category}/> */}
+      <ForexRates />
     </div>
   );
 };
