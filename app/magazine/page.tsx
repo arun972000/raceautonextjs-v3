@@ -6,6 +6,7 @@ import BreakingNews from "@/components/BreakingNews/BreakingNews";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
+import GreenBar from "@/components/GreenBar/MagazineBar";
 
 const page = () => {
   return (
@@ -13,8 +14,9 @@ const page = () => {
       <BreakingNews />
       <Navbar />
       <MobileNavNew/>
-      <Magazine_v2 />
+      <div className="main_content__position"><Magazine_v2 /></div>
       <Footer />
+      <GreenBar/>
     </>
   );
 };

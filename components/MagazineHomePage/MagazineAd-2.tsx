@@ -79,7 +79,7 @@ const MagazineAd_2 = () => {
           .map((item: magazineCardType) => (
             <SwiperSlide key={item.id}>
               <Card className="mx-3">
-                <Link href={`/magazine/${item.title_slug}`}>
+                <Link href={`/magazine/`}>
                   <div
                     style={{
                       position: "relative",
