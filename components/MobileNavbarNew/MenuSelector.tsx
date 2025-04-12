@@ -7,8 +7,10 @@ import Image from "next/image";
 import { mainMenu } from "../Navbar/Navbar";
 import Subcategory from "../Navbar/Subcategory";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function MarketDropdown() {
+  const router=useRouter();
   const [openMenus, setOpenMenus] = useState<{ [key: number]: boolean }>({});
   const [mainCategory, setMainCategory] = useState([]);
   const [subCategories, setSubCategories] = useState<{ [key: number]: any[] }>(

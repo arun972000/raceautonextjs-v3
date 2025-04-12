@@ -1,6 +1,7 @@
 .card__container {
     border-radius: 8px;
     transition: transform 0.2s ease-in-out;
+    background-color: #d5d5d5;
   }
   
   .card__container:hover {

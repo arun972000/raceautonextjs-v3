@@ -9,11 +9,11 @@ import { IoMdClose } from "react-icons/io";
 
 export const SearchBar: React.FC = () => {
   return (
-    <nav className={styles.searchBar} role="search">
+    <div className={styles.searchBar} role="search">
       <Image src='/images/black logo.png' alt='logo nav' width={35} height={35}/>
       <SearchInput />
       <IoMdClose className={styles.closeButton}/>
-    </nav>
+    </div>
   );
 };
 

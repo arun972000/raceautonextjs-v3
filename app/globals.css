@@ -53,15 +53,6 @@ a {
   margin-bottom: 290px;
 }
 
-@media only screen and (max-width: 840px) {
-  .main_content__position {
-    min-height: 100vh;
-    padding-top: 0;
-    position: relative;
-    z-index: 1;
-    margin-bottom: 390px;
-  }
-}
 
 @media only screen and (max-width: 600px) {
   .main_content__position {
@@ -69,6 +60,6 @@ a {
     padding-top: 0;
     position: relative;
     z-index: 1;
-    margin-bottom: 550px;
+    margin-bottom: 10px;
   }
 }

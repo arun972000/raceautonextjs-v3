@@ -32,10 +32,11 @@ const Home = async () => {
     <>
       {/* This component will check for "verified" query param and reload if present */}
       <RefreshOnVerified />
+      <MobileNavNew/>
       <div className="container-fluid m-0 p-0">
         <BreakingNews />
         <Navbar />
-        <MobileNavNew/>
+        
         <div className="main_content__position">
           <div className="container">
             <HeaderAd />

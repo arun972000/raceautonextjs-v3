@@ -8,8 +8,8 @@ import Link from "next/link";
 export function BottomNavigation() {
   console.log(styles)
   return (
-    <nav className={styles.navigation}>
+    <div className={styles.navigation}>
       
-    </nav>
+    </div>
   );
 }
