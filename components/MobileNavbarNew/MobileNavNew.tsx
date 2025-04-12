@@ -105,7 +105,7 @@ const MobileNavNew = () => {
 
   return (
     <>
-      <div className={styles.mobile_navbar}>
+      <div className={styles.mobile_navbar} style={{color:'black'}}>
         <div
           style={{
             position: "fixed",
