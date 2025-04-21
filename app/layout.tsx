@@ -162,6 +162,7 @@ export default async function RootLayout({
       <body>
         <AddBootstrap />
         <ToastContainer />
+        <FloatingChatBot/>
         <ThemeProvider attribute="class">{children}</ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />

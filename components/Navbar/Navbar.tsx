@@ -38,6 +38,8 @@ const Navbar = async () => {
 
   const marketData = await marketResponse.json();
 
+  const marketFilteredValue= marketData.filter((item: any)=>item.show_on_menu == 1)
+
   const logoData = await logoResponse.json();
 
   const morepageResponse = await fetch(
@@ -116,7 +118,7 @@ const Navbar = async () => {
                     className={`${styles.dropdown_menu_custom} dropdown-menu`}
                     aria-labelledby="navbarDropdown"
                   >
-                    {marketData.map((item: marketType) => (
+                    {marketFilteredValue.map((item: marketType) => (
                       <Link
                         key={item.id}
                         className={`${styles.dropdown_item} dropdown-item`}

@@ -15,9 +15,8 @@ import HomeBanner_2 from "@/components/Homebanner/Homebanner-2/HomeBanner-2";
 import LinkedinPage from "@/components/LinkedinForm/LinkedinPage";
 import Services from "@/components/Servicesbar/ServiceBar";
 import RefreshOnVerified from "./Verifies";
-import ChatPopup from "@/components/ChatBot/MessangerContainer";
 import AdHeader from "@/components/GoogleAds/AdHeader";
-import styles from './page.module.css'
+import styles from "./page.module.css";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 
 const Home = async () => {
@@ -31,15 +30,18 @@ const Home = async () => {
   return (
     <>
       {/* This component will check for "verified" query param and reload if present */}
+
       <RefreshOnVerified />
-      <MobileNavNew/>
+      <MobileNavNew />
       <div className="container-fluid m-0 p-0">
         <BreakingNews />
         <Navbar />
-        
+
         <div className="main_content__position">
           <div className="container">
+          <div className={styles.ad_header}>
             <HeaderAd />
+            </div>
             {sliderType == 1 ? (
               <HomeBanner />
             ) : sliderType == 2 ? (
@@ -52,7 +54,9 @@ const Home = async () => {
               <HomeBanner />
             )}
             <h1>Latest Updates on Automobiles, Agriculture & Construction</h1>
-            <AdHeader />
+            <div className={styles.ad_header}>
+              <AdHeader />
+            </div>
             <MagazineAd_2 />
             <HomeMarket />
             <HomeReports />
@@ -68,10 +72,9 @@ const Home = async () => {
           <Services />
         </div>
 
-          {/* <ChatPopup /> */}
-          <Footer />
-          <GreenBar />
-
+        {/* <ChatPopup /> */}
+        <Footer />
+        <GreenBar />
       </div>
     </>
   );

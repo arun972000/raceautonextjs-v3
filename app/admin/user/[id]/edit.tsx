@@ -26,37 +26,42 @@ const EditUser = () => {
   const [rolesTypes, setRoleTypes] = useState([]);
   const [planDuration, setPlanDuration] = useState("annual");
   const [subscriptionData, setSubscriptionData] = useState([]);
-  const roleData = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/role/roles`
-      );
+  // 1. Fetch Roles
+const fetchRoles = async () => {
+  try {
+    const res = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/role/roles`
+    );
+    setRoleTypes(res.data);
+  } catch (err) {
+    console.log("Error fetching roles:", err);
+  }
+};
 
-      const subscriptionRes = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/user_id/${id}`
-      );
+// 2. Fetch Subscription and Determine Plan Duration
+const fetchSubscriptionData = async () => {
+  try {
+    const subscriptionRes = await axios.get(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/user_id/${id}`
+    );
+    setSubscriptionData(subscriptionRes.data);
 
-      setRoleTypes(res.data);
-      setSubscriptionData(subscriptionRes.data);
-      const date1 = new Date(subscriptionRes.data[0].start_date);
-      const date2 = new Date(subscriptionRes.data[0].end_date);
+    const date1 = new Date(subscriptionRes.data[0].start_date);
+    const date2 = new Date(subscriptionRes.data[0].end_date);
 
-      // Calculate the difference in milliseconds
-      const differenceInMs = date2.getTime() - date1.getTime();
+    const differenceInMs = date2.getTime() - date1.getTime();
+    const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
 
-      // Convert milliseconds to days
-      const differenceInDays = differenceInMs / (1000 * 60 * 60 * 24);
-
-      // Determine if it's Monthly (<31 days) or Annual (≥365 days)
-      if (differenceInDays < 31) {
-        setPlanDuration("monthly");
-      } else if (differenceInDays >= 365) {
-        setPlanDuration("annual");
-      }
-    } catch (err) {
-      console.log(err);
+    if (differenceInDays < 31) {
+      setPlanDuration("monthly");
+    } else if (differenceInDays >= 365) {
+      setPlanDuration("annual");
     }
-  };
+  } catch (err) {
+    console.log("Error fetching subscription data:", err);
+  }
+};
+
 
   const formDataApi = async () => {
     try {
@@ -177,7 +182,8 @@ const EditUser = () => {
 
   useEffect(() => {
     formDataApi();
-    roleData();
+    fetchRoles();
+    fetchSubscriptionData();
   }, []);
 
   const handleSubmit = (e: any) => {
@@ -243,46 +249,7 @@ const EditUser = () => {
                 ))}
               </Form.Control>
             </Form.Group>
-            {/* <Form.Group controlId="Plan" className="mb-3">
-              <Form.Label>Plan</Form.Label>
-              <Form.Control
-                as="select"
-                value={plan}
-                onChange={(e) => setPlan(e.target.value)}
-              >
-                {[
-                  { id: 0, name: "Bronze", value: 0 },
-                  { id: 1, name: "Silver", value: 1 },
-                  { id: 2, name: "Gold", value: 2 },
-                  { id: 3, name: "Platinum", value: 3 },
-                ].map((item) => (
-                  <option key={item.id} value={item.value}>
-                    {item.name}
-                  </option>
-                ))}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group controlId="PlanDuration" className="mb-3">
-              <Form.Label>Plan Duration</Form.Label>
-              <div>
-                <Form.Check
-                  type="radio"
-                  id="monthly"
-                  label="Monthly"
-                  value="monthly"
-                  checked={planDuration === "monthly"}
-                  onChange={(e) => setPlanDuration(e.target.value)}
-                />
-                <Form.Check
-                  type="radio"
-                  id="annual"
-                  label="Annual"
-                  value="annual"
-                  checked={planDuration === "annual"}
-                  onChange={(e) => setPlanDuration(e.target.value)}
-                />
-              </div>
-            </Form.Group> */}
+          
             <div className="mb-3">
               <label htmlFor="aboutMe" className="form-label">
                 About Me

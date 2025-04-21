@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { PiFileAudioFill, PiNewspaperClippingDuotone } from "react-icons/pi";
+import { CgTemplate } from "react-icons/cg";
 import {
   FaAd,
   FaAdversal,
@@ -130,7 +131,12 @@ const AdminSidebar = async () => {
               <span className="ms-1 d-none d-sm-inline">Pages</span>
             </Link>
           </li>
-          
+          <li>
+            <Link href="/admin/email-template-builder" className="nav-link px-0 align-middle">
+            <CgTemplate />{" "}
+              <span className="ms-1 d-none d-sm-inline">Email Template Builder</span>
+            </Link>
+          </li>
           {/* <li>
             <Link
               href="/admin/subscription"

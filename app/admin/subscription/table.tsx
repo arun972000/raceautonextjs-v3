@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import { SubscriptionType } from "@/types/subscription";
 import PlanForm from "./createList";
+import { FaCheck, FaTimes } from "react-icons/fa";
 
 const SubscriptionTable = () => {
   const [data, setData] = useState([]);
@@ -19,11 +20,15 @@ const SubscriptionTable = () => {
       );
       const onlyData = res.data.filter(
         (item: SubscriptionType) =>
-          item.plan !== "Monthly price" && item.plan !== "Annual price"
+          item.plan !== "Monthly price" &&
+          item.plan !== "Annual price" &&
+          item.plan !== "usd"
       );
       const onlyPrice = res.data.filter(
         (item: SubscriptionType) =>
-          item.plan === "Monthly price" || item.plan === "Annual price" || item.plan === "usd"
+          item.plan === "Monthly price" ||
+          item.plan === "Annual price" ||
+          item.plan === "usd"
       );
 
       setData(onlyData);
@@ -74,27 +79,64 @@ const SubscriptionTable = () => {
             {[...data, ...priceData].map((item: SubscriptionType) => (
               <tr key={item.id}>
                 <td>{item.plan}</td>
-                <td>{item.platinum}</td>
-                <td>{item.gold}</td>
-                <td>{item.silver}</td>
-                <td>{item.bronze}</td>
+
+                <td>
+                  {item.platinum == 1 ? (
+                    <FaCheck color="green" />
+                  ) : item.platinum == 0 ? (
+                    <FaTimes color="red" />
+                  ) : (
+                    item.platinum
+                  )}
+                </td>
+
+                <td>
+                  {item.gold == 1 ? (
+                    <FaCheck color="green" />
+                  ) : item.gold == 0 ? (
+                    <FaTimes color="red" />
+                  ) : (
+                    item.gold
+                  )}
+                </td>
+
+                <td>
+                  {item.silver == 1 ? (
+                    <FaCheck color="green" />
+                  ) : item.silver == 0 ? (
+                    <FaTimes color="red" />
+                  ) : (
+                    item.silver
+                  )}
+                </td>
+
+                <td>
+                  {item.bronze == 1 ? (
+                    <FaCheck color="green" />
+                  ) : item.bronze == 0 ? (
+                    <FaTimes color="red" />
+                  ) : (
+                    item.bronze
+                  )}
+                </td>
                 <td>
                   <div className="d-flex">
-
-                      <Link href={`/admin/subscription/${item.id}`}>
-                        <button className="btn btn-primary me-3">
-                          <MdModeEdit size={20} />
-                        </button>
-                      </Link>
-
-                    {item.plan !== "Monthly price" && item.plan !== "Annual price" && item.plan !== "usd" && (
-                      <button
-                        className="btn btn-danger me-3"
-                        onClick={() => handleDelete(item.id)}
-                      >
-                        <MdDelete size={20} />
+                    <Link href={`/admin/subscription/${item.id}`}>
+                      <button className="btn btn-primary me-3">
+                        <MdModeEdit size={20} />
                       </button>
-                    )}
+                    </Link>
+
+                    {item.plan !== "Monthly price" &&
+                      item.plan !== "Annual price" &&
+                      item.plan !== "usd" && (
+                        <button
+                          className="btn btn-danger me-3"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          <MdDelete size={20} />
+                        </button>
+                      )}
                   </div>
                 </td>
               </tr>

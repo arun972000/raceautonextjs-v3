@@ -19,6 +19,7 @@ const MobileNavNew = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [openMenus, setOpenMenus] = useState<{ [key: number]: boolean }>({});
   const [mainCategory, setMainCategory] = useState<any[]>([]);
+  const [market, setMarket] = useState([]);
   const [subCategories, setSubCategories] = useState<{ [key: number]: any[] }>(
     {}
   );
@@ -38,6 +39,20 @@ const MobileNavNew = () => {
         .filter((item: any) => item.show_on_menu == 1)
         .sort((a: any, b: any) => a.category_order - b.category_order);
       setMainCategory(Main_Category);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const market_api = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/market`
+      );
+      const marketFilteredValue = res.data!.filter(
+        (item: any) => item.show_on_menu == 1
+      );
+      setMarket(marketFilteredValue);
     } catch (err) {
       console.log(err);
     }
@@ -78,6 +93,7 @@ const MobileNavNew = () => {
   useEffect(() => {
     main_category_api();
     fetchMoreApi();
+    market_api();
   }, []);
 
   const toggleMenu = (id: number) => {
@@ -105,7 +121,7 @@ const MobileNavNew = () => {
 
   return (
     <>
-      <div className={styles.mobile_navbar} style={{color:'black'}}>
+      <div className={styles.mobile_navbar} style={{ color: "black" }}>
         <div
           style={{
             position: "fixed",
@@ -152,6 +168,39 @@ const MobileNavNew = () => {
               style={{ cursor: "pointer" }}
             />
           </div>
+          <div className={menuStyles.navMenuContainer}>
+            <button
+              className={menuStyles.menuSelector}
+              onClick={() => toggleMenu(100)}
+            >
+              <span className={menuStyles.menuText}>Market</span>
+              <FaChevronDown className={menuStyles.marketIcon} />
+            </button>
+
+            <ul
+              className={`${menuStyles.marketList} ${
+                openMenus[100] ? menuStyles.show : menuStyles.hide
+              }`}
+            >
+              {market.length > 0 ? (
+                market.map((sub: any, i) => (
+                  <li
+                    key={sub.id}
+                    className={menuStyles.marketItem}
+                    onClick={() => {
+                      router.push(`/market/${sub.title_slug.toLowerCase()}`);
+                      setMenuVisible(false);
+                    }}
+                  >
+                    {sub.title}
+                    {i !== market.length - 1 && <hr />}
+                  </li>
+                ))
+              ) : (
+                <li className={menuStyles.marketItem}>Loading...</li>
+              )}
+            </ul>
+          </div>
 
           {/* Main Categories with Subcategories */}
           {mainCategory.map((item) => (
@@ -170,7 +219,7 @@ const MobileNavNew = () => {
                 }`}
               >
                 {subCategories[item.id]?.length > 0 ? (
-                  subCategories[item.id].map((sub) => (
+                  subCategories[item.id].map((sub, i) => (
                     <li
                       key={sub.id}
                       className={menuStyles.marketItem}
@@ -179,7 +228,7 @@ const MobileNavNew = () => {
                       }
                     >
                       {sub.name}
-                      <hr />
+                      {i !== subCategories[item.id]?.length - 1 && <hr />}
                     </li>
                   ))
                 ) : (
@@ -203,20 +252,28 @@ const MobileNavNew = () => {
                 openMenus[2] ? menuStyles.show : menuStyles.hide
               }`}
             >
-              {moreOption.map((sub) => (
+              {moreOption.map((sub, i) => (
                 <li
                   key={sub.id}
                   className={menuStyles.marketItem}
                   onClick={() => handleMorePageClick(`/page/${sub.name_slug}`)}
                 >
                   {sub.title}
-                  <hr />
+                  {i !== moreOption.length - 1 && <hr />}
                 </li>
               ))}
             </ul>
           </div>
 
           {/* Static Pages as Main Buttons (no dropdown) */}
+          <div className={menuStyles.navMenuContainer}>
+            <button
+              className={menuStyles.menuSelector}
+              onClick={() => handleMorePageClick("/magazine")}
+            >
+              <span className={menuStyles.menuText}>E-Magazine</span>
+            </button>
+          </div>
           <div className={menuStyles.navMenuContainer}>
             <button
               className={menuStyles.menuSelector}
@@ -274,6 +331,15 @@ const MobileNavNew = () => {
             <Link href="https://www.linkedin.com/company/race-auto-india/">
               <Image
                 src="/images/linkedin (1) 1.png"
+                alt="LinkedIn"
+                width={35}
+                height={35}
+                className={menuStyles.brandLogo}
+              />
+            </Link>
+            <Link href="https://www.youtube.com/@RaceAutoIndia">
+              <Image
+                src="/images/youtube (1) 1.png"
                 alt="LinkedIn"
                 width={35}
                 height={35}

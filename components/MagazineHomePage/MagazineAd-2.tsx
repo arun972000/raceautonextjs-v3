@@ -42,10 +42,8 @@ const MagazineAd_2 = () => {
         Race Auto India Magazine
       </h2>
       <p className="mb-5">
-        Explore the forefront of the automotive industry with our latest
-        edition. Featuring in-depth vehicle reviews, the latest trends, and
-        expert insights, we bring you everything you need to stay connected and
-        informed.
+        Stay ahead in the automotive world with top reviews, trends, and expert
+        analysis in our latest edition.
       </p>
       <Swiper
         slidesPerView={4}

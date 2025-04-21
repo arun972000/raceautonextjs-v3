@@ -52,9 +52,9 @@ const HomeBanner = async () => {
           <div className="row">{FeatureCardData1}</div>
         </div>
 
-        <div className="col-12-3">
+        {/* <div className="col-12-3">
           <div className="row">{FeatureCardData2}</div>
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -1,0 +1,11 @@
+/* styles.css or AdHeader.module.css */
+.ad_header {
+    display: block;
+  }
+  
+  @media (max-width: 767px) {
+    .ad_header {
+      display: none;
+    }
+  }
+  

@@ -1,9 +1,9 @@
 import React from "react";
 import parse from "html-react-parser";
-import Event from "../event/event";
 import AboutUs from "../about-us/aboutus";
 import Contact_v2 from "../contact/contact-v2";
-import Event_2 from "../event/Event-2";
+import EventPage from "@/components/EventPage/Component/EventPage";
+
 
 const PageContent = async ({ slug }: { slug: string }) => {
   const res = await fetch(
@@ -16,7 +16,7 @@ const PageContent = async ({ slug }: { slug: string }) => {
   }
 
   if (slug == "event") {
-    return <Event_2 />;
+    return <EventPage />;
   }
 
   if (slug == "about-us") {
