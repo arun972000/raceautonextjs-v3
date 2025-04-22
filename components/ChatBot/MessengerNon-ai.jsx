@@ -73,9 +73,10 @@ const FloatingChatBot = () => {
 
 
   const styles = {
-    chatButtonStyle: { background: 'pink' },
+    chatButtonStyle: { background: 'pink', marginBottom: 50 },
     chatInputAreaStyle: { minHeight: 15 },
-    chatInputAreaFocusedStyle: { minHeight: 15 }
+    chatInputAreaFocusedStyle: { minHeight: 15 },
+    tooltipStyle:{marginBottom: 50}
   };
 
   const settings = {
@@ -85,7 +86,7 @@ const FloatingChatBot = () => {
     chatHistory: { storageKey: "floating_chatbot" },
     tooltip: { mode: isDesktop ? "CLOSE" : "NEVER" },
     header: { title: 'Race Team', showAvatar: true, avatar: '/images/idea.webp' },
-    chatButton: { icon: '/images/idea.webp' }
+    chatButton: { icon: '/images/idea.webp', },
   };
 
   const flow = {
@@ -457,38 +458,38 @@ const FloatingChatBot = () => {
             return "ask_email_magazine_advertising";
           case "Others":
             return "ask_email_advertising_other";
-            case "Back" :
-              return "process_options"
+          case "Back":
+            return "process_options"
           default:
             return "unknown_input";
         }
       }
     },
-    
+
     ask_email_web_advertising: {
       message: "To advertise on our website, please provide your email ID for further details.",
       function: (params) => sendEmail(params.userInput, "Web Advertising Inquiry"),
       path: "confirm_advertising_email",
     },
-    
+
     ask_email_magazine_advertising: {
       message: "To advertise in our magazine, please provide your email ID for further details.",
       function: (params) => sendEmail(params.userInput, "Magazine Advertising Inquiry"),
       path: "confirm_advertising_email",
     },
-    
+
     ask_email_advertising_other: {
       message: "For any other advertising inquiries, please provide your email ID so we can assist you.",
       function: (params) => sendEmail(params.userInput, "Other Advertising Inquiry"),
       path: "confirm_advertising_email",
     },
-    
+
     confirm_advertising_email: {
       message: `Our team will reach out within 24 hours regarding your advertising inquiry.`,
       options: ["Back"],
       path: "advertising_options"
     },
-    
+
     other_queries: {
       message: "Please let us know your query, and our team will get back to you shortly.",
       path: "show_options"

@@ -17,7 +17,7 @@ const Event_v2 = () => {
   const eventList = async () => {
     try {
       const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/event`
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/event`
       );
       setData(res.data);
     } catch (err) {

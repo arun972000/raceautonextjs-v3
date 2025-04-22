@@ -35,6 +35,7 @@ export async function PUT(req) {
     const currentDate = new Date();
     const year = String(currentDate.getFullYear());
     const folderName = `${year}`;
+
     const formData = await req.formData();
     const image_url = formData.get("image_url");
     const title = formData.get("title");
@@ -42,10 +43,22 @@ export async function PUT(req) {
     const location = formData.get("location");
     const referenceLink = formData.get("referenceLink");
     const event_date = formData.get("event_date");
+    const category = formData.get("category");
+    const region = formData.get("region");
 
-    let query =
-      "UPDATE event SET title = ?, summary = ?, location = ?, referenceLink = ?, event_date = ?";
+    let query = `UPDATE event SET title = ?, summary = ?, location = ?, referenceLink = ?, event_date = ?`;
     const values = [title, summary, location, referenceLink, event_date];
+
+    // Optional: Add category and region if provided
+    if (category) {
+      query += `, category = ?`;
+      values.push(category);
+    }
+
+    if (region) {
+      query += `, region = ?`;
+      values.push(region);
+    }
 
     if (image_url) {
       const imageFilename = image_url.name;
@@ -54,33 +67,31 @@ export async function PUT(req) {
       const s3Key = `uploads/eventpage/${folderName}/${newImageName}`;
       const imageFileBuffer = Buffer.from(await image_url.arrayBuffer());
 
-      // Upload file to S3
       const bucketName = process.env.AWS_S3_BUCKET_NAME;
       const uploadParams = {
         Bucket: bucketName,
         Key: s3Key,
         Body: imageFileBuffer,
-        ContentType: image_url.type, // Set content type from the uploaded file
+        ContentType: image_url.type,
       };
 
       await s3Client.send(new PutObjectCommand(uploadParams));
 
-      // Update the query to include the S3 file URL
-      query += ", image_url = ?";
+      query += `, image_url = ?`;
       values.push(s3Key);
     }
 
-    // Append the WHERE clause
-    query += " WHERE id = ?";
+    query += ` WHERE id = ?`;
     values.push(id);
 
-    // Execute the query
     const [results] = await db.execute(query, values);
-
     return NextResponse.json(results);
   } catch (err) {
     console.error("Error updating event:", err);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 

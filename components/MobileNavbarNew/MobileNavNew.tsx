@@ -125,7 +125,7 @@ const MobileNavNew = () => {
         <div
           style={{
             position: "fixed",
-            zIndex: 999999,
+            zIndex: 9,
             top: 0,
             width: "100%",
             opacity: 0.7,
@@ -274,29 +274,47 @@ const MobileNavNew = () => {
               <span className={menuStyles.menuText}>E-Magazine</span>
             </button>
           </div>
-          <div className={menuStyles.navMenuContainer}>
-            <button
-              className={menuStyles.menuSelector}
-              onClick={() => handleMorePageClick("/page/contact")}
+          <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                display: "inline-flex",
+                gap: "0.5rem",
+                alignItems: "center",
+              }}
             >
-              <span className={menuStyles.menuText}>Contact</span>
-            </button>
-          </div>
-          <div className={menuStyles.navMenuContainer}>
-            <button
-              className={menuStyles.menuSelector}
-              onClick={() => handleMorePageClick("/page/about-us")}
-            >
-              <span className={menuStyles.menuText}>About Us</span>
-            </button>
-          </div>
-          <div className={menuStyles.navMenuContainer}>
-            <button
-              className={menuStyles.menuSelector}
-              onClick={() => handleMorePageClick("/page/terms-conditions")}
-            >
-              <span className={menuStyles.menuText}>Terms and Conditions</span>
-            </button>
+              <span
+                style={{
+                  cursor: "pointer",
+                  color: "#007bff",
+                  textDecoration: "underline",
+                }}
+                onClick={() => handleMorePageClick("/page/about-us")}
+              >
+                About Us
+              </span>
+              <span>|</span>
+              <span
+                style={{
+                  cursor: "pointer",
+                  color: "#007bff",
+                  textDecoration: "underline",
+                }}
+                onClick={() => handleMorePageClick("/page/terms-conditions")}
+              >
+                Terms and Conditions
+              </span>
+              <span>|</span>
+              <span
+                style={{
+                  cursor: "pointer",
+                  color: "#007bff",
+                  textDecoration: "underline",
+                }}
+                onClick={() => handleMorePageClick("/page/contact")}
+              >
+                Contact
+              </span>
+            </div>
           </div>
 
           {/* Social Icons */}

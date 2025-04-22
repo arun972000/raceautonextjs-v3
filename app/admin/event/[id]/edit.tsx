@@ -13,6 +13,21 @@ import Link from "next/link";
 
 const EventEdit = () => {
   const { id } = useParams();
+  const categories = [
+    { id: 1, name: "Car", image: "/images/car.png" },
+    { id: 2, name: "Bike", image: "/images/bike.png" },
+    { id: 3, name: "CV", image: "/images/truck.png" },
+    { id: 4, name: "Farming", image: "/images/agri.png" },
+    { id: 5, name: "C & M", image: "/images/CM.png" },
+    { id: 6, name: "Components", image: "/images/components.jpg" },
+  ];
+
+
+  const regions = [
+    { id: 1, name: "National" },
+    { id: 2, name: "International" },
+  ];
+
   const [isFileSelected, setIsFileSelected] = useState(false);
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -23,6 +38,8 @@ const EventEdit = () => {
   const [image_url, setImage_url] = useState<any>([]);
   const [preview, setPreview] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
+  const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
 
   const baseStyle = {
     flex: 1,
@@ -76,6 +93,8 @@ const EventEdit = () => {
       setSummary(event.summary);
       setLocation(event.location);
       setReferenceLink(event.referenceLink);
+      setSelectedCategory(event.category)
+      setSelectedRegion(event.region)
       setStartDate(new Date(event.start_date).toISOString().split("T")[0]);
       setEndDate(new Date(event.end_date).toISOString().split("T")[0]);
       setPreview(`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${event.image_url}`);
@@ -94,6 +113,9 @@ const EventEdit = () => {
     formData.append("location", location);
     formData.append("referenceLink", referenceLink);
     formData.append("image_url", image_url);
+    formData.append("category", selectedCategory?.toString() || "");
+    formData.append("region", selectedRegion?.toString() || "");
+    
     setIsSubmitting(true);
 
     try {
@@ -119,6 +141,13 @@ const EventEdit = () => {
     } finally {
       setIsSubmitting(false);
     }
+  };
+  const handleCategoryChange = (value: number | null) => {
+    setSelectedCategory(value);
+  };
+
+  const handleRegionChange = (value: number | null) => {
+    setSelectedRegion(value);
   };
 
   useEffect(() => {
@@ -155,14 +184,42 @@ const EventEdit = () => {
                   required
                 />
               </Form.Group>
-
+              <div className="mb-3">
+              <select
+                className="form-select mb-2"
+                onChange={(e) =>
+                  handleCategoryChange(parseInt(e.target.value) || null)
+                }
+                value={selectedCategory || ""}
+              >
+                <option value="">Select Category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <select
+              className="form-select mb-3"
+              onChange={(e) =>
+                handleRegionChange(parseInt(e.target.value) || null)
+              }
+              value={selectedRegion || ""}
+            >
+              <option value="">Select Region</option>
+              {regions.map((region) => (
+                <option key={region.id} value={region.id}>
+                  {region.name}
+                </option>
+              ))}
+            </select>
               <Form.Group controlId="formStartDate" className="mb-3">
                 <Form.Label>Start Date</Form.Label>
                 <Form.Control
                   type="date"
                   value={start_date}
                   onChange={(e) => setStartDate(e.target.value)}
-                  required
                 />
               </Form.Group>
 
@@ -172,7 +229,6 @@ const EventEdit = () => {
                   type="date"
                   value={end_date}
                   onChange={(e) => setEndDate(e.target.value)}
-                  required
                 />
               </Form.Group>
 

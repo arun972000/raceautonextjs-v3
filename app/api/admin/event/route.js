@@ -4,6 +4,21 @@ import { v4 as uuidv4 } from "uuid";
 import db from "@/lib/db";
 import s3Client from "@/lib/s3Client";
 
+export async function GET() {
+  try {
+    // Base query
+    const [results] = await db.execute("SELECT * FROM event");
+
+    return NextResponse.json(results);
+  } catch (err) {
+    console.error("Error fetching data from reports:", err);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
+}
+
 // Configure your S3 bucket
 export async function POST(req) {
   try {
@@ -19,6 +34,8 @@ export async function POST(req) {
     const location = formData.get("location");
     const referenceLink = formData.get("referenceLink");
     const event_date = formData.get("event_date");
+    const category = formData.get("category");
+    const region = formData.get("region");
 
     if (!image_url) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });
@@ -38,7 +55,7 @@ export async function POST(req) {
       Bucket: bucketName,
       Key: s3Key,
       Body: imageFileBuffer,
-      ContentType: image_url.type, // Set content type from the uploaded file
+      ContentType: image_url.type,
     };
 
     await s3Client.send(new PutObjectCommand(uploadParams));
@@ -48,8 +65,18 @@ export async function POST(req) {
 
     // Insert event data into the database
     await db.execute(
-      "INSERT INTO event (title, image_url, summary, location, referenceLink, event_date) VALUES (?, ?, ?, ?, ?, ?)",
-      [title, image, summary, location, referenceLink, event_date]
+      `INSERT INTO event (title, image_url, summary, location, referenceLink, event_date, category, region)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        title,
+        image,
+        summary,
+        location,
+        referenceLink,
+        event_date,
+        category,
+        region,
+      ]
     );
 
     return NextResponse.json({ msg: "Upload successful", image });
@@ -69,7 +96,6 @@ export async function POST(req) {
 // import { v4 as uuidv4 } from "uuid";
 // import db from "@/lib/db";
 // import s3Client from "@/lib/s3Client";
-
 
 // export async function POST(req) {
 //   try {
