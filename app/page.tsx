@@ -61,7 +61,7 @@ const Home = async () => {
             <HomeMarket />
             <HomeReports />
             <div className="row mt-4">
-              <div className="col-lg-8">
+              <div className={`${styles.desktop_category} col-lg-8`}>
                 <MainComponent />
               </div>
               <Sidebar />

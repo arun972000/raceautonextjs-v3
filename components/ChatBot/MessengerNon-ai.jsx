@@ -76,7 +76,7 @@ const FloatingChatBot = () => {
     chatButtonStyle: { background: 'pink', marginBottom: 50 },
     chatInputAreaStyle: { minHeight: 15 },
     chatInputAreaFocusedStyle: { minHeight: 15 },
-    tooltipStyle:{marginBottom: 50}
+    tooltipStyle: { marginBottom: 50 }
   };
 
   const settings = {
@@ -87,11 +87,14 @@ const FloatingChatBot = () => {
     tooltip: { mode: isDesktop ? "CLOSE" : "NEVER" },
     header: { title: 'Race Team', showAvatar: true, avatar: '/images/idea.webp' },
     chatButton: { icon: '/images/idea.webp', },
+    footer: { text: 'RACE EDITORIALE' },
+    fileAttachment: { disabled: true },
+    emoji: { disabled: true }
   };
 
   const flow = {
     start: {
-      message: "Hello, I am Tan Jin 👋! Welcome to Race Auto India’s chatbot. How can I assist you today?",
+      message: "Hello, I am Quinn 👋! Welcome to Race Auto India’s chatbot. How can I assist you today?",
       transition: { duration: 0 },
       path: "show_options",
       chatDisabled: true

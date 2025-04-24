@@ -57,8 +57,10 @@
   max-height: 100vh; /* or whatever height you want */
   overflow-y: auto;
   scroll-behavior: smooth;
-  background: white;
+  background: rgba(255, 255, 255, 0.1);
+backdrop-filter: blur(10px);
   z-index: 1000000;
+  height: 100%;
   /* padding: 1rem; */
 }
 

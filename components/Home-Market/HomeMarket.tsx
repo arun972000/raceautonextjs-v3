@@ -8,7 +8,7 @@ const HomeMarket = async () => {
 
   return (
     <>
-      <div className="home_market_desktop row mt-5 mb-5">
+      <div className="row mt-5 mb-5">
         <h2 className="mb-4" style={{ fontWeight: 700 }}>
           Market
         </h2>
@@ -17,16 +17,6 @@ const HomeMarket = async () => {
             <HomeMarketCard key={item.id} category={item.title_slug} />
           ))
           .slice(0, 4)}
-      </div>
-      <div className="home_market_mobile row mt-5 mb-5">
-        <h2 className="mb-4" style={{ fontWeight: 700 }}>
-          Market
-        </h2>
-        {marketList
-          .map((item: any) => (
-            <HomeMarketCard key={item.id} category={item.title_slug} />
-          ))
-          .slice(0, 1)}
       </div>
     </>
   );

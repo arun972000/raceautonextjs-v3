@@ -3,7 +3,7 @@
     font-weight: 900;
     font-style: normal;
     background-color: #59BEA0;
-    color: white;
+    color: white !important;
     z-index: 9999;
     position: absolute;
   }
@@ -11,7 +11,7 @@
   
   .breaking-news__container{
     background-color: #59BEA0;
-    color: white;
+    color: white  !important;
     position: sticky;
     top: 0;
     z-index: 9999;

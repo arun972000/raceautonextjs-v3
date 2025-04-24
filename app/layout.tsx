@@ -5,8 +5,8 @@ import "./globals.css";
 import AddBootstrap from "@/components/BootstrapClient";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { GoogleAnalytics } from '@next/third-parties/google'
-import FloatingChatBot from "@/components/ChatBot/MessengerNon-ai";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import ConditionalChatbot from '@/components/ConditionalChatBot'
 
 async function fetchLogoData() {
   try {
@@ -32,7 +32,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     title: {
-      default: "Race Auto India - Latest News on Cars, Bikes, and Commercial Vehicles",
+      default:
+        "Race Auto India - Latest News on Cars, Bikes, and Commercial Vehicles",
       template: "%s - Race Auto India",
     },
     description:
@@ -91,10 +92,8 @@ export async function generateMetadata(): Promise<Metadata> {
         type: "image/x-icon",
       },
     ],
-  
   };
 }
-
 
 export default async function RootLayout({
   children,
@@ -120,41 +119,47 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "NewsArticle",
-              "headline": "Latest Updates on Cars, Bikes, Trucks, Buses, Agriculture & Construction Equipment",
-              "alternativeHeadline": "Breaking News & Reviews on Automobiles, Heavy Vehicles, and Machinery",
-              "description": "Stay updated with the latest automotive news, vehicle reviews, industry trends, and expert insights on cars, bikes, trucks, buses, agricultural machinery, and construction equipment.",
-              "keywords": "Car News, Bike Reviews, Truck Updates, Bus Launches, Tractor Trends, Construction Equipment, Automotive Industry",
-              "datePublished": "2025-04-03T12:00:00+05:30",
-              "dateModified": "2025-04-03T12:30:00+05:30",
-              "isAccessibleForFree": true,
-              "author": {
+              headline:
+                "Latest Updates on Cars, Bikes, Trucks, Buses, Agriculture & Construction Equipment",
+              alternativeHeadline:
+                "Breaking News & Reviews on Automobiles, Heavy Vehicles, and Machinery",
+              description:
+                "Stay updated with the latest automotive news, vehicle reviews, industry trends, and expert insights on cars, bikes, trucks, buses, agricultural machinery, and construction equipment.",
+              keywords:
+                "Car News, Bike Reviews, Truck Updates, Bus Launches, Tractor Trends, Construction Equipment, Automotive Industry",
+              datePublished: "2025-04-03T12:00:00+05:30",
+              dateModified: "2025-04-03T12:30:00+05:30",
+              isAccessibleForFree: true,
+              author: {
                 "@type": "Organization",
-                "name": "Race Auto India",
-                "url": "https://raceautoindia.com",
-                "logo": {
+                name: "Race Auto India",
+                url: "https://raceautoindia.com",
+                logo: {
                   "@type": "ImageObject",
-                  "url": `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoUrl}`, // Updated logo URL
-                  "width": 600,
-                  "height": 60,
+                  url: `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoUrl}`, // Updated logo URL
+                  width: 600,
+                  height: 60,
                 },
               },
-              "publisher": {
+              publisher: {
                 "@type": "Organization",
-                "name": "Race Auto India",
-                "logo": {
+                name: "Race Auto India",
+                logo: {
                   "@type": "ImageObject",
-                  "url": `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoUrl}`, // Updated logo URL
-                  "width": 600,
-                  "height": 60,
+                  url: `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoUrl}`, // Updated logo URL
+                  width: 600,
+                  height: 60,
                 },
               },
-              "url": "https://raceautoindia.com/",
-              "articleSection": "Automobile, Transportation, Heavy Vehicles, Construction",
-              "mainEntityOfPage": {
+              url: "https://raceautoindia.com/",
+              articleSection:
+                "Automobile, Transportation, Heavy Vehicles, Construction",
+              mainEntityOfPage: {
                 "@type": "WebPage",
                 "@id": "https://raceautoindia.com/",
               },
-              "articleBody": "Get the latest insights on automotive industry trends, vehicle launches, and reviews from experts at Race Auto India.",
+              articleBody:
+                "Get the latest insights on automotive industry trends, vehicle launches, and reviews from experts at Race Auto India.",
             }),
           }}
         />
@@ -162,7 +167,7 @@ export default async function RootLayout({
       <body>
         <AddBootstrap />
         <ToastContainer />
-        <FloatingChatBot/>
+        <ConditionalChatbot/>
         <ThemeProvider attribute="class">{children}</ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />

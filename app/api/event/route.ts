@@ -36,7 +36,15 @@ export async function GET(request: NextRequest) {
 
     const [results]: any = await db.execute(query, values);
 
-    const sortedResults = results.sort((a: any, b: any) => {
+    // Filter out entries with missing or invalid event_date
+    const validEvents = results.filter(
+      (e: any) =>
+        typeof e.event_date === "string" &&
+        e.event_date.includes(" -") &&
+        !isNaN(new Date(removeOrdinalSuffix(e.event_date.split(" -")[0])).getTime())
+    );
+
+    const sortedResults = validEvents.sort((a: any, b: any) => {
       const startDateA = new Date(removeOrdinalSuffix(a.event_date.split(" -")[0]));
       const startDateB = new Date(removeOrdinalSuffix(b.event_date.split(" -")[0]));
       return startDateA.getTime() - startDateB.getTime();

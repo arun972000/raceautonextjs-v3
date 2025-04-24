@@ -15,7 +15,7 @@ const EventSwiper = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/event`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/event`);
         const events = response.data;
 
         const eventImages = events
@@ -61,7 +61,7 @@ const EventSwiper = () => {
                 src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${src}`}
                 fill
                 alt={`slide-${index}`}
-                className="img-fluid"
+                className="img-fluid" 
               />
             </div>
           </SwiperSlide>

@@ -8,14 +8,14 @@
 
 /* Light Theme */
 html.light {
-  --bg-color: #ffffff;
-  --text-color: #212529;
+  --bg-color: #ffffff !important;
+  --text-color: #212529 !important;
 }
 
 /* Dark Theme */
 html.dark {
-  --bg-color: #212529;
-  --text-color: #f8f9fa;
+  --bg-color: #212529 !important;
+  --text-color: #f8f9fa !important;
 }
 
 /* Apply to Bootstrap components */
@@ -46,6 +46,7 @@ a {
 
 .main_content__position {
   background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
   padding-top: 0;
   position: relative;

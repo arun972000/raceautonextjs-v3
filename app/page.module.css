@@ -9,3 +9,14 @@
     }
   }
   
+  .desktop_category
+
+  .desktop_category {
+    display: block;
+  }
+  
+  @media (max-width: 767px) {
+    .desktop_category {
+      display: none;
+    }
+  }

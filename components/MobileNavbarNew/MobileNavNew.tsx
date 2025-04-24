@@ -63,9 +63,14 @@ const MobileNavNew = () => {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/category/sub-category/parent/${mainCategoryId}`
       );
+
+      const filteredSubCategories = res.data.filter(
+        (item: any) => item.show_on_menu === 1
+      );
+
       setSubCategories((prev) => ({
         ...prev,
-        [mainCategoryId]: res.data,
+        [mainCategoryId]: filteredSubCategories,
       }));
     } catch (err) {
       console.log(err);
@@ -256,7 +261,7 @@ const MobileNavNew = () => {
                 <li
                   key={sub.id}
                   className={menuStyles.marketItem}
-                  onClick={() => handleMorePageClick(`/page/${sub.name_slug}`)}
+                  onClick={() => handleMorePageClick(`/page/${sub.slug}`)}
                 >
                   {sub.title}
                   {i !== moreOption.length - 1 && <hr />}
@@ -274,7 +279,7 @@ const MobileNavNew = () => {
               <span className={menuStyles.menuText}>E-Magazine</span>
             </button>
           </div>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", background: "white" }}>
             <div
               style={{
                 display: "inline-flex",
