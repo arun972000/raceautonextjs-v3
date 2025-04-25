@@ -74,6 +74,29 @@ export default function EmailEditPage() {
     });
   };
 
+  const exportAsHTML = () => {
+    editorRef.current?.editor.exportHtml((data) => {
+      const { html } = data;
+      const blob = new Blob([html], { type: 'text/html' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${designName || 'design'}.html`;
+      link.click();
+    });
+  };
+
+  const exportAsTXT = () => {
+    editorRef.current?.editor.exportHtml((data) => {
+      const { html } = data;
+      const txtContent = html.replace(/<[^>]*>/g, ''); // Simple regex to remove HTML tags
+      const blob = new Blob([txtContent], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${designName || 'design'}.txt`;
+      link.click();
+    });
+  };
+
   return (
     <div style={{ padding: 20 }}>
       <h2>Edit Email Design</h2>
@@ -87,9 +110,19 @@ export default function EmailEditPage() {
 
       <ReactEmailEditor ref={editorRef} onLoad={() => setIsLoaded(true)} />
 
-      <button className="btn btn-primary mt-3" onClick={saveDesign} disabled={!isLoaded}>
-        Update Design
-      </button>
+      <div className="mt-3">
+        <button className="btn btn-primary" onClick={saveDesign} disabled={!isLoaded}>
+          Update Design
+        </button>
+
+        {/* Export Buttons */}
+        <button className="btn btn-secondary ms-2" onClick={exportAsHTML} disabled={!isLoaded}>
+          Export as HTML
+        </button>
+        <button className="btn btn-secondary ms-2" onClick={exportAsTXT} disabled={!isLoaded}>
+          Export as TXT
+        </button>
+      </div>
     </div>
   );
 }
