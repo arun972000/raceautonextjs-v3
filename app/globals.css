@@ -22,12 +22,12 @@ html.dark {
 body {
   font-family: Arial, sans-serif;
   background-color: var(--bg-color);
-  color: var(--text-color);
+  color: var(--text-color) !important;
 }
 
 .card {
   background-color: var(--bg-color);
-  color: var(--text-color);
+  color: var(--text-color) !important;
 }
 
 a {
@@ -46,7 +46,7 @@ a {
 
 .main_content__position {
   background-color: var(--bg-color);
-  color: var(--text-color);
+  color: var(--text-color) !important;
   min-height: 100vh;
   padding-top: 0;
   position: relative;

@@ -3,6 +3,8 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+
 
 const validationSchema = Yup.object({
 
@@ -19,6 +21,7 @@ const validationSchema = Yup.object({
 });
 
 function ProtectedForm({ email }) {
+    const router=useRouter();
     const passToken = localStorage.getItem("verifyToken")
     const formik = useFormik({
         initialValues: {
@@ -29,8 +32,9 @@ function ProtectedForm({ email }) {
         onSubmit: async (values) => {
             try {
                 const formData = { ...values, email, token: passToken }
-                await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/user/update-password`, formData);
+                await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/login/update-password`, formData);
                 alert("Password changed successfully");
+                router.push('/login')
             } catch (error) {
                 console.error("Error updating password:", error);
                 alert("Failed to update password. Please try again.");

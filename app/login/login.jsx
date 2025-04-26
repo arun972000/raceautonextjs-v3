@@ -174,7 +174,7 @@ const LoginForm = () => {
                     <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
                   </Form.Group>
                   <div className="text-end mb-3">
-                    <a href="/forgot-password" className="text-muted">Forgot Password?</a>
+                    <a href="/reset-password" className="text-muted">Forgot Password?</a>
                   </div>
                  
 

@@ -34,8 +34,8 @@ const ProfileButton = ({ token }: { token: string }) => {
     <DropdownButton
       variant="secondary"
       id="dropdown-basic-button"
-      drop="down" // ensures dropdown opens downward (default)
-      align="start" // aligns dropdown to the start (left side of the toggle)
+      drop="down" 
+      align="start"
       className="ms-auto"
       title={<FaUser />}
     >

@@ -39,8 +39,20 @@ const Home = async () => {
 
         <div className="main_content__position">
           <div className="container">
-          <div className={styles.ad_header}>
-            <HeaderAd />
+            <div className={styles.ad_header}>
+              <p
+                style={{ width: "100%", background: "black" }}
+                className="m-0 p-0 text-center text-white"
+              >
+                Advertisement
+              </p>
+              <HeaderAd />
+              <p
+                style={{ width: "100%", background: "black" }}
+                className="m-0 p-0 text-center text-white"
+              >
+                Advertisement
+              </p>
             </div>
             {sliderType == 1 ? (
               <HomeBanner />
@@ -54,8 +66,21 @@ const Home = async () => {
               <HomeBanner />
             )}
             <h1>Latest Updates on Automobiles, Agriculture & Construction</h1>
+
             <div className={styles.ad_header}>
+              <p
+                style={{ width: "100%", background: "black" }}
+                className="m-0 p-0 text-center text-white"
+              >
+                Advertisement
+              </p>
               <AdHeader />
+              <p
+                style={{ width: "100%", background: "black" }}
+                className="m-0 p-0 text-center text-white"
+              >
+                Advertisement
+              </p>
             </div>
             <MagazineAd_2 />
             <HomeMarket />

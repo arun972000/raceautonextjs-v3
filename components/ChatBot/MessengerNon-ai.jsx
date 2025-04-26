@@ -94,7 +94,7 @@ const FloatingChatBot = () => {
 
   const flow = {
     start: {
-      message: "Hello, I am Quinn 👋! Welcome to Race Auto India’s chatbot. How can I assist you today?",
+      message: "Hello, I am Olivia 👋! Welcome to Race Auto India’s chatbot. How can I assist you today?",
       transition: { duration: 0 },
       path: "show_options",
       chatDisabled: true

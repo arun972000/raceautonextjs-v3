@@ -1,15 +1,14 @@
-"use client";
-
-import { jwtDecode } from "jwt-decode";
+'use client'
 import Link from "next/link";
-import React from "react";
+import { jwtDecode } from "jwt-decode"; // This will run server-side in Server Components
 
 const AdminButtons = ({ token, id }: { token: string; id: number }) => {
   const decoded: any = jwtDecode(token);
+
   if (
-    decoded.role == "admin" ||
-    decoded.role == "ad team" ||
-    decoded.role == "moderator"
+    decoded.role === "admin" ||
+    decoded.role === "ad team" ||
+    decoded.role === "moderator"
   ) {
     return (
       <>
@@ -22,6 +21,7 @@ const AdminButtons = ({ token, id }: { token: string; id: number }) => {
       </>
     );
   }
+  
   return null;
 };
 

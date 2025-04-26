@@ -25,12 +25,5 @@ export const mailTransporter = nodemailer.createTransport({
 export const mailDetails = {
   from:`Race Auto India <enquiry@raceautoindia.com>`,
   to: "abc@gmail.com",
-  subject: "Test mail",
-  text: "Node.js testing mail for GeeksforGeeks",
-  html: "hello",
-  attachments: [{
-    filename: 'thumbnail logo.png',
-    path: 'asset/black logo.png',
-    cid: 'unique@nodemailer.com' //same cid value as in the html img src
-}]
+
 };
