@@ -1,40 +1,39 @@
 "use client";
 import { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth } from "@/firebase";
+
 
 const ResetPassword = () => {
-  const [email, setemail] = useState("");
-  // State to hold the verify_link
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const passreset = async () => {
+  const handlePasswordReset = async () => {
+    if (!email) {
+      toast.warn("Please enter your registered email.", {
+        position: "top-right",
+        autoClose: 4000,
+      });
+      return;
+    }
+
+    setLoading(true);
     try {
-      const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/login/forgot-password`,
-        { email }
-      );
-
-      toast.info("Please check your mail inbox to verify", {
+      await sendPasswordResetEmail(auth, email);
+      toast.success("Password reset link sent! Check your inbox.", {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
       });
-    } catch (err) {
-      toast.error("Please try again after some times", {
+      setEmail(""); // Clear input
+    } catch (error) {
+      console.error("Reset Error:", error);
+      toast.error("Failed to send reset link. Please try again.", {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "colored",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,6 +43,7 @@ const ResetPassword = () => {
         <div className="col-12 col-sm-8 col-md-6 m-auto">
           <div className="card">
             <div className="card-body">
+              <h5 className="text-center mb-4">Reset Password</h5>
               <div className="mb-3">
                 <label htmlFor="email" className="form-label">
                   Email
@@ -54,12 +54,16 @@ const ResetPassword = () => {
                   name="email"
                   value={email}
                   placeholder="Enter Registered Email"
-                  onChange={(e) => setemail(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                   id="email"
                 />
                 <div className="text-center">
-                  <button className="btn btn-primary" onClick={passreset}>
-                    submit
+                  <button
+                    className="btn btn-primary"
+                    onClick={handlePasswordReset}
+                    disabled={loading}
+                  >
+                    {loading ? "Sending..." : "Submit"}
                   </button>
                 </div>
               </div>

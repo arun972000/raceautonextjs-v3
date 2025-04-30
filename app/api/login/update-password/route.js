@@ -7,7 +7,7 @@ export async function PUT(req) {
     const payload = await req.json();
 
     const { email, password } = payload;
-
+    console.log(email, password)
     if (!email || !password) {
       return NextResponse.json({ message: "Email and password are required" }, { status: 400 });
     }

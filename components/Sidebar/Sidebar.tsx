@@ -7,7 +7,6 @@ import LatestNewsSwiper from "./LatestNewsList";
 import { FaCrown } from "react-icons/fa";
 import ExclusiveNewsSwiper from "./ExclusiveNewsList";
 import AdSidebar from "../GoogleAds/AdSidebar";
-import AdSidebarBottom from "../GoogleAds/AdsidebarBottom";
 
 export type LatestNewsType = {
   id: number;
@@ -112,7 +111,6 @@ const Sidebar = async () => {
           fill
         />
       </div>
-      <AdSidebarBottom />
     </div>
   );
 };

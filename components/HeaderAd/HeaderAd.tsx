@@ -59,8 +59,8 @@ const HeaderAd = () => {
             className="my-4"
           />
         </div>
-      ) : (
-        !isGoogle ? (<div
+      ) : !isGoogle ? (
+        <div
           className={isVisible ? "my-4" : "d-none my-4"}
           style={{
             position: "relative",
@@ -90,7 +90,9 @@ const HeaderAd = () => {
           >
             ✕
           </button>
-        </div>) : <AdHomeBanner/>
+        </div>
+      ) : (
+        <AdHomeBanner />
       )}
     </>
   );

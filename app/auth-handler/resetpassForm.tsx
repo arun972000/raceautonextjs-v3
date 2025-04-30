@@ -35,7 +35,7 @@ const VerifyToken = () => {
   }, [token]);
 
   if (verified) {
-    return <ProtectedForm email={decoded.email} />;
+    return <ProtectedForm />;
   }
 
   return (

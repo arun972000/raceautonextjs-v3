@@ -143,19 +143,23 @@ const Post = async ({
         >
           {post.image_description}
         </p>
-        <p
+        {/* <p
           style={{ width: "100%", background: "black" }}
           className="m-0 p-0 text-center text-white"
         >
           Advertisement
         </p>
-        <AdArticleMiddle />
+        <div
+          style={{ width: "100%", position: "relative", aspectRatio: "3.56/1" }}
+        >
+          <Image src="/images/sample banner.jpg" alt="smaple" fill />
+        </div>
         <p
           style={{ width: "100%", background: "black" }}
           className="m-0 p-0 text-center text-white"
         >
           Advertisement
-        </p>
+        </p> */}
         <PostContent
           content={post.content}
           token={token?.value}

@@ -40,19 +40,7 @@ const Home = async () => {
         <div className="main_content__position">
           <div className="container">
             <div className={styles.ad_header}>
-              <p
-                style={{ width: "100%", background: "black" }}
-                className="m-0 p-0 text-center text-white"
-              >
-                Advertisement
-              </p>
               <HeaderAd />
-              <p
-                style={{ width: "100%", background: "black" }}
-                className="m-0 p-0 text-center text-white"
-              >
-                Advertisement
-              </p>
             </div>
             {sliderType == 1 ? (
               <HomeBanner />
