@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/inline-script-id */
 export const dynamic = "force-dynamic";
 import React from "react";
-import SubscriptionPage from "./component/SubscriptionPage";
 
 import BreakingNews from "@/components/BreakingNews/BreakingNews";
 import Navbar from "@/components/Navbar/Navbar";
@@ -11,6 +10,7 @@ import Script from "next/script";
 import { cookies } from "next/headers";
 import PricingTable from "./component/ComparisonTable";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
+import SubscriptionPage from "./component/subscription-v2/SubscriptionPage";
 
 const page = async () => {
   const cookieStore = await cookies();
@@ -26,7 +26,7 @@ const page = async () => {
       <MobileNavNew />
       <div className="main_content__position">
         <SubscriptionPage />
-        <PricingTable />
+        {/* <PricingTable /> */}
       </div>
       <Footer />
       <GreenBar />

@@ -31,52 +31,52 @@ const LoginForm = () => {
     try {
       setError(""); // Clear previous error messages
   
-      let userCredential;
+      // let userCredential;
   
-      // Try logging in the user
-      try {
-        userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-      } catch (loginError) {
-        // If user not found, create the user
-        if (loginError.code === "auth/invalid-credential") {
-          userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-          const user = userCredential.user;
+      // // Try logging in the user
+      // try {
+      //   userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      // } catch (loginError) {
+      //   // If user not found, create the user
+      //   if (loginError.code === "auth/invalid-credential") {
+      //     userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      //     const user = userCredential.user;
   
-          // Send email verification for new user
-          await sendEmailVerification(user);
-          toast.info("Account created. Verification email sent!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+      //     // Send email verification for new user
+      //     await sendEmailVerification(user);
+      //     toast.info("Account created. Verification email sent!", {
+      //       position: "top-right",
+      //       autoClose: 5000,
+      //       hideProgressBar: false,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       draggable: true,
+      //       progress: undefined,
+      //       theme: "light",
+      //     });
   
-          router.push("/login");
-          return;
-        } else {
-          throw loginError;
-        }
-      }
+      //     router.push("/login");
+      //     return;
+      //   } else {
+      //     throw loginError;
+      //   }
+      // }
   
-      const user = userCredential.user;
+      // const user = userCredential.user;
   
-      if (user == null || !user.emailVerified) {
-        toast.error("Please verify your email before logging in.", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        return;
-      }
+      // if (user == null || !user.emailVerified) {
+      //   toast.error("Please verify your email before logging in.", {
+      //     position: "top-right",
+      //     autoClose: 5000,
+      //     hideProgressBar: false,
+      //     closeOnClick: true,
+      //     pauseOnHover: true,
+      //     draggable: true,
+      //     progress: undefined,
+      //     theme: "light",
+      //   });
+      //   return;
+      // }
   
       // Call backend login API
       await axios.post("/api/login", values);
@@ -135,7 +135,7 @@ const LoginForm = () => {
         <Col md={6} lg={3}>
           <div className="login-box p-4">
             <div className="text-center mb-4">
-              <Image src="/images/black logo with text.png" alt="Logo" width={60} height={70} />
+              <Link href='/'><Image src="/images/black logo with text.png" alt="Logo" width={60} height={70} /></Link>
               <h2 className="mt-2">Login</h2>
             </div>
             {error && <Alert variant="danger">{error}</Alert>}

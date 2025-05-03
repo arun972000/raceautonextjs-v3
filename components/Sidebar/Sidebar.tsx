@@ -7,6 +7,7 @@ import LatestNewsSwiper from "./LatestNewsList";
 import { FaCrown } from "react-icons/fa";
 import ExclusiveNewsSwiper from "./ExclusiveNewsList";
 import AdSidebar from "../GoogleAds/AdSidebar";
+import Link from "next/link";
 
 export type LatestNewsType = {
   id: number;
@@ -76,12 +77,15 @@ const Sidebar = async () => {
           className="my-4"
           style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
         >
-          <Image
-            unoptimized
-            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sidebarTopData[0].ad_code_300}`}
-            alt="sidebar top"
-            fill
-          />
+          <Link href="/subscription">
+            {" "}
+            <Image
+              unoptimized
+              src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sidebarTopData[0].ad_code_300}`}
+              alt="sidebar top"
+              fill
+            />
+          </Link>
         </div>
         <div className="col-12">
           <h6
@@ -104,12 +108,14 @@ const Sidebar = async () => {
         className="my-4"
         style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
       >
-        <Image
-          unoptimized
-          src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sidebarbottomData[0].ad_code_300}`}
-          alt="sidebar top"
-          fill
-        />
+        <Link href="/subscription">
+          <Image
+            unoptimized
+            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sidebarbottomData[0].ad_code_300}`}
+            alt="sidebar top"
+            fill
+          />
+        </Link>
       </div>
     </div>
   );

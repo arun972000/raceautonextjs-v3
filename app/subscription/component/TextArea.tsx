@@ -1,8 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client'
 import React from "react";
-import SubscriptionForm from "./SubscriptionForm";
+
 import CountUp from 'react-countup';
+import SubscriptionForm from "./SubscriptionForm";
+
 
 const TextArea = () => {
   return (

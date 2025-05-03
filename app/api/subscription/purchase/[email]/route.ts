@@ -29,8 +29,8 @@ export async function GET(req: NextRequest) {
     if (existingSubscription.length == 0) {
       return NextResponse.json({ err: "not found" }, { status: 404 });
     }
-
     return NextResponse.json(existingSubscription);
+    
   } catch (err) {
     console.log(err);
     return NextResponse.json({ err: "internal server error" }, { status: 500 });

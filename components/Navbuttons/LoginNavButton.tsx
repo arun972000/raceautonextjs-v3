@@ -13,6 +13,7 @@ const LoginNavButton = () => {
     const cookieToken: any = Cookies.get("authToken");
     setToken(cookieToken);
   }, []);
+console.log(token)
 
   if (!token) {
     return (

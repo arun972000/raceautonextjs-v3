@@ -6,7 +6,7 @@ import { AnalyticsIcon } from "./icons";
 import Link from "next/link";
 
 export function BottomNavigation() {
-  console.log(styles)
+
   return (
     <div className={styles.navigation}>
       

@@ -38,7 +38,7 @@ const SignupForm = () => {
     try {
       setError(""); // Clear previous error messages
       await axios.post("/api/register", values);
-      toast.info("Verification email sent! Please check your inbox.", {
+      toast.info("Login success", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -49,12 +49,15 @@ const SignupForm = () => {
         theme: "light",
       });
 
-      const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-      const user = userCredential.user;
+      // const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
+      // const user = userCredential.user;
 
-      await sendEmailVerification(user);
+      // await sendEmailVerification(user);
 
-      router.push('/login')
+      setTimeout(() => {
+        router.push('/subscription');           // 1st back → login page
+
+      }, 1000);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 409) {
@@ -78,7 +81,7 @@ const SignupForm = () => {
         <Col md={6} lg={3}>
           <div className="signup-box p-4">
             <div className="text-center mb-4">
-              <Image src="/images/black logo with text.png" alt="Logo" width={60} height={70} />
+              <Link href='/'><Image src="/images/black logo with text.png" alt="Logo" width={60} height={70} /></Link>
               {/* <h2 className="mt-2">Sign Up</h2> */}
             </div>
             {error && <Alert variant="danger">{error}</Alert>}
@@ -141,7 +144,7 @@ const SignupForm = () => {
                     {isSubmitting ? "Signing up..." : "Sign Up"}
                   </Button>
                   <p className="text-center text-muted mt-2 mb-1 p-0 m-0">or</p>
-                  <div className="d-flex justify-content-center mb-3"><GoogleLoginButton/></div>
+                  <div className="d-flex justify-content-center mb-3"><GoogleLoginButton /></div>
                   <div className="text-center mt-3">
                     <span>Already have an account? </span><Link href="/login" className="text-primary">Login</Link>
                   </div>

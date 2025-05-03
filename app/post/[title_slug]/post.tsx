@@ -98,7 +98,6 @@ const Post = async ({
             />
           </a>
         </div> */}
-
         <div>
           {(token || token !== undefined) && (
             <EditButton token={token.value} id={post.id} />
@@ -138,28 +137,53 @@ const Post = async ({
         </div>
         <PostSlider images={post.images} title={post.title} />
         <p
-          className="text-muted text-center mt-2"
-          style={{ fontSize: "small" }}
-        >
-          {post.image_description}
-        </p>
-        {/* <p
-          style={{ width: "100%", background: "black" }}
           className="m-0 p-0 text-center text-white"
+          style={{ width: "100%", background: "black" }}
         >
           Advertisement
         </p>
+
+        {/* Desktop Banner (3.56:1) */}
         <div
-          style={{ width: "100%", position: "relative", aspectRatio: "3.56/1" }}
+          className="position-relative my-2 d-none d-md-block"
+          style={{ width: "100%", aspectRatio: "3.56/1" }}
         >
-          <Image src="/images/sample banner.jpg" alt="smaple" fill />
+          <Link href="/subscription" passHref>
+            <Image
+              src="/images/SUBCRIBE BANNER.jpg"
+              alt="Subscribe – desktop"
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="(min-width: 768px) 100vw"
+              quality={75}
+              priority
+            />
+          </Link>
         </div>
+
+        {/* Mobile Banner (1:1) */}
+        <div
+          className="position-relative my-2 d-block d-md-none"
+          style={{ width: "100%", aspectRatio: "1/1" }}
+        >
+          <Link href="/subscription" passHref>
+            <Image
+              src="/images/width 400  height 400 Mobile banner.jpg"
+              alt="Subscribe – mobile"
+              fill
+              style={{ objectFit: "cover" }}
+              sizes="100vw"
+              quality={75}
+            />
+          </Link>
+        </div>
+
         <p
+          className="m-0 p-0 text-center text-white mb-3"
           style={{ width: "100%", background: "black" }}
-          className="m-0 p-0 text-center text-white"
         >
           Advertisement
-        </p> */}
+        </p>
         <PostContent
           content={post.content}
           token={token?.value}
