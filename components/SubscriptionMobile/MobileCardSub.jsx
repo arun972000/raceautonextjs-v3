@@ -87,7 +87,7 @@ export default function PricingPlans({ hide }) {
     });
 
     return (
-        <div className="container pb-5 pt-2">
+        <div className="container pb-5 pt-2 mb-5">
             <div className="position-relative" style={{ left: '92%' }}>
                 {!selectedPlan ? (
                     <IoMdCloseCircle size={30} onClick={hide} color='black' />

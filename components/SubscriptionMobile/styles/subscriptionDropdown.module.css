@@ -1,10 +1,10 @@
 .subscription_menu_slide {
   transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   position: fixed;
-  top: 80px;
+  top: 30px;
   left: 0px;
   width: 100%;
-  max-height: 100vh; /* or whatever height you want */
+  min-height: 100vh; /* or whatever height you want */
   overflow-y: auto;
   scroll-behavior: smooth;
   background: white;

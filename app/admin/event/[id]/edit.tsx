@@ -103,13 +103,35 @@ const EventEdit = () => {
     }
   };
 
+  const formatDateWithSuffix = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const day = date.getDate();
+    const suffix =
+      day % 10 === 1 && day !== 11
+        ? "st"
+        : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+        ? "rd"
+        : "th";
+
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long",
+      year: "numeric",
+    };
+
+    return `${day}${suffix} ${date.toLocaleDateString("en-US", options)}`;
+  };
+
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const formData = new FormData();
+    const formattedStart = formatDateWithSuffix(start_date);
+    const formattedEnd = formatDateWithSuffix(end_date);
+    const eventDateFormatted = `${formattedStart} - ${formattedEnd}`;
     formData.append("title", title);
     formData.append("summary", summary);
-    formData.append("start_date", start_date);
-    formData.append("end_date", end_date);
+    formData.append("event_date", eventDateFormatted);
     formData.append("location", location);
     formData.append("referenceLink", referenceLink);
     formData.append("image_url", image_url);
