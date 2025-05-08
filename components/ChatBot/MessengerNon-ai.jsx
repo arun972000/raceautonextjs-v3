@@ -76,18 +76,19 @@ const FloatingChatBot = () => {
     chatButtonStyle: { background: 'pink', marginBottom: 50 },
     chatInputAreaStyle: { minHeight: 15 },
     chatInputAreaFocusedStyle: { minHeight: 15 },
-    tooltipStyle: { marginBottom: 50 }
+    tooltipStyle: { marginBottom: 50 },
   };
 
   const settings = {
     voice: { disabled: true },
     audio: { disabled: true },
-    botBubble: { simStream: true, showAvatar: true, avatar: '/images/idea.webp' },
+    botBubble: { simStream: true, showAvatar: true, avatar: '/images/chat-bot-icon.webp' },
     chatHistory: { storageKey: "floating_chatbot", },
     tooltip: { mode: "NEVER" },
-    header: { title: 'Race Team', showAvatar: true, avatar: '/images/idea.webp' },
-    chatButton: { icon: '/images/chat.png', },
-    notification:{volume:0.1},
+    header: { title: 'Race Team', showAvatar: true, avatar: '/images/chat-bot-icon.webp' },
+    chatButton: { icon: '/images/chat-bot-icon.webp', },
+    notification: { volume: 0.1 },
+    chatWindow: { defaultOpen: isDesktop },
     footer: { text: 'RACE EDITORIALE' },
     fileAttachment: { disabled: true },
     emoji: { disabled: true }

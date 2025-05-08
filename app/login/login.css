@@ -1,9 +1,9 @@
 /* LoginForm.css */
 
 .login-container {
-    background: url('/images/car login v2.gif') no-repeat center center;
+    /* background: url('/images/car login v2.gif') no-repeat center center;
     min-height: 100vh;
-    background-size: cover;
+    background-size: cover; */
 
   }
   
@@ -40,3 +40,15 @@
     background: #e8e8e8;
   }
 
+  .valid-dot {
+    position: absolute;
+    top: 50%;
+    right: 12px;              /* adjust to align inside the input */
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 1;
+  }

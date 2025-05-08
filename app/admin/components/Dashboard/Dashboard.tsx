@@ -10,6 +10,7 @@ import { MdEventAvailable } from "react-icons/md";
 import MostViewedPost from "./MostViewedPost";
 import MostViewedMagazine from "./MostViewedMagazine";
 import LineChartAdmin from "./WeeklyReportChart";
+import PageViewsChart from "./PageViewsCountChart";
 
 export type viewsCardType = {
   id: number;
@@ -77,6 +78,9 @@ const Dashboard = async () => {
       </div>
       <div className="col-12 mt-3">
         <LineChartAdmin />
+      </div>
+      <div className="col-12 mt-3">
+        <PageViewsChart />
       </div>
     </div>
   );

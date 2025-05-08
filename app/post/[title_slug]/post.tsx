@@ -136,12 +136,13 @@ const Post = async ({
           <hr />
         </div>
         <PostSlider images={post.images} title={post.title} />
-        <p
-          className="m-0 p-0 text-center text-white"
-          style={{ width: "100%", background: "black" }}
-        >
-          Advertisement
-        </p>
+        <span
+                style={{ borderBottom:'1px solid black'  }}
+                className="m-0 mb-2 p-0 text-center"
+              >
+                Advertisement
+
+              </span>
 
         {/* Desktop Banner (3.56:1) */}
         <div
@@ -178,12 +179,6 @@ const Post = async ({
           </Link>
         </div>
 
-        <p
-          className="m-0 p-0 text-center text-white mb-3"
-          style={{ width: "100%", background: "black" }}
-        >
-          Advertisement
-        </p>
         <PostContent
           content={post.content}
           token={token?.value}

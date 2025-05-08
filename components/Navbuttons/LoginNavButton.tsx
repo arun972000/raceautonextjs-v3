@@ -5,24 +5,28 @@ import Cookies from "js-cookie";
 import ProfileButton from "./ProfileButton";
 import { CiLogin } from "react-icons/ci";
 import Link from "next/link";
+import AuthModal from "@/app/test/components/LoginFormTest";
 
 const LoginNavButton = () => {
   const [token, setToken] = useState(null);
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     const cookieToken: any = Cookies.get("authToken");
     setToken(cookieToken);
   }, []);
-console.log(token)
 
   if (!token) {
     return (
-      <Link href="/login">
+      <>
         <CiLogin
+          onClick={() => setShowAuth(true)}
           size={25}
+          style={{cursor:'pointer'}}
           className="ms-auto"
         />
-      </Link>
+        <AuthModal show={showAuth} onClose={() => setShowAuth(false)} />
+      </>
     );
   }
 

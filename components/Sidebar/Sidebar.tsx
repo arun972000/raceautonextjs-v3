@@ -99,7 +99,6 @@ const Sidebar = async () => {
           >
             Latest News
           </h6>
-
           <LatestNewsSwiper latestNewsData={LatestNewsData} />
         </div>
       </div>

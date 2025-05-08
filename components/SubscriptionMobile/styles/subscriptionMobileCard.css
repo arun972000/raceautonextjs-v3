@@ -1,6 +1,5 @@
-.pricing-card {
+.mobile-pricing-card {
     position: relative;
-    width: 300px;
     padding: 1.5rem;
     border-radius: 1.5rem;
     clip-path: path('M0,0 H85% Q100%,0 100%,20% V100% H0 Z');
@@ -82,5 +81,3 @@
     font-size: 1rem;
   }
   
-
- 

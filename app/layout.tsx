@@ -6,7 +6,8 @@ import AddBootstrap from "@/components/BootstrapClient";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import ConditionalChatbot from '@/components/ConditionalChatBot'
+import ConditionalChatbot from "@/components/ConditionalChatBot";
+import Script from "next/script";
 
 async function fetchLogoData() {
   try {
@@ -165,10 +166,20 @@ export default async function RootLayout({
         />
       </head>
       <body>
+        <Script
+                type="text/javascript"
+                src="https://checkout.razorpay.com/v1/checkout.js"
+              />
         <AddBootstrap />
         <ToastContainer />
-        <ConditionalChatbot/>
-        <ThemeProvider attribute="class">{children}</ThemeProvider>
+        <ConditionalChatbot />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem={false}
+        >
+          {children}
+        </ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />
     </html>

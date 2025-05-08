@@ -18,6 +18,9 @@ import RefreshOnVerified from "./Verifies";
 import AdHeader from "@/components/GoogleAds/AdHeader";
 import styles from "./page.module.css";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
+import PageViewTracker from "./pageTracker";
+import Script from "next/script";
+import ContactModal from "@/components/SubscribeModal";
 
 const Home = async () => {
   const sliderRes = await fetch(
@@ -29,8 +32,10 @@ const Home = async () => {
   const sliderType = slide[0].slider_type;
   return (
     <>
+        
       {/* This component will check for "verified" query param and reload if present */}
-
+      <ContactModal/>
+      <PageViewTracker  page='home'/>
       <RefreshOnVerified />
       <MobileNavNew />
       <div className="container-fluid m-0 p-0">
@@ -56,19 +61,14 @@ const Home = async () => {
             <h1>Latest Updates on Automobiles, Agriculture & Construction</h1>
 
             <div className={styles.ad_header}>
-              <p
-                style={{ width: "100%", background: "black" }}
-                className="m-0 p-0 text-center text-white"
+              <span
+                style={{ borderBottom:'1px solid black'  }}
+                className="m-0 mb-2 p-0 text-center"
               >
                 Advertisement
-              </p>
+
+              </span>
               <AdHeader />
-              <p
-                style={{ width: "100%", background: "black" }}
-                className="m-0 p-0 text-center text-white"
-              >
-                Advertisement
-              </p>
             </div>
             <MagazineAd_2 />
             <HomeMarket />

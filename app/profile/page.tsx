@@ -10,7 +10,7 @@ const Page = async () => {
 
   // Redirect if no token
   if (!token) {
-    redirect("/login");
+    redirect("/");
   }
 
   // Render the ProfileDashboard with the token

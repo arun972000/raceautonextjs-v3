@@ -11,6 +11,7 @@ import { cookies } from "next/headers";
 import PricingTable from "./component/ComparisonTable";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 import SubscriptionPage from "./component/subscription-v2/SubscriptionPage";
+import PageViewTracker from "../pageTracker";
 
 const page = async () => {
   const cookieStore = await cookies();
@@ -21,6 +22,7 @@ const page = async () => {
         type="text/javascript"
         src="https://checkout.razorpay.com/v1/checkout.js"
       />
+      <PageViewTracker page="subscription" />
       <BreakingNews />
       <Navbar />
       <MobileNavNew />

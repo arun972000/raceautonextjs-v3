@@ -45,3 +45,10 @@
     }
   }
   
+  .fake-price {
+    text-decoration: line-through;
+    color: #888;
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  

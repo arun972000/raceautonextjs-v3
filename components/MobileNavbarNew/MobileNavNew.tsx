@@ -14,9 +14,13 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { FiBarChart2, FiStar, FiCreditCard, FiMenu } from "react-icons/fi";
 import { TbChartHistogram } from "react-icons/tb";
+import PricingPlans from "../SubscriptionMobile/MobileCardSub";
+import subscriptionStyles from '@/components/SubscriptionMobile/styles/subscriptionDropdown.module.css'
 
 const MobileNavNew = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [subscriptionMenuVisible, setSubscriptionMVisible] = useState(false);
+
   const [openMenus, setOpenMenus] = useState<{ [key: number]: boolean }>({});
   const [mainCategory, setMainCategory] = useState<any[]>([]);
   const [market, setMarket] = useState([]);
@@ -27,6 +31,10 @@ const MobileNavNew = () => {
   const router = useRouter();
   const iconColor = "black";
   const iconSize = 28;
+
+  const handleToggle = () => {
+    setSubscriptionMVisible(!subscriptionMenuVisible);
+  };
 
   const toggleMenuSlide = () => setMenuVisible((prev) => !prev);
 
@@ -306,7 +314,7 @@ const MobileNavNew = () => {
                 }}
                 onClick={() => handleMorePageClick("/page/terms-conditions")}
               >
-                Terms and Conditions
+                T & C
               </span>
               <span>|</span>
               <span
@@ -319,8 +327,20 @@ const MobileNavNew = () => {
               >
                 Contact
               </span>
+              <span>|</span>
+              <span
+                style={{
+                  cursor: "pointer",
+                  color: "#007bff",
+                  textDecoration: "underline",
+                }}
+                onClick={() => handleMorePageClick("/page/privacy")}
+              >
+                Privacy
+              </span>
             </div>
           </div>
+          
 
           {/* Social Icons */}
           <div className={menuStyles.imageContainer}>
@@ -381,35 +401,54 @@ const MobileNavNew = () => {
                 size={iconSize}
                 title="Forecast"
               />
+              <span className={styles.caption}>Forecast</span>
             </div>
           </Link>
-          <Link href="/">
+
+          {/* <Link href="/">
             <div className={styles.navItem}>
               <FiStar color={iconColor} size={iconSize} title="Exclusive" />
+              <span className={styles.caption}>Exclusive</span>
             </div>
-          </Link>
-          <Link href="/subscription">
-            <div className={styles.navItem}>
+          </Link> */}
+
+
+            <div className={styles.navItem} onClick={handleToggle}>
               <FiCreditCard
                 color={iconColor}
                 size={iconSize}
                 title="Subscription"
+                
               />
+              <span className={styles.caption}>Subscription</span>
             </div>
-          </Link>
+ 
+
           <Link href="/page/event">
             <div className={styles.navItem}>
               <FaCalendarAlt color={iconColor} size={iconSize} title="Events" />
+              <span className={styles.caption}>Events</span>
             </div>
           </Link>
+
           <div
             className={styles.navItem}
             onClick={toggleMenuSlide}
             role="button"
           >
             <FiMenu color={iconColor} size={iconSize} title="Menu" />
+            <span className={styles.caption}>Menu</span>
           </div>
         </div>
+      </div>
+      <div
+        className={`${subscriptionStyles.subscription_menu_slide} ${
+          subscriptionMenuVisible
+            ? subscriptionStyles.subscription_menu_slideUp
+            : subscriptionStyles.subscription_menu_hidden
+        }`}
+      >
+        <PricingPlans hide={handleToggle} />
       </div>
     </>
   );

@@ -1,14 +1,15 @@
 "use client";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { Button, Form } from "react-bootstrap";
 import { FaMedal } from "react-icons/fa";
 import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import "./planDetails.css"; // Custom styles for shake animation
+
+import "./planDetails.css";
 
 interface PlanDetailsFormProps {
   onNext: (
@@ -16,109 +17,111 @@ interface PlanDetailsFormProps {
     billingCycle: "monthly" | "annual",
     price: number
   ) => void;
-  plan: string; // "platinum" | "gold" | "silver"
+  plan: string;
 }
 
 const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
   const router = useRouter();
-  const [data, setData] = useState<any[]>([]);
-  const [planTier, setPlanTier] = useState<string>(plan.toLowerCase());
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("annual");
-  const [price, setPrice] = useState<number>(0);
-  const [isChecked, setIsChecked] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [countryCode, setCountryCode] = useState("+91");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [verifiedOtp, setVerifiedOtp] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
+
+  const [plansData, setPlansData] = useState<any[]>([]);
+  const [planTier, setPlanTier] = useState(plan.toLowerCase());
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
+    "annual"
+  );
+  const [price, setPrice] = useState(0);
+
   const [email, setEmail] = useState("");
   const [token, setToken] = useState<string | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("+91");
+
+  const [isChecked, setIsChecked] = useState(false);
   const [shakeCheckbox, setShakeCheckbox] = useState(false);
 
+  const [isVerified, setIsVerified] = useState(false);
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Fetch token and decode email
   useEffect(() => {
-    const token = Cookies.get("authToken");
-    if (token) {
-      setToken(token);
-      const decoded: any = jwtDecode(token);
+    const t = Cookies.get("authToken");
+    if (t) {
+      setToken(t);
+      const decoded: any = jwtDecode(t);
       setEmail(decoded.email);
     }
   }, []);
 
+  // Fetch phone details using email
   useEffect(() => {
-    if (email) {
-      phoneDataApi();
-    }
+    if (email) fetchPhoneStatus();
   }, [email]);
 
+  // Fetch subscription pricing details
   useEffect(() => {
-    planApi();
+    fetchPlanPricing();
   }, []);
 
+  // Calculate price when plan or billing cycle changes
   useEffect(() => {
-    if (data.length === 0) return;
-    const monthlyData = data.find((item) => item.plan === "Monthly price");
-    const annualData = data.find((item) => item.plan === "Annual price");
+    if (!plansData.length) return;
     const key = planTier;
-    const computed =
-      billingCycle === "monthly"
-        ? monthlyData?.[key] ?? 0
-        : annualData?.[key] ?? 0;
-    setPrice(computed);
-  }, [data, planTier, billingCycle]);
+    const monthly = plansData.find((item) => item.plan === "Monthly price");
+    const annual = plansData.find((item) => item.plan === "Annual price");
+    const selectedPrice =
+      billingCycle === "monthly" ? monthly?.[key] : annual?.[key];
+    setPrice(selectedPrice ?? 0);
+  }, [plansData, planTier, billingCycle]);
 
-  const planApi = async () => {
+  // Fetch all subscription plans
+  const fetchPlanPricing = async () => {
     try {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription`
       );
-      setData(res.data);
+      setPlansData(res.data);
     } catch (err) {
-      console.log(err);
+      console.error("Subscription fetch failed:", err);
     }
   };
 
-  const phoneDataApi = async () => {
+  // Fetch phone number and verification status
+  const fetchPhoneStatus = async () => {
     try {
       const res = await axios.get(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/auth/phone/${email}`
       );
-      setPhoneNumber(res.data[0].phone_number);
-      const verified = res.data[0].phone_status === 1;
-      setVerifiedOtp(verified);
-      setIsVerified(verified);
+      const phoneData = res.data[0];
+      setPhoneNumber(phoneData.phone_number);
+      setIsVerified(phoneData.phone_status === 1);
     } catch (err) {
-      console.log(err);
+      console.error("Phone data fetch failed:", err);
     }
   };
 
+  // Send request to verify OTP
   const verifyOTP = async () => {
+    setLoading(true);
     try {
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/auth/phone/${email}`,
         { phone: `${countryCode} ${phoneNumber}` }
       );
-      setVerifiedOtp(true);
+      setIsVerified(true);
       toast.success("Phone verified successfully!");
-    } catch (error) {
+    } catch (err) {
       setMessage("Invalid OTP, try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  const handleCountryCodeChange = (e: any) => setCountryCode(e.target.value);
-  const handlePhoneChange = (e: any) => setPhoneNumber(e.target.value);
-  const handleChange = (event: any) => {
-    setIsChecked(event.target.checked);
-    if (event.target.checked) setShakeCheckbox(false);
+  const handleAgreementChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(e.target.checked);
+    if (e.target.checked) setShakeCheckbox(false);
   };
 
-  const handleNext = () => {
-    if (!email) {
-      toast.warning("Please login first to continue.");
-      router.push("/login");
-      return;
-    }
+  const handleNextClick = () => {
 
     if (!isChecked) {
       setShakeCheckbox(true);
@@ -132,7 +135,9 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
 
   return (
     <div className="card border-0">
-      <div className={`card-header text-white ${planTier}-gradient d-flex align-items-center justify-content-between`}>
+      <div
+        className={`card-header text-white ${planTier}-gradient d-flex justify-content-between align-items-center`}
+      >
         <div className="d-flex align-items-center">
           <span className={`plan-badge ${planTier}`}>
             <FaMedal />
@@ -143,90 +148,76 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
 
       <div className="card-body">
         <p className="text-muted">
-          Unlock all exclusive <strong>{planTier}</strong> plan features after purchasing.
+          Unlock all exclusive <strong>{planTier}</strong> plan features after
+          purchasing.
         </p>
 
         <Form>
-          <Form.Group className="mb-3" controlId="planTierSelect">
-            <Form.Label>Select Plan Tier</Form.Label>
-            <Form.Select value={planTier} onChange={(e) => setPlanTier(e.target.value)}>
-              <option value="platinum">Platinum</option>
-              <option value="gold">Gold</option>
-              <option value="silver">Silver</option>
-            </Form.Select>
-          </Form.Group>
+          {/* Plan Tier Selection */}
+          <div className="d-flex align-items-end mb-3">
+            {/* Plan Tier */}
+            <Form.Group className="me-3">
+              <Form.Label>Select Plan Tier</Form.Label>
+              <Form.Select
+                value={planTier}
+                onChange={(e) => setPlanTier(e.target.value)}
+              >
+                <option value="platinum">Platinum</option>
+                <option value="gold">Gold</option>
+                <option value="silver">Silver</option>
+              </Form.Select>
+            </Form.Group>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Billing Cycle</Form.Label>
+            {/* Billing Cycle */}
+            <Form.Group className="me-3">
+              <Form.Label className="mb-3">Billing Cycle</Form.Label>
+              <div>
+                <Form.Check
+                  inline
+                  label="Monthly"
+                  type="radio"
+                  checked={billingCycle === "monthly"}
+                  onChange={() => setBillingCycle("monthly")}
+                />
+                <Form.Check
+                  inline
+                  label="Annual"
+                  type="radio"
+                  checked={billingCycle === "annual"}
+                  onChange={() => setBillingCycle("annual")}
+                />
+              </div>
+            </Form.Group>
+
+            {/* Price Display */}
             <div>
-              <Form.Check
-                inline
-                label="Monthly"
-                name="billing"
-                type="radio"
-                id="billing-monthly"
-                checked={billingCycle === "monthly"}
-                onChange={() => setBillingCycle("monthly")}
-              />
-              <Form.Check
-                inline
-                label="Annual"
-                name="billing"
-                type="radio"
-                id="billing-annual"
-                checked={billingCycle === "annual"}
-                onChange={() => setBillingCycle("annual")}
-              />
+              <Form.Label className="d-block mb-3">Price</Form.Label>
+              <span className="price-badge">₹{price}</span>
             </div>
-          </Form.Group>
-
-          <div className="mb-3">
-            <strong>Price: </strong>
-            <span className="price-badge">₹{price}</span>
           </div>
 
+          {/* Email Display */}
           <Form.Group className="mb-3">
             <Form.Label>Email ID</Form.Label>
             <Form.Control
               type="email"
               value={email}
-              required
               disabled
               className="custom-input"
             />
           </Form.Group>
 
+          {/* Phone Verification */}
           <Form.Group className="mb-3">
             <Form.Label>Phone Number</Form.Label>
             <div className="d-flex gap-2">
               <Form.Select
                 value={countryCode}
-                onChange={handleCountryCodeChange}
-                className="custom-input"
+                onChange={(e) => setCountryCode(e.target.value)}
                 style={{ maxWidth: "100px" }}
-                disabled={verifiedOtp}
+                disabled={isVerified}
               >
-                {[
-                  "+1", "+7", "+20", "+27", "+30", "+31", "+32", "+33", "+34", "+36", "+39", "+40", "+41",
-                  "+43", "+44", "+45", "+46", "+47", "+48", "+49", "+51", "+52", "+53", "+54", "+55", "+56",
-                  "+57", "+58", "+60", "+61", "+62", "+63", "+64", "+65", "+66", "+81", "+82", "+84", "+86",
-                  "+90", "+91", "+92", "+93", "+94", "+95", "+98", "+211", "+212", "+213", "+216", "+218",
-                  "+220", "+221", "+222", "+223", "+224", "+225", "+226", "+227", "+228", "+229", "+230",
-                  "+231", "+232", "+233", "+234", "+235", "+236", "+237", "+238", "+239", "+240", "+241",
-                  "+242", "+243", "+244", "+245", "+246", "+248", "+249", "+250", "+251", "+252", "+253",
-                  "+254", "+255", "+256", "+257", "+258", "+260", "+261", "+262", "+263", "+264", "+265",
-                  "+266", "+267", "+268", "+269", "+290", "+291", "+297", "+298", "+299", "+350", "+351",
-                  "+352", "+353", "+354", "+355", "+356", "+357", "+358", "+359", "+370", "+371", "+372",
-                  "+373", "+374", "+375", "+376", "+377", "+378", "+379", "+380", "+381", "+382", "+383",
-                  "+385", "+386", "+387", "+389", "+420", "+421", "+423", "+500", "+501", "+502", "+503",
-                  "+504", "+505", "+506", "+507", "+508", "+509", "+590", "+591", "+592", "+593", "+594",
-                  "+595", "+596", "+597", "+598", "+599", "+670", "+672", "+673", "+674", "+675", "+676",
-                  "+677", "+678", "+679", "+680", "+681", "+682", "+683", "+685", "+686", "+687", "+688",
-                  "+689", "+690", "+691", "+692", "+850", "+852", "+853", "+855", "+856", "+880", "+886",
-                  "+960", "+961", "+962", "+963", "+964", "+965", "+966", "+967", "+968", "+970", "+971",
-                  "+972", "+973", "+974", "+975", "+976", "+977", "+992", "+993", "+994", "+995", "+996",
-                  "+998"
-                ].map((code) => (
+                {["+91", "+1", "+44", "+61", "+86", "+971"].map((code) => (
                   <option key={code} value={code}>
                     {code}
                   </option>
@@ -235,57 +226,52 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
               <Form.Control
                 type="tel"
                 value={phoneNumber}
-                onChange={handlePhoneChange}
-                required
-                disabled={verifiedOtp}
-                className="custom-input"
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="Enter phone number"
+                disabled={isVerified}
+                className="custom-input"
               />
             </div>
           </Form.Group>
 
-          {!verifiedOtp && (
+          {!isVerified && (
             <div className="text-center my-2">
-              <Button onClick={verifyOTP} disabled={!phoneNumber} className="btn btn-success">
-                Verify
+              <Button onClick={verifyOTP} disabled={!phoneNumber || loading}>
+                {loading ? "Verifying..." : "Verify"}
               </Button>
             </div>
           )}
 
           {message && <p className="text-center text-muted mt-2">{message}</p>}
 
-          {isVerified && (
-            <p className="info-text">
-              Your email ID and phone number are retrieved from your login information
-            </p>
-          )}
-
-          <Form.Group className="mb-3">
-            <div className="d-flex align-items-center gap-2">
-              <Form.Check
+          {/* Terms and Conditions */}
+          <div className={`form-check ${shakeCheckbox ? "shake" : ""}`}>
+            <label
+              style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+            >
+              <input
                 type="checkbox"
                 checked={isChecked}
-                onChange={handleChange}
-                required
-                className={`checkbox-custom ${shakeCheckbox ? "shake" : ""}`}
+                onChange={handleAgreementChange}
+                style={{
+                  accentColor: "#0d6efd",
+                  width: "16px",
+                  height: "16px",
+                }}
               />
-
-              <Form.Label className="mb-0">
+              <span>
                 I agree to the{" "}
-                <Link href="/terms-conditions" className="text-primary">
-                  terms and conditions
-                </Link>{" "}
-                regarding this purchase
-              </Form.Label>
-            </div>
-          </Form.Group>
-        </Form>
-      </div>
+                <Link href="/terms" target="_blank">
+                  terms & conditions
+                </Link>
+              </span>
+            </label>
+          </div>
 
-      <div className="card-footer d-flex justify-content-end gap-2">
-        <Button variant="primary" onClick={handleNext} disabled={!email}>
-          Next
-        </Button>
+          <div className="mt-3 text-center">
+            <Button onClick={handleNextClick}>Next</Button>
+          </div>
+        </Form>
       </div>
     </div>
   );

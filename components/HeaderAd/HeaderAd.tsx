@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import AdHomeBanner from "../GoogleAds/AdHomeHeader";
+import Link from "next/link";
 
 const HeaderAd = () => {
   const [data, setData] = useState<any>([]);
@@ -69,11 +70,13 @@ const HeaderAd = () => {
             objectFit: "contain",
           }}
         >
-          <Image
-            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_728}`}
-            alt="index top"
-            fill
-          />
+          <Link href="/subscription">
+            <Image
+              src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_728}`}
+              alt="index top"
+              fill
+            />
+          </Link>
           <button
             onClick={handleClose}
             style={{

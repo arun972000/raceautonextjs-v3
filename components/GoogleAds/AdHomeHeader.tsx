@@ -11,12 +11,12 @@ const AdHomeBanner = () => {
   }, []);
   return (
     <>
-      <p
-        style={{ width: "100%", background: "black" }}
-        className="m-0 p-0 text-center text-white"
+      <span
+        style={{ borderBottom: "1px solid black" }}
+        className="m-0 mb-2 p-0 text-center"
       >
         Advertisement
-      </p>
+      </span>
 
       <div style={{ display: "block", margin: "20px 0" }}>
         <ins
@@ -33,12 +33,6 @@ const AdHomeBanner = () => {
           }}
         />
       </div>
-      <p
-        style={{ width: "100%", background: "black" }}
-        className="m-0 p-0 text-center text-white"
-      >
-        Advertisement
-      </p>
     </>
   );
 };

@@ -32,7 +32,6 @@
   }
 }
 
-
 .navIcon {
   width: 23px;
   height: 23px;
@@ -58,7 +57,7 @@
   overflow-y: auto;
   scroll-behavior: smooth;
   background: rgba(255, 255, 255, 0.1);
-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   z-index: 1000000;
   height: 100%;
   /* padding: 1rem; */
@@ -78,12 +77,30 @@ backdrop-filter: blur(10px);
   pointer-events: auto;
 }
 
+.navigation {
+  display: flex;
+  justify-content: space-around;
+  /* …other styles… */
+}
 
+.navItem {
+  display: flex;
+  flex-direction: column;  /* stack icon + text */
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  padding: 0.5rem;
+}
 
+.caption {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;      /* tweak as you like */
+  color: inherit;          /* same as icon color */
+  line-height: 1;
+}
 
 @media only screen and (min-width: 1000px) {
-  .mobile_navbar{
+  .mobile_navbar {
     display: none;
   }
 }
-

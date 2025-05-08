@@ -152,3 +152,24 @@
     transform: scale(1.05);
   }
   
+
+  /* components/SubscribeModal.module.css */
+
+.dialog {
+  max-width: 420px;
+}
+
+.content {
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.bi-person-fill,
+.bi-envelope-fill {
+  font-size: 1.1rem;
+}
+
+.modal-body {
+  padding-top: 0;
+}

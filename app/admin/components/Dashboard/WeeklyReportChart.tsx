@@ -55,7 +55,7 @@ const LineChartAdmin = () => {
       x: {
         title: {
           display: true,
-          text: "Days of the Week",
+
         },
       },
       y: {
@@ -74,14 +74,13 @@ const LineChartAdmin = () => {
 
   return (
     <div className="card shadow border-0 p-1" style={{ height: "100%" }}>
-      <h6>Weekly Post Report</h6>
+      <h6>Articles Views Overview (Past 30 Days)</h6>
       <div
         className="chart-container mt-2"
         style={{ position: "relative", width: "100%", aspectRatio: "2/1" }}
       >
         <Line data={data} options={options} />
       </div>
-      <p className="mt-4 ms-2">Stats for the current week</p>
     </div>
   );
 };

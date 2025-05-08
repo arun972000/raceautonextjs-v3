@@ -14,8 +14,8 @@ const GoogleLoginButton = () => {
     <Link href={`https://accounts.google.com/o/oauth2/auth?client_id=${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/auth/google/callback&response_type=code&scope=openid%20profile%20email`}><button className="google-login-btn">
       {/* <FaGoogle /> */}
 
-        <Image src='/images/search-google.png' alt='search-google' width={20} height={20} />
-      <span className='ms-3'>Continue with Google</span>
+      <Image src='/images/search-google.png' alt='search-google' width={20} height={20} />
+      <span className='ms-3'>Login with Google</span>
     </button></Link>
 
   );

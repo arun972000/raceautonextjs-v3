@@ -1,5 +1,6 @@
 "use client";
 
+import AuthModal from "@/app/test/components/LoginFormTest";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useRouter } from "next/navigation";
@@ -7,6 +8,7 @@ import React, { useEffect, useState } from "react";
 
 const PostContent = ({ content, token, is_recommended }: { content: string; token: any; is_recommended:any }) => {
   const router = useRouter();
+  const [showAuth, setShowAuth] = useState(false);
 
   const handleCopy = (event: ClipboardEvent) => {
     event.preventDefault();
@@ -83,6 +85,7 @@ const PostContent = ({ content, token, is_recommended }: { content: string; toke
           </button>
         </div>
       )}
+       <AuthModal show={showAuth} onClose={() => setShowAuth(false)} />
     </>
   );
 };

@@ -29,7 +29,7 @@ const validationSchema = Yup.object().shape({
     .required("Confirm password is required"),
 });
 
-const SignupForm = () => {
+const SignupForm = ({ onSuccess }) => {
   const [error, setError] = useState("");
   const router = useRouter()
 
@@ -54,10 +54,12 @@ const SignupForm = () => {
 
       // await sendEmailVerification(user);
 
-      setTimeout(() => {
-        router.push('/subscription');           // 1st back → login page
+      // setTimeout(() => {
+      //   router.push('/subscription');           // 1st back → login page
 
-      }, 1000);
+      // }, 1000);
+      onSuccess();
+      window.location.reload();
     } catch (error) {
       if (error.response) {
         if (error.response.status === 409) {
@@ -76,85 +78,78 @@ const SignupForm = () => {
   };
 
   return (
-    <Container fluid className="signup-container">
-      <Row className="justify-content-center align-items-center min-vh-100">
-        <Col md={6} lg={3}>
-          <div className="signup-box p-4">
-            <div className="text-center mb-4">
-              <Link href='/'><Image src="/images/black logo with text.png" alt="Logo" width={60} height={70} /></Link>
-              {/* <h2 className="mt-2">Sign Up</h2> */}
-            </div>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Formik
-              initialValues={{ username: "", email: "", password: "", confirmPassword: "" }}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-            >
-              {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-                <Form noValidate onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3" controlId="formUsername">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="username"
-                      value={values.username}
-                      onChange={handleChange}
-                      isInvalid={touched.username && errors.username}
-                      placeholder="Enter username"
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formEmail">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      name="email"
-                      value={values.email}
-                      onChange={handleChange}
-                      isInvalid={touched.email && errors.email}
-                      placeholder="Enter email"
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      name="password"
-                      value={values.password}
-                      onChange={handleChange}
-                      isInvalid={touched.password && errors.password}
-                      placeholder="Password"
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-                  </Form.Group>
-                  <Form.Group className="mb-3" controlId="formConfirmPassword">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <Form.Control
-                      type="password"
-                      name="confirmPassword"
-                      value={values.confirmPassword}
-                      onChange={handleChange}
-                      isInvalid={touched.confirmPassword && errors.confirmPassword}
-                      placeholder="Confirm password"
-                    />
-                    <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
-                  </Form.Group>
-                  <Button variant="primary" type="submit" disabled={isSubmitting} className="w-100">
-                    {isSubmitting ? "Signing up..." : "Sign Up"}
-                  </Button>
-                  <p className="text-center text-muted mt-2 mb-1 p-0 m-0">or</p>
-                  <div className="d-flex justify-content-center mb-3"><GoogleLoginButton /></div>
-                  <div className="text-center mt-3">
-                    <span>Already have an account? </span><Link href="/login" className="text-primary">Login</Link>
-                  </div>
-                </Form>
-              )}
-            </Formik>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+
+    <div className="signup-box px-3 py-2">
+
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Formik
+        initialValues={{ username: "", email: "", password: "", confirmPassword: "" }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+          <Form noValidate onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="formUsername">
+              {/* <Form.Label>Username</Form.Label> */}
+              <Form.Control
+                type="text"
+                name="username"
+                value={values.username}
+                onChange={handleChange}
+                isInvalid={touched.username && errors.username}
+                placeholder="Enter username"
+                style={{ border: '1px solid #000', boxShadow: 'none' }}
+              />
+              <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formEmail">
+              {/* <Form.Label>Email address</Form.Label> */}
+              <Form.Control
+                type="email"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                isInvalid={touched.email && errors.email}
+                placeholder="Enter email"
+                style={{ border: '1px solid #000', boxShadow: 'none' }}
+              />
+              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formPassword">
+              {/* <Form.Label>Password</Form.Label> */}
+              <Form.Control
+                type="password"
+                name="password"
+                value={values.password}
+                onChange={handleChange}
+                isInvalid={touched.password && errors.password}
+                placeholder="Password"
+                style={{ border: '1px solid #000', boxShadow: 'none' }}
+              />
+              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="formConfirmPassword">
+              {/* <Form.Label>Confirm Password</Form.Label> */}
+              <Form.Control
+                type="password"
+                name="confirmPassword"
+                value={values.confirmPassword}
+                onChange={handleChange}
+                isInvalid={touched.confirmPassword && errors.confirmPassword}
+                placeholder="Confirm password"
+                style={{ border: '1px solid #000', boxShadow: 'none' }}
+              />
+              <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+            </Form.Group>
+            <Button variant="dark" type="submit" disabled={isSubmitting} className="w-100">
+              {isSubmitting ? "Signing up..." : "Sign Up"}
+            </Button>
+            <p className="text-center text-muted mt-2 mb-1 p-0 m-0">or</p>
+            <div className="d-flex justify-content-center mb-3"><GoogleLoginButton /></div>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 

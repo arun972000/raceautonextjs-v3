@@ -5,6 +5,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ReactEmailEditor from 'react-email-editor';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { formatDate } from '@/components/Time';
+
+
+
 
 export default function EmailEditPage() {
   const editorRef = useRef(null);
@@ -97,6 +101,40 @@ export default function EmailEditPage() {
     });
   };
 
+  const handleCopy = () => {
+    editorRef.current?.editor.exportHtml(async (data) => {
+      const { design, html } = data;
+      // build the name: either “MyDesign-2025-05-07_14-30-00” or fallback to Untitled with timestamp
+      const timestamp = formatDate(new Date());
+      const baseName = designName.trim() || 'Untitled Design';
+      const copyName = `${baseName}-${timestamp}`;
+
+      const body = {
+        name: copyName,
+        design_json: JSON.stringify(design),
+        html,
+      };
+
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/admin/email-template-builder`,
+          body,
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+
+        toast.success(`Copy “${copyName}” saved!`, { autoClose: 4000 });
+        // optionally, navigate to edit the new copy:
+        const newId = res.data.id;
+        if (newId) {
+          router.push(`/admin/email-template-builder/edit?id=${newId}`);
+        }
+      } catch (err) {
+        console.error('Copy failed:', err);
+        toast.error('Failed to save copy.', { autoClose: 4000 });
+      }
+    });
+  };
+
   return (
     <div style={{ padding: 20 }}>
       <h2>Edit Email Design</h2>
@@ -121,6 +159,9 @@ export default function EmailEditPage() {
         </button>
         <button className="btn btn-secondary ms-2" onClick={exportAsTXT} disabled={!isLoaded}>
           Export as TXT
+        </button>
+        <button className="btn btn-secondary ms-2" onClick={handleCopy} disabled={!isLoaded}>
+          Save a copy
         </button>
       </div>
     </div>

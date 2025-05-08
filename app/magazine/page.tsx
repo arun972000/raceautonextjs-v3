@@ -7,16 +7,20 @@ import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/Footer/Footer";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 import GreenBar from "@/components/GreenBar/MagazineBar";
+import PageViewTracker from "../pageTracker";
 
 const page = () => {
   return (
     <>
+      <PageViewTracker page="magazine" />
       <BreakingNews />
       <Navbar />
-      <MobileNavNew/>
-      <div className="main_content__position"><Magazine_v2 /></div>
+      <MobileNavNew />
+      <div className="main_content__position">
+        <Magazine_v2 />
+      </div>
       <Footer />
-      <GreenBar/>
+      <GreenBar />
     </>
   );
 };
