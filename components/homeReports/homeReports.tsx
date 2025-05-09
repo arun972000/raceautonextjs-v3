@@ -1,9 +1,10 @@
 'use client';
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import ClientReportContent from './ClientReportContent';
 
-const ReportPlayer = dynamic(() => import("./ReportsVideo"), { ssr: false });
+
+const ReportPlayer = dynamic(() => import('./ReportsVideo'), { ssr: false });
 
 type ReportData = {
   title: string;
@@ -11,68 +12,34 @@ type ReportData = {
   image_url: string;
 };
 
-// eslint-disable-next-line @next/next/no-async-client-component
-const HomeReports = async (): Promise<JSX.Element> => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/reports`, {
-    cache: "no-store",
-  });
+const HomeReports = (): JSX.Element => {
+  const [report, setReport] = useState<ReportData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const data: ReportData[] = await res.json();
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}api/reports`, {
+          cache: 'no-store',
+        });
+        const data = await res.json();
+        setReport(data[0]);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load report');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  return <ClientReportContent data={data[0]} />;
+    fetchReports();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error || !report) return <p>{error || 'No report found.'}</p>;
+
+  return <ClientReportContent data={report} />;
 };
 
 export default HomeReports;
-
-// 👇 Client component to handle responsive Read More
-const ClientReportContent = ({ data }: { data: ReportData }): JSX.Element => {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [expanded, setExpanded] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const truncateText = (text: string, wordLimit: number): string => {
-    const words = text.split(" ");
-    if (words.length <= wordLimit) return text;
-    return words.slice(0, wordLimit).join(" ") + "...";
-  };
-
-  const summaryContent = isMobile
-    ? expanded
-      ? data.summary
-      : truncateText(data.summary, 50)
-    : data.summary;
-
-  return (
-    <div className="row my-5">
-      <div className="col-md-4">
-        <h2 className="mb-3" style={{ fontWeight: 700 }}>Report</h2>
-        <h5 className="mb-3">{data.title}</h5>
-        <p>
-          {summaryContent}
-          {isMobile && data.summary.split(" ").length > 50 && (
-            <span
-              onClick={() => setExpanded(!expanded)}
-              style={{ color: "#007bff", cursor: "pointer", marginLeft: "5px" }}
-            >
-              {expanded ? "Show Less" : "Read More"}
-            </span>
-          )}
-        </p>
-      </div>
-      <div className="col-md-8">
-        <div style={{ width: "100%", aspectRatio: "16/9", position: "relative" }}>
-          <ReportPlayer url={data.image_url} />
-        </div>
-      </div>
-    </div>
-  );
-};
