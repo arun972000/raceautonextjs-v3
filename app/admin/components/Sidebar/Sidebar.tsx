@@ -45,7 +45,6 @@ import {
 import Image from "next/image";
 import { CiBank, CiText } from "react-icons/ci";
 
-
 const AdminSidebar = async () => {
   const logoRes = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/general-settings/logo`
@@ -134,9 +133,14 @@ const AdminSidebar = async () => {
             </Link>
           </li>
           <li>
-            <Link href="/admin/email-template-builder" className="nav-link px-0 align-middle">
-            <CgTemplate />{" "}
-              <span className="ms-1 d-none d-sm-inline">Email Template Builder</span>
+            <Link
+              href="/admin/email-template-builder"
+              className="nav-link px-0 align-middle"
+            >
+              <CgTemplate />{" "}
+              <span className="ms-1 d-none d-sm-inline">
+                Email Template Builder
+              </span>
             </Link>
           </li>
           {/* <li>
@@ -174,7 +178,10 @@ const AdminSidebar = async () => {
                 </Link>
               </li>
               <li>
-                <Link href="/admin/subscription/subscribers" className="nav-link px-0">
+                <Link
+                  href="/admin/subscription/subscribers"
+                  className="nav-link px-0"
+                >
                   <FaSitemap className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary">
                     Subscribers
@@ -182,7 +189,10 @@ const AdminSidebar = async () => {
                 </Link>
               </li>
               <li>
-                <Link href="/admin/subscription/payment/upi-payment" className="nav-link px-0">
+                <Link
+                  href="/admin/subscription/payment/upi-payment"
+                  className="nav-link px-0"
+                >
                   <FaRupeeSign className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary">
                     UPI-payments
@@ -190,10 +200,13 @@ const AdminSidebar = async () => {
                 </Link>
               </li>
               <li>
-                <Link href="/admin/subscription/payment/bank-payment" className="nav-link px-0">
+                <Link
+                  href="/admin/subscription/payment/bank-payment"
+                  className="nav-link px-0"
+                >
                   <CiBank className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary">
-                   Bank-payments
+                    Bank-payments
                   </span>
                 </Link>
               </li>
@@ -217,7 +230,10 @@ const AdminSidebar = async () => {
               data-bs-parent="#menu"
             >
               <li className="w-100">
-                <Link href="/admin/ai-powered/image-generate" className="nav-link px-0">
+                <Link
+                  href="/admin/ai-powered/image-generate"
+                  className="nav-link px-0"
+                >
                   <FaImage className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary text-primary">
                     Image Generator
@@ -225,7 +241,10 @@ const AdminSidebar = async () => {
                 </Link>
               </li>
               <li>
-                <Link href="/admin/ai-powered/speech-to-text" className="nav-link px-0">
+                <Link
+                  href="/admin/ai-powered/speech-to-text"
+                  className="nav-link px-0"
+                >
                   <CiText className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary">
                     Speech to Text
@@ -233,7 +252,10 @@ const AdminSidebar = async () => {
                 </Link>
               </li>
               <li>
-                <Link href="/admin/ai-powered/text-to-speech" className="nav-link px-0">
+                <Link
+                  href="/admin/ai-powered/text-to-speech"
+                  className="nav-link px-0"
+                >
                   <PiFileAudioFill className="text-primary" />{" "}
                   <span className="d-none d-sm-inline text-primary">
                     Text to Speech

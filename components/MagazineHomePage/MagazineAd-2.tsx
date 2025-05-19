@@ -46,8 +46,8 @@ const MagazineAd_2 = () => {
         analysis in our latest edition.
       </p>
       <Swiper
-        slidesPerView={4}
-        spaceBetween={30}
+        slidesPerView={5}
+        spaceBetween={20}
         loop={true}
         autoplay={{
           delay: 2500,

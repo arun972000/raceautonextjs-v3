@@ -16,7 +16,7 @@ const ClientReportContent = ({ data }: { data: ReportData }): JSX.Element => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1200);
     };
 
     handleResize(); // Initial check
@@ -38,7 +38,7 @@ const ClientReportContent = ({ data }: { data: ReportData }): JSX.Element => {
 
   return (
     <div className="row my-5">
-      <div className="col-md-4">
+      <div className="col-lg-4">
         <h2 className="mb-3" style={{ fontWeight: 700 }}>Report</h2>
         <h5 className="mb-3">{data.title}</h5>
         <p>
@@ -53,7 +53,7 @@ const ClientReportContent = ({ data }: { data: ReportData }): JSX.Element => {
           )}
         </p>
       </div>
-      <div className="col-md-8">
+      <div className="col-lg-8">
         <div style={{ width: "100%", aspectRatio: "16/9", position: "relative" }}>
           <ReportPlayer url={data.image_url} />
         </div>

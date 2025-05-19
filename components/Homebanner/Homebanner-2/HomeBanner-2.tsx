@@ -9,6 +9,7 @@ type Feature = {
   title: string;
   title_slug: string;
   image_big: string;
+  image_mid: string;
   created_at: any;
   featured_order: number;
 };
@@ -26,27 +27,25 @@ const HomeBanner_2 = async () => {
   );
   const FeatureCardData1 = orderedFeatures
     .map((item) => <FeatureCard_2 item={item} key={item.id} />)
-    .slice(0, 1);
-  const FeatureCardData2 = orderedFeatures
-    .map((item) => (
-      <div className="col-md-6 col-lg-3" key={item.id}>
-        <FeatureCard_2 item={item} key={item.id} />
-      </div>
-    ))
-    .slice(1, 5);
+    .slice(0, 2);
 
   return (
     <>
-      <div className={`${styles.pc_homebanner} row mb-4 mt-3`}>
-        <div className="col-lg-9">
-          <Slider_2 />
+      <div className={`${styles.pc_homebanner} row mb-4 pt-3`}>
+        
+        <div className="col-lg-8 p-0">
+          <div className="row m-0 p-0">
+            <div className="col-12">
+              <Slider_2 />
+            </div>
+            {/* {FeatureCardData1} */}
+          </div>
         </div>
-        <div className="col-lg-3">{FeatureCardData1}</div>
+        <div className="col-lg-4">
+          <div className="row ">{FeatureCardData1}</div>
+        </div>
       </div>
-      <div className={`${styles.pc_homebanner} row mt-3`}>
-        {FeatureCardData2}
-      </div>
-      <div className={`${styles.mobile_homebanner} row mb-4 mt-4`}>
+      <div className={`${styles.mobile_homebanner} row mb-4 pt-3`}>
         <div className="col-12 p-0">
           <div className="row m-0 p-0">
             <div className="col-12">

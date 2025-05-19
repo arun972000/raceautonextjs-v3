@@ -82,7 +82,7 @@ function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
   const [loading, setLoading] = useState(true);
 
   return (
-    <div style={{ width: "100%", position: "relative", aspectRatio: "3/2" }}>
+    <div style={{ width: "100%", position: "relative", aspectRatio: "16/9" }}>
       {/* {loading && (
         <div
           style={{

@@ -28,7 +28,7 @@ const Page = forwardRef(({ pageNumber }, ref) => {
   );
 });
 
-function TestMobile({ token }) {
+function TestMobile({ token, pdfData }) {
   const book = useRef();
   const router = useRouter();
   const params = useParams();
@@ -53,16 +53,16 @@ function TestMobile({ token }) {
     ["admin", "ad team", "moderator"].includes(decoded.role) ||
     (subcriptionData.length !== 0 && subcriptionData[0]?.status === "Active");
 
-  const pdfData = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/magazine/${title_slug}`
-      );
-      setPdf_url(res.data[0].pdf_url);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const pdfData = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}api/magazine/${title_slug}`
+  //     );
+  //     setPdf_url(res.data[0].pdf_url);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const subscriptionApi = async () => {
     try {
@@ -166,7 +166,7 @@ function TestMobile({ token }) {
     window.addEventListener("resize", handleResize);
     handleResize();
 
-    pdfData();
+    // pdfData();
 
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("touchstart", handleTouchStart);
@@ -203,7 +203,7 @@ function TestMobile({ token }) {
         </div>
       )}
       <Document
-        file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdf_url}`}
+        file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`}
         style={{ width: "100%", aspectRatio: "1.4/1" }}
         onLoadSuccess={handleLoadSuccess}
         onLoadProgress={handleLoadProgress}
@@ -370,7 +370,7 @@ function TestMobile({ token }) {
             )}
             {showActionButtons && (
               <a
-                href={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdf_url}`}
+                href={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`}
                 style={{
                   cursor: "pointer",
                   textDecoration: "none",
@@ -406,22 +406,22 @@ function TestMobile({ token }) {
                 size={23}
               />
             )}
-         
-              <IoMdExit
-                title="Exit"
-                color="white"
-                onClick={() => {
-                  router.push("/magazine");
-                }}
-                style={{
-                  cursor: "pointer",
-                  background: "#32bea6",
-                  borderRadius: 100,
-                }}
-                className="mx-2 p-1"
-                size={23}
-              />
-    
+
+            <IoMdExit
+              title="Exit"
+              color="white"
+              onClick={() => {
+                router.push("/magazine");
+              }}
+              style={{
+                cursor: "pointer",
+                background: "#32bea6",
+                borderRadius: 100,
+              }}
+              className="mx-2 p-1"
+              size={23}
+            />
+
           </div>
         </div>
       )}

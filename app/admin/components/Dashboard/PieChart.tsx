@@ -10,18 +10,18 @@ const PieChartAdmin = () => {
   const [userName, setUserName] = useState([]);
   const [count, setCount] = useState([]);
   const colors = [
-    // Pinkish-red
     "#FFDB33", // Yellow
-    "#33FFF5", // Light cyan
+    "#FF00FF", // Light cyan
     "#8E33FF", // Purple
     "#FF8333", // Coral orange
     "#33FF99", // Mint green
-    "#FF3333",
+    "#FF3333", 
     "#FF5733", // Vibrant orange-red
     "#33FF57", // Bright green
     "#3357FF", // Bright blue
     "#FF33A1", // Bright red
   ];
+
 
   const chartapi = async () => {
     try {

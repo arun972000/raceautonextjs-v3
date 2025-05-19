@@ -7,7 +7,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import Link from "next/link";
-import Skeleton from "react-loading-skeleton";
 import "../HomeSwiper.css";
 
 type SliderType = {
@@ -15,14 +14,13 @@ type SliderType = {
   title: string;
   title_slug: string;
   image_big: string;
-  image_mid: string;
-  image_default:string;
-  slider_order: number;
+  image_default: string;
   summary: string;
-  created_at: any;
+  image_mid: string;
+  slider_order: number;
 };
 
-export default function SwiperSilde_2({ slides }: { slides: SliderType[] }) {
+export default function SwiperSlide_2({ slides }: { slides: SliderType[] }) {
   const pagination = {
     clickable: true,
     renderBullet: function (index: any, className: any) {
@@ -35,43 +33,44 @@ export default function SwiperSilde_2({ slides }: { slides: SliderType[] }) {
       grabCursor={true}
       centeredSlides={true}
       loop={true}
-      autoplay={{ delay: 2000, pauseOnMouseEnter: true }} // Increase delay to reduce initial activity
-      speed={600} // Faster slide transition
+      autoplay={{ delay: 2000, pauseOnMouseEnter: true }}
+      speed={600}
       slidesPerView={1}
-      coverflowEffect={{
-        rotate: 0,
-        stretch: 0,
-        depth: 80,
-        modifier: 1.5,
-      }}
       modules={[Pagination, Autoplay]}
-      style={{ marginTop: 3 }}
+      style={{ marginTop: 0 }}
       pagination={pagination}
     >
       {slides.map((item) => (
         <SwiperSlide key={item.id}>
           <Link href={`/post/${item.title_slug}`}>
-            <div className="row g-0">
-              <div className="col-lg-8">
-                <ImageWithPlaceholder
-                  src={
-                    process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default
-                  }
-                  alt={item.title}
-                />
+            <div className="slide-container">
+              <ImageWithPlaceholder
+                src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
+                alt={item.title}
+              />
+              <div
+                className="overlay-title-banner"
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "50px",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)", // 50% opacity black background
+                  // display: "flex",
+                  // alignItems: "center",
+                  // justifyContent: "center",
+                  color: "#fff", // White text color
+                  zIndex: 3, // Place above the image
+                  textAlign: "center",
+                  padding: "1rem",
+                }}
+              >
+                <h6 style={{ fontWeight: "bold", margin: 0 }}>{item.title}</h6>
               </div>
-              <div className="col-lg-4">
-                <div
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(to bottom,rgba(120, 117, 117, 0.97),rgba(90, 81, 81, 0.97))",
-                    color: "white",
-                    height: "100%",
-                  }}
-                >
-                  <h4 className="mb-1 p-3">{item.title}</h4>
-                  <h6 className="mb-1 p-3">{item.summary}</h6>
-                </div>
+              <div className="overlay-content">
+                <h3 className="slide-title">{item.title}</h3>
+                <p className="slide-summary">{item.summary}</p>
               </div>
             </div>
           </Link>
@@ -82,43 +81,8 @@ export default function SwiperSilde_2({ slides }: { slides: SliderType[] }) {
 }
 
 function ImageWithPlaceholder({ src, alt }: { src: string; alt: string }) {
-  const [loading, setLoading] = useState(true);
-
   return (
-    <div style={{ width: "100%", position: "relative", aspectRatio: "16/9" }}>
-      {/* {loading && (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            zIndex: 2,
-          }}
-        >
-          <Skeleton
-            height={50}
-            count={1}
-            baseColor="#e0e7ff" // Light blue background
-            highlightColor="#c7d2fe" // Slightly darker blue highlight
-            className="my-4"
-          />
-         
-        </div>
-      )} */}
-      {/* <Image
-        src={src}
-        alt={alt}
-        fill
-        style={{ objectFit: "cover" }}
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 40vw"
-        priority
-        onLoad={() => setLoading(false)}
-      /> */}
+    <div className="image-wrapper">
       <Image
         src={src}
         alt={alt}

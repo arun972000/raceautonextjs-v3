@@ -183,7 +183,6 @@ const FloatingChatBot = () => {
       }
     },
 
-
     message_gold: {
       message: "✨ Gold Plan includes premium content access, priority support, and monthly analytics reports.",
       transition: { duration: 1000 },

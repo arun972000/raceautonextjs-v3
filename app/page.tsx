@@ -42,8 +42,8 @@ const Home = async () => {
         <BreakingNews />
         <Navbar />
 
-        <div className="main_content__position">
-          <div className="container">
+        <div className="main_content__position px-4">
+          <div className="container-fluid">
             <div className={styles.ad_header}>
               <HeaderAd />
             </div>

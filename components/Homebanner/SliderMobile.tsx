@@ -22,7 +22,7 @@ const SliderMobile = async () => {
   const sortedSlider = slides.sort((a, b) => a.slider_order - b.slider_order);
 
   return (
-    <div style={{ width: "100%", position: "relative", aspectRatio: "3/2" }}>
+    <div style={{ width: "100%", position: "relative", aspectRatio: "16/9" }}>
       <Link href={`/post/${sortedSlider[0].title_slug}`}>
         <Image
           src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sortedSlider[0].image_mid}`}

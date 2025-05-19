@@ -9,6 +9,7 @@ type Feature = {
   title: string;
   title_slug: string;
   image_big: string;
+  image_mid:string;
   created_at: any;
 };
 
@@ -23,14 +24,14 @@ const FeatureCard_3 = async (props: proptype) => {
     process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_big
   );
   return (
-    <div className="col-md-6 mt-3">
+    <div className="col-12 mb-3">
       <Link className="link-style" href={`/post/${item.title_slug}`}>
         <div
           className={`${styles.banner__hover_v3}`}
-          style={{ position: "relative", width: "100%", aspectRatio: "3/2" }}
+          style={{ position: "relative", width: "100%", aspectRatio: "16/9" }}
         >
           <Image
-            src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + `${item.image_big}`}
+            src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + `${item.image_mid}`}
             alt={item.title}
             className={styles.featured__image}
             fill

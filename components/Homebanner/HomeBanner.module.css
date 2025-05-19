@@ -78,7 +78,7 @@
   display: none !important;
 }
 
-@media (max-width: 500px) {
+@media (max-width: 1000px) {
   .mobile_homebanner {
     display: block !important;
   }
@@ -102,4 +102,35 @@
 .swiper-pagination-bullet-active {
   color: #fff;
   background: #007aff;
+}
+
+
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+}
+
+.featured__image {
+  object-fit: cover;
+}
+
+.featureTitle {
+  /* font-size: 1.25rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  color: #222; */
+}
+
+.featureSummary {
+  font-size: 1rem;
+  color: #555;
+  margin: 0 0 0.75rem 0;
+}
+
+.featureDate {
+  font-size: 0.875rem;
+  color: #888;
 }

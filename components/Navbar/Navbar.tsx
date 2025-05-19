@@ -206,7 +206,7 @@ const Navbar = async () => {
       {/* <MobileNavbarSample  logoData={logoData[0]}
         morePagefiltered={morePagefiltered}
         Main_Category={Main_Category}/> */}
-      <ForexRates />
+      {/* <ForexRates /> */}
     </div>
   );
 };

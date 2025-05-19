@@ -8,6 +8,7 @@ type SliderType = {
   image_big: string;
   image_default:string;
   image_mid:string;
+  summary:string;
   slider_order: number;
 };
 

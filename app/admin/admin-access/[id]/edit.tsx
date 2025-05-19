@@ -108,7 +108,8 @@ const RoleForm = () => {
           name="title"
           value={title}
           className="form-control"
-          onChange={(e) => setTitle(e.target.value)}
+          // onChange={(e) => setTitle(e.target.value)}
+          disabled
         />
         <Form>
           {Object.keys(permissions).map((permission: any) => (

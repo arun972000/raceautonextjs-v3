@@ -32,7 +32,8 @@ const Page = forwardRef(({ pageNumber }, ref) => {
   );
 });
 
-function Test({ token }) {
+function Test({ token, pdfData }) {
+
   const book = useRef();
   const router = useRouter(); // Next.js router for navigation
   const params = useParams(); // Use Next.js useParams hook for dynamic route
@@ -57,16 +58,16 @@ function Test({ token }) {
     ["admin", "ad team", "moderator"].includes(decoded.role) ||
     (subcriptionData.length !== 0 && subcriptionData[0]?.status === "Active");
 
-  const pdfData = async () => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/magazine/${title_slug}`
-      );
-      setPdf_url(res.data[0].pdf_url);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  // const pdfData = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}api/magazine/${title_slug}`
+  //     );
+  //     setPdf_url(res.data[0].pdf_url);
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
 
   const subscriptionApi = async () => {
     try {
@@ -172,7 +173,7 @@ function Test({ token }) {
     window.addEventListener("resize", handleResize);
     handleResize();
 
-    pdfData();
+    // pdfData();
 
     window.addEventListener("keydown", handleKeyPress);
     window.addEventListener("touchstart", handleTouchStart);
@@ -197,8 +198,30 @@ function Test({ token }) {
     }
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Block F12
+      if (e.key === "F12") {
+        e.preventDefault();
+      }
+      // Block Ctrl+Shift+I or Ctrl+Shift+J or Ctrl+U
+      if (
+        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+        (e.ctrlKey && e.key === "U")
+      ) {
+        e.preventDefault();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
-    <>
+    <div onContextMenu={(e) => e.preventDefault()}>
       {file && (
         <iframe
           ref={frameRef}
@@ -216,7 +239,7 @@ function Test({ token }) {
         <MagazineSlider />
       </div>
       <Document
-        file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdf_url}`}
+        file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`}
         style={{ width: "100%", aspectRatio: "1.4/1" }}
         onLoadSuccess={handleLoadSuccess}
         onLoadProgress={handleLoadProgress}
@@ -227,7 +250,7 @@ function Test({ token }) {
       >
         <HTMLFlipBook
           width={460}
-          height={640}
+          height={660}
           ref={book}
           showCover={true}
           onFlip={onFlip}
@@ -245,10 +268,20 @@ function Test({ token }) {
       </Document>
 
       {!pdfloading && (
-        <div className="row mt-2 justify-content-center align-items-center">
+        <div className="row justify-content-center align-items-center">
+
           <div
-            className="d-flex justify-content-center pt-1"
-            style={{ zIndex: 99, color: "black" }}
+            className="position-relative d-flex justify-content-center pt-1"
+            style={{
+              zIndex: 99,
+              color: "black",
+              bottom: 20,
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // semi-transparent white
+              backdropFilter: "blur(8px)", // blur effect
+              WebkitBackdropFilter: "blur(8px)", // for Safari support
+              borderRadius: "8px", // optional for rounded corners
+              padding: "10px 20px" // optional padding
+            }}
           >
             <GrFormPrevious
               title="Previous"
@@ -399,7 +432,7 @@ function Test({ token }) {
             )}
             {showActionButtons && (
               <a
-                href={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdf_url}`}
+                href={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`}
                 style={{
                   cursor: "pointer",
                   textDecoration: "none",
@@ -450,7 +483,7 @@ function Test({ token }) {
               className="mx-2 p-1"
               size={28}
             />
-             <Link href="/subscription"><button className='subscribeButton_magazine ms-2'>Subscribe</button></Link>
+            <Link href="/subscription"><button className='subscribeButton_magazine ms-2'>Subscribe</button></Link>
           </div>
           <div className="magazine-ad">
             <div className="text-center pt-3 position-relative"><Image style={{ cursor: 'pointer' }} alt='race logo' src='/images/white logo.png' width={60} height={60} onClick={() => router.back()} /></div>
@@ -474,7 +507,7 @@ function Test({ token }) {
         <source src="/turnpage-99756.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
-    </>
+    </div>
   );
 }
 
