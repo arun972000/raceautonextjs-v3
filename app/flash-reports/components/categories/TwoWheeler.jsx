@@ -4,7 +4,7 @@ import ForecastChart from '../charts/DummyLineChart';
 
 const CustomPieChart = dynamic(() => import("../charts/PieChart"), { ssr: false });
 const TwoWheelerEV = dynamic(() => import("../ev/TwoWheeler-EV"), { ssr: false });
-const TwoWheelerForecast = dynamic(() => import("../Forecast-chart/Twoheeler"), { ssr: false });
+const TwoWheelerForecast = dynamic(() => import("../Forecast-chart/Twowheeler"), { ssr: false });
 
 const TwoWheeler = () => {
     return (
