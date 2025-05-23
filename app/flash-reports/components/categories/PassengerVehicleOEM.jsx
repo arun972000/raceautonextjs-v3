@@ -22,20 +22,20 @@ const TwoWheeler = () => {
                 <div className="row">
                     <div className='col-12'>
                         <h3>
-                            Passenger Vehicles OEM
+                           Passenger Vehicle Market Performance – April 2025
                         </h3>
                         <p style={{ textAlign: 'justify' }}>
-                            In April 2025, Maruti Suzuki remained the leader in India’s passenger vehicle market with 1,38,021 units sold, capturing 39.44% of the market. However, its market share slightly declined from 40.39% in April 2024, reflecting growing competition.
+                            In April 2025, Maruti Suzuki retained its position as the market leader in India’s passenger vehicle segment, selling 1,38,021 units and securing a 39.44% market share. However, this represented a slight decline from 40.39% in April 2024, indicating intensifying competition.
                         </p>
                         <p style={{ textAlign: 'justify' }}>
-                            Mahindra & Mahindra showed impressive growth, increasing its share to 13.83% from 11.23% last year, driven by the popularity of its SUVs like the XUV700 and Thar. Tata Motors saw a small dip, with its share reducing to 12.59% from 13.61%, despite strong performances in electric and SUV segments.
+                            Mahindra & Mahindra recorded significant year-on-year growth, increasing its share to 13.83% from 11.23%, largely driven by the strong demand for its SUVs such as the XUV700 and Thar.
                         </p>
                         <p style={{ textAlign: 'justify' }}>
-                            Hyundai Motor India experienced a slight drop, going from 14.29% in April 2024 to 12.47%, possibly due to increased competition from local players. On the other hand, Toyota and Kia both saw YoY improvements, with Toyota's share increasing to 6.67% and Kia's reaching 6.18%.
+                           Tata Motors experienced a marginal decline in market share, slipping to 12.59% from 13.61%, despite continued success in both the electric and SUV categories.
                         </p>
                     </div>
 
-                    <div className='col-12'>
+                    <div className='col-12 mt-3'>
                         <PassengerVehicle_Piechart />
                     </div>
 

@@ -127,7 +127,7 @@ const ChartWithComparison = ({ current, compare, title }) => {
 
 const Tractor_PieChart = () => {
   return (
-    <div className="container px-3 px-md-5">
+    <div className="container-fluid px-md-5">
       <div className="row mb-4">
         <div className="col text-center">
           <h5 className="text-warning fs-5 fs-md-4">Tractor OverAll OEM Share Comparison</h5>
@@ -143,7 +143,7 @@ const Tractor_PieChart = () => {
 
       {/* Shared Legend */}
       <div className="mt-4 text-center">
-        <div className="d-flex flex-wrap justify-content-center gap-2 gap-md-3">
+        <div className="d-flex flex-wrap justify-content-center gap-1">
           {companyNames.map((name, i) => (
             <div key={name} className="d-flex align-items-center mb-2">
               <div

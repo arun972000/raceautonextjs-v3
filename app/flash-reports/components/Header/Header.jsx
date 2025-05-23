@@ -47,7 +47,7 @@ const Header = () => {
         </motion.div>
 
       </Link>
-      <div className="nav-buttons">
+      {/* <div className="nav-buttons">
         <button
           className="nav-btn"
           onClick={() => router.push('/score-card')}
@@ -63,7 +63,7 @@ const Header = () => {
           <FaBolt className="btn-icon" />
           Flash Reports
         </button>
-      </div>
+      </div> */}
 
     </div>
   )

@@ -77,7 +77,7 @@ export default async function FlashReportsLayout({
   // Authorized: render layout
   return (
     <div className={`${bricolage.className} flash-reports`}>
-      <DownloadAllButton />
+      {/* <DownloadAllButton /> */}
       <Header />
       <FlashReportsHome />
       {children}

@@ -140,8 +140,8 @@ const TwoWheelerForecast = () => {
         style={{
           position: 'absolute',
           top: 20,
-          left: '70%',
-          width: '30%',
+          left: '80%',
+          width: '20%',
           height: 'calc(100% - 60px)',
           background: 'rgba(0,0,0,0.3)',
           backdropFilter: 'blur(6px)',

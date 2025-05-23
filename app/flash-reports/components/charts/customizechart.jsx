@@ -69,7 +69,7 @@ export default function DualBarComparison() {
   return (
     <div className=" border-0 mb-4 mt-2">
       <div className="card-header border-0 ">
-        <h2 className="mb-3">Alternative Fuel Penetration Comparison</h2>
+        <h2 className="mb-3">April 2025 – Alternative Fuel Adoption Summary</h2>
       </div>
       <div className="card-body">
         <div className="mb-3 text-center">

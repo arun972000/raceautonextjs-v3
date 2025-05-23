@@ -33,80 +33,15 @@ const CustomTooltip = ({ active, payload, label }) => {
 
 // Raw Data
 const rawData = [
-  {
-    month: 'Jan25',
-    '2W': 1525862,
-    '3W': 107033,
-    PV: 465920,
-    TRAC: 93381,
-    CV: 99425,
-    Total: 2342621
-  },
-  {
-    month: 'Feb25',
-    '2W': 1353280,
-    '3W': 94181,
-    PV: 303398,
-    TRAC: 65574,
-    CV: 82763,
-    Total: 1902196
-  },
-  {
-    month: 'Mar25',
-    '2W': 1508232,
-    '3W': 99376,
-    PV: 350603,
-    TRAC: 74013,
-    CV: 94764,
-    Total: 2125988
-  },
-  {
-    month: 'Apr25',
-    '2W': 1686774,
-    '3W': 99766,
-    PV: 349939,
-    TRAC: 60915,
-    CV: 90558,
-    Total: 2296952
-  },
-  {
-    month: 'May25',
-    '2W': 2000000,
-    '3W': 1200000,
-    PV: 800000,
-    TRAC: 300000,
-    CV: 400000,
-    Total: 2000000
-  },
-  {
-    month: 'Jun25',
-    '2W': 1800000,
-    '3W': 95000,
-    PV: 600000,
-    TRAC: 200000,
-    CV: 150000,
-    Total: 1800000
-  },
-  {
-    month: 'Jul25',
-    '2W': 1500000,
-    '3W': 1700000,
-    PV: 900000,
-    TRAC: 350000,
-    CV: 450000,
-    Total: 1500000
-  },
-  {
-    month: 'Aug25',
-    '2W': 1300000,
-    '3W': 2100000,
-    PV: 1000000,
-    TRAC: 400000,
-    CV: 500000,
-    Total: 1300000
-  }
+  { month: 'Jan25', '2W': 1525862, '3W': 107033, PV: 465920, TRAC: 93381, CV: 99425, Total: 2342621 },
+  { month: 'Feb25', '2W': 1353280, '3W': 94181, PV: 303398, TRAC: 65574, CV: 82763, Total: 1902196 },
+  { month: 'Mar25', '2W': 1508232, '3W': 99376, PV: 350603, TRAC: 74013, CV: 94764, Total: 2125988 },
+  { month: 'Apr25', '2W': 1686774, '3W': 99766, PV: 349939, TRAC: 60915, CV: 90558, Total: 2296952 },
+  { month: 'May25', '2W': 2000000, '3W': 1200000, PV: 800000, TRAC: 300000, CV: 400000, Total: 2000000 },
+  { month: 'Jun25', '2W': 1800000, '3W': 95000, PV: 600000, TRAC: 200000, CV: 150000, Total: 1800000 },
+  { month: 'Jul25', '2W': 1500000, '3W': 1700000, PV: 900000, TRAC: 350000, CV: 450000, Total: 1500000 },
+  { month: 'Aug25', '2W': 1300000, '3W': 2100000, PV: 1000000, TRAC: 400000, CV: 500000, Total: 1300000 }
 ];
-
 
 const categories = ['All', '2W', '3W', 'PV', 'TRAC', 'CV', 'Total'];
 
@@ -120,18 +55,17 @@ const colors = {
 };
 
 const abbreviate = v => {
-  if (v >= 1e9)   return `${(v / 1e9).toFixed(1).replace(/\.0$/, '')}B`;
-  if (v >= 1e6)   return `${(v / 1e6).toFixed(1).replace(/\.0$/, '')}M`;
-  if (v >= 1e3)   return `${(v / 1e3).toFixed(1).replace(/\.0$/, '')}K`;
+  if (v >= 1e9) return `${(v / 1e9).toFixed(1).replace(/\.0$/, '')}B`;
+  if (v >= 1e6) return `${(v / 1e6).toFixed(1).replace(/\.0$/, '')}M`;
+  if (v >= 1e3) return `${(v / 1e3).toFixed(1).replace(/\.0$/, '')}K`;
   return v.toString();
-}
+};
 
 const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25'];
 
 const CustomLineChart = () => {
   const [selectedCat, setSelectedCat] = useState('All');
 
-  // Filter data to allowed months only
   const filteredData = useMemo(() => {
     return rawData
       .filter(d => allowedMonths.includes(d.month))
@@ -212,16 +146,16 @@ const CustomLineChart = () => {
           <Tooltip content={<CustomTooltip />} />
           <Legend wrapperStyle={{ marginTop: 24 }} />
 
-          {/* Lines */}
+          {/* Lines with pointer & linear curve */}
           {(selectedCat === 'All' ? ['2W', '3W', 'PV', 'TRAC', 'CV', 'Total'] : [selectedCat]).map(key => (
             <Line
               key={key}
-              type="monotone"
+              type="linear"
               dataKey={key}
               name={key}
               stroke={`url(#${key}-grad)`}
               strokeWidth={3}
-              dot={false}
+              dot={{ r: 3 }}
               connectNulls
               animationBegin={0}
             />
@@ -229,13 +163,13 @@ const CustomLineChart = () => {
         </LineChart>
       </ResponsiveContainer>
 
-      {/* Overlay */}
+      {/* Overlay for forecast access */}
       <div
         style={{
           position: 'absolute',
           top: 40,
-          left: '70%',
-          width: '30%',
+          left: '80%',
+          width: '20%',
           height: 'calc(100% - 60px)',
           background: 'rgba(0, 0, 0, 0.3)',
           backdropFilter: 'blur(6px)',

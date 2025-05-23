@@ -23,14 +23,20 @@ const ThreeWheeler = () => {
                 <div className="row">
                     <div className='col-12'>
                         <h3>
-                            3-Wheeler OEM
+                            Three-Wheeler Market Summary – April 2025
                         </h3>
                         <p style={{ textAlign: 'justify' }}>
-                            The automotive industry is a major global sector encompassing the design, manufacturing, marketing, and sale of motor vehicles. It includes a wide range of participants such as original equipment manufacturers (OEMs), parts suppliers, dealerships, and aftermarket service providers. In recent years, the industry has been undergoing a significant transformation driven by trends such as electrification, autonomous driving technology, and digital connectivity. Electric vehicles (EVs) are gaining traction as governments enforce stricter environmental regulations and consumers demand cleaner transportation options. At the same time, innovations in software and artificial intelligence are reshaping
+                            India’s three-wheeler segment continued its upward trajectory in April 2025, registering 99,766 units, marking a robust 24.5% year-on-year growth compared to April 2024. This performance reflects growing demand in both passenger and cargo sub-segments, with electric vehicles (EVs) driving much of the momentum.
+
+                            EV penetration reached a new high, accounting for 62.7% of total 3W sales—up significantly from 52.5% a year earlier. This reinforces the segment’s rapid transition towards sustainable mobility, supported by favourable policies, low running costs, and increasing urban adoption.
+
+                            Bajaj Auto maintained its leadership with 32,638 units sold, securing a 32.7% market share, while Mahindra Group and TVS Motor Company delivered standout performances. Mahindra recorded a remarkable 64.8% year-on-year growth, and TVS nearly doubled its volumes with a 98.2% increase, reflecting strong traction in electric and goods-focused models.
+
+                            Other notable players included Piaggio Vehicles, Y.C. Electric, and Atul Auto, each contributing steadily to the segment’s diversification.
                         </p>
                     </div>
 
-                    <div className='col-12'>
+                    <div className='col-12 mt-3'>
                         <ThreeWheeler_Piechart />
                     </div>
 

@@ -27,7 +27,7 @@ const rawData = [
 ];
 
 // Only include months up to May25
-const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25', 'May25'];
+const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25'];
 
 const abbreviate = v => {
   if (v >= 1e9)   return `${(v / 1e9).toFixed(1).replace(/\.0$/, '')}B`;
@@ -131,8 +131,8 @@ const PVForecast = () => {
         style={{
           position: 'absolute',
           top: 20,
-          left: '70%',
-          width: '30%',
+          left: '80%',
+          width: '20%',
           height: 'calc(100% - 60px)',
           background: 'rgba(0,0,0,0.3)',
           backdropFilter: 'blur(6px)',
