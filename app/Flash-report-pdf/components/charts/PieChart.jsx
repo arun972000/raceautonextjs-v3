@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useMediaQuery } from 'react-responsive';
 import {
   PieChart,
   Pie,
@@ -56,14 +57,7 @@ const getComparisonData = (currentKey, compareKey, showSymbol) =>
   });
 
 const ChartWithComparison = ({ current, compare, title }) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 576);
-    handleResize(); // initial
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const isMobile = useMediaQuery({ query: '(max-width: 576px)' });
 
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);

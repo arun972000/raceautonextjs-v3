@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useMediaQuery } from 'react-responsive';
 import {
   PieChart,
   Pie,
@@ -28,7 +29,7 @@ const getColor = (i) => PALETTE[i % PALETTE.length].light;
 const getDark = (i) => PALETTE[i % PALETTE.length].dark;
 
 const companyData = [
-{ name: "BAJAJ AUTO LTD", Apr25: 30.78, Mar25: 31.7, Apr24: 35.66 },
+  { name: "BAJAJ AUTO LTD", Apr25: 30.78, Mar25: 31.7, Apr24: 35.66 },
   { name: "PIAGGIO VEHICLES PVT LTD", Apr25: 5.99, Mar25: 6.62, Apr24: 7.02 },
   { name: "MAHINDRA & MAHINDRA LIMITED", Apr25: 5.92, Mar25: 6.9, Apr24: 4.54 },
   { name: "MAHINDRA LAST MILE MOBILITY LTD", Apr25: 5.9, Mar25: 6.87, Apr24: 4.33 },
@@ -61,14 +62,8 @@ const getComparisonData = (currentKey, compareKey, showSymbol) =>
   });
 
 const ChartWithComparison = ({ current, compare, title }) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 576);
-    handleResize(); // initial check
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // Use react-responsive hook for mobile detection
+  const isMobile = useMediaQuery({ query: '(max-width: 576px)' });
 
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);
@@ -78,8 +73,11 @@ const ChartWithComparison = ({ current, compare, title }) => {
     const { name, value, symbol } = payload[0].payload;
     return (
       <div style={{
-        background: '#222', color: '#fff',
-        padding: 8, borderRadius: 4, fontSize: 10
+        background: '#222',
+        color: '#fff',
+        padding: 8,
+        borderRadius: 4,
+        fontSize: 10,
       }}>
         <strong>{name}</strong><br />
         Value: {value.toFixed(2)}% {symbol}
@@ -98,7 +96,10 @@ const ChartWithComparison = ({ current, compare, title }) => {
                 <linearGradient
                   key={i}
                   id={`sliceGrad-${i}`}
-                  x1="0" y1="0" x2="0" y2="1"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
                 >
                   <stop offset="0%" stopColor={getColor(i)} stopOpacity={0.8} />
                   <stop offset="100%" stopColor={getDark(i)} stopOpacity={0.3} />

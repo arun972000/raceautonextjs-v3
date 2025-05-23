@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   PieChart,
   Pie,
@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useMediaQuery } from "react-responsive";
 
 // Color palette with light/dark gradients
 const PALETTE = [
@@ -55,18 +56,9 @@ const getComparisonData = (currentKey, compareKey, showSymbol) =>
   });
 
 const ChartWithComparison = ({ current, compare, title }) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 576);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const data = useMemo(() => getComparisonData(current, compare, current === "Apr25"), [current, compare]);
+  const isMobile = useMediaQuery({ query: '(max-width: 576px)' });
+  const showSymbol = current === "Apr25";
+  const data = useMemo(() => getComparisonData(current, compare, showSymbol), [current, compare, showSymbol]);
 
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null;
@@ -135,7 +127,9 @@ const CM_PieChart = () => {
     <div className="container">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: "#ffdc00" }}>Commercial Vehicle OverAll OEM Share Comparison</h5>
+          <h5 style={{ color: "#ffdc00" }}>
+            Commercial Vehicle Overall OEM Share Comparison
+          </h5>
         </div>
       </div>
 

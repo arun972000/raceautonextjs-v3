@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   PieChart,
   Pie,
@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useMediaQuery } from 'react-responsive';
 
 // Gradient palette
 const PALETTE = [
@@ -28,7 +29,7 @@ const getColor = (i) => PALETTE[i % PALETTE.length].light;
 const getDark = (i) => PALETTE[i % PALETTE.length].dark;
 
 const companyData = [
-{ name: "MARUTI SUZUKI INDIA LTD", Apr25: 38.26, Mar25: 36.68, Apr24: 39.42 },
+  { name: "MARUTI SUZUKI INDIA LTD", Apr25: 38.26, Mar25: 36.68, Apr24: 39.42 },
   { name: "MAHINDRA & MAHINDRA LIMITED", Apr25: 13.42, Mar25: 12.81, Apr24: 10.96 },
   { name: "TATA MOTORS LTD", Apr25: 12.22, Mar25: 13.41, Apr24: 13.29 },
   { name: "HYUNDAI MOTOR INDIA LTD", Apr25: 12.11, Mar25: 11.77, Apr24: 13.98 },
@@ -72,17 +73,7 @@ const getComparisonData = (currentKey, compareKey, showSymbol) =>
 const companyNames = companyData.map(item => item.name);
 
 const ChartWithComparison = ({ current, compare, title }) => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 576);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+  const isMobile = useMediaQuery({ maxWidth: 576 });
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);
 
@@ -155,7 +146,6 @@ const PassengerPieChart = () => {
         <ChartWithComparison current="Apr25" compare="Apr24" title="YoY - Apr 25" />
       </div>
 
-      {/* Shared Legend */}
       <div className="mt-4 text-center">
         <div className="d-flex flex-wrap justify-content-center gap-3">
           {companyNames.map((name, i) => (

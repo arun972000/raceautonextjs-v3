@@ -23,10 +23,10 @@ const FlashReportsHome = () => {
                 </div>
                 <div className='container-fluid ms-2'>
                     <div className='row g-0 m-0 p-0 justify-content-between'>
-                        <div className='col-12 col-md-4 '>
+                        <div className='col-12 col-lg-4 '>
                             <Contents />
                         </div>
-                        <div className='col-12 col-md-6 col-lg-8' >
+                        <div className='col-12 col-lg-6 col-xl-8' >
                             <Highlights />
                         </div>
                     </div>

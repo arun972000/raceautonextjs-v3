@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   PieChart,
   Pie,
@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useMediaQuery } from "react-responsive";
 
 // Gradient color palette
 const PALETTE = [
@@ -41,15 +42,16 @@ const companyData = [
   { name: "Others", Apr24: 11.47, Mar25: 5.61, Apr25: 5.61 },
 ];
 
-
-const companyNames = companyData.map(item => item.name);
+const companyNames = companyData.map((item) => item.name);
 
 const getComparisonData = (currentKey, compareKey, showSymbol) =>
   companyData.map((item) => {
     const symbol =
-      showSymbol && item[currentKey] > item[compareKey] ? "▲"
-        : showSymbol && item[currentKey] < item[compareKey] ? "▼"
-          : "";
+      showSymbol && item[currentKey] > item[compareKey]
+        ? "▲"
+        : showSymbol && item[currentKey] < item[compareKey]
+        ? "▼"
+        : "";
     return {
       name: item.name,
       value: item[currentKey],
@@ -61,17 +63,10 @@ const ChartWithComparison = ({ current, compare, title }) => {
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);
 
-  // Responsive sizes
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  // Use react-responsive hook for mobile breakpoint (< 768px)
+  const isMobile = useMediaQuery({ maxWidth: 767 });
 
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Set sizes conditionally based on breakpoint (example: 768px)
-  const isMobile = windowWidth < 768;
+  // Sizes for chart depending on isMobile
   const chartHeight = isMobile ? 220 : 400;
   const innerRadius = isMobile ? 60 : 85;
   const outerRadius = isMobile ? 90 : 120;
@@ -80,11 +75,17 @@ const ChartWithComparison = ({ current, compare, title }) => {
     if (!active || !payload?.length) return null;
     const { name, value, symbol } = payload[0].payload;
     return (
-      <div style={{
-        background: '#222', color: '#fff',
-        padding: 8, borderRadius: 4, fontSize: 12
-      }}>
-        <strong>{name}</strong><br />
+      <div
+        style={{
+          background: "#222",
+          color: "#fff",
+          padding: 8,
+          borderRadius: 4,
+          fontSize: 12,
+        }}
+      >
+        <strong>{name}</strong>
+        <br />
         Value: {value.toFixed(2)}% {symbol}
       </div>
     );
@@ -101,10 +102,21 @@ const ChartWithComparison = ({ current, compare, title }) => {
                 <linearGradient
                   key={i}
                   id={`evGrad-${i}`}
-                  x1="0" y1="0" x2="0" y2="1"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
                 >
-                  <stop offset="0%" stopColor={getColor(i)} stopOpacity={0.8} />
-                  <stop offset="100%" stopColor={getDark(i)} stopOpacity={0.3} />
+                  <stop
+                    offset="0%"
+                    stopColor={getColor(i)}
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={getDark(i)}
+                    stopOpacity={0.3}
+                  />
                 </linearGradient>
               ))}
             </defs>
@@ -121,8 +133,8 @@ const ChartWithComparison = ({ current, compare, title }) => {
               stroke="rgba(255,255,255,0.1)"
               labelLine={false}
               label={({ name, value }) => {
-                const item = data.find(d => d.name === name);
-                return `${item?.symbol || ''} ${value.toFixed(1)}%`;
+                const item = data.find((d) => d.name === name);
+                return `${item?.symbol || ""} ${value.toFixed(1)}%`;
               }}
             >
               {data.map((_, i) => (
@@ -143,7 +155,9 @@ const TwoWheelerEV = () => {
     <div className="container px-3 px-md-5">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: '#59bea0' }}>2-Wheeler EV Electric Share Comparison</h5>
+          <h5 style={{ color: "#59bea0" }}>
+            2-Wheeler EV Electric Share Comparison
+          </h5>
         </div>
       </div>
 
