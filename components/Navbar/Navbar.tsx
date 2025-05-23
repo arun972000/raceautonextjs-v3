@@ -38,7 +38,9 @@ const Navbar = async () => {
 
   const marketData = await marketResponse.json();
 
-  const marketFilteredValue= marketData.filter((item: any)=>item.show_on_menu == 1)
+  const marketFilteredValue = marketData.filter(
+    (item: any) => item.show_on_menu == 1
+  );
 
   const logoData = await logoResponse.json();
 
@@ -189,6 +191,11 @@ const Navbar = async () => {
           <div className={styles.header_icons}>
             <div className="d-flex align-items-center">
               <ThemeToggle />
+              <Link href="/flash-reports" className={styles.flashReportsLink}>
+                <button className={styles.flashReportsButton}>
+                  Flash Reports
+                </button>
+              </Link>
               <Link href="/subscription">
                 <button className={styles.subscribeButton}>Subscribe</button>
               </Link>

@@ -394,14 +394,14 @@ const MobileNavNew = () => {
 
         {/* Bottom Navigation */}
         <div className={styles.navigation}>
-          <Link href="/">
+          <Link href="/flash-reports">
             <div className={styles.navItem}>
               <TbChartHistogram
                 color={iconColor}
                 size={iconSize}
                 title="Forecast"
               />
-              <span className={styles.caption}>Forecast</span>
+              <span className={styles.caption}>Flash Reports</span>
             </div>
           </Link>
 

@@ -54,6 +54,30 @@
   width: 100%;
 }
 
+.flashReportsButton {
+  background: linear-gradient(135deg, #4A00E0, #8E2DE2);
+  color: white;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(142, 45, 226, 0.3);
+  transition: all 0.3s ease;
+}
+
+.flashReportsButton:hover {
+  background: linear-gradient(135deg, #8E2DE2, #4A00E0);
+  box-shadow: 0 6px 18px rgba(142, 45, 226, 0.5);
+  transform: translateY(-1px);
+}
+
+.flashReportsLink {
+  margin: 0 10px;
+  text-decoration: none;
+}
+
 
 
 .visible {

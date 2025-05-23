@@ -79,7 +79,7 @@ const PostContent = ({ content, token, is_recommended }: { content: string; toke
             }}
             onMouseOver={(e: any) => (e.target.style.background = "#0056b3")}
             onMouseOut={(e: any) => (e.target.style.background = "#007bff")}
-            onClick={() => router.push("/login")}
+            onClick={() => setShowAuth(true)}
           >
             Log In
           </button>

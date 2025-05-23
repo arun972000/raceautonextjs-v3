@@ -25,7 +25,7 @@ const AdminNavButton = () => {
         progress: undefined,
         theme: "light",
       });
-      router.refresh();
+      router.push('/');
     } catch (err) {
       console.log(err);
     }
