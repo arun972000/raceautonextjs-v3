@@ -60,7 +60,7 @@ export default function DualBarComparison() {
     const symbol = value > 0 ? '▲' : value < 0 ? '▼' : '';
     const color = value > 0 ? 'green' : value < 0 ? 'red' : 'gray';
     return (
-      <text x={x + 5} y={y + 30} fontSize={12} fill={color}>
+      <text x={x + 5} y={y + 32} fontSize={14} fill={color}>
         {symbol}{Math.abs(value)}%
       </text>
     );
@@ -97,7 +97,7 @@ export default function DualBarComparison() {
                 <BarChart
                   layout="vertical"
                   data={leftData}
-                  margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+                  margin={{ top: 20, right: 20, left: 0, bottom: 20 }}
                 >
                   <CartesianGrid stroke="#e9ecef" horizontal={false} vertical={false} />
                   <XAxis type="number" tickFormatter={v => `${v}%`} />
@@ -118,13 +118,13 @@ export default function DualBarComparison() {
               <BarChart
                 layout="vertical"
                 data={rightData}
-                margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+                margin={{ top: 20, right: 20, left: 0, bottom: 20 }}
               >
                 <CartesianGrid stroke="#e9ecef" horizontal={false} vertical={false} />
                 <XAxis type="number" tickFormatter={v => `${v}%`} />
                 <YAxis type="category" dataKey="category" />
                   <Tooltip formatter={v => `${v}%`} />
-                <Bar dataKey="value" fill="#8884d8" name={RIGHT_MONTH} barSize={16}>
+                <Bar dataKey="value" fill="#81ea81" name={RIGHT_MONTH} barSize={16}>
                   <LabelList dataKey="value" position="right" formatter={val => `${val.toFixed(1)}%`} />
                   <LabelList dataKey="delta" content={renderDelta} />
                 </Bar>

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -16,19 +16,24 @@ import {
 
 // Tooltip component
 const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload?.length) {
-    return (
-      <div style={{ background: '#333', color: '#fff', padding: 10, borderRadius: 5 }}>
-        <p>{label}</p>
-        {payload.map((entry, index) => (
+  if (!active || !payload || !payload.length) return null;
+
+  const isLocked = isLockedMonth(label) || label === 'May25';
+
+  return (
+    <div style={{ background: '#333', color: '#fff', padding: 10, borderRadius: 5 }}>
+      <p>{label}</p>
+      {isLocked ? (
+        <p style={{ color: '#ccc', fontStyle: 'italic' }}>🔒 Subscribe to view details</p>
+      ) : (
+        payload.map((entry, index) => (
           <p key={index} style={{ color: entry.color }}>
             {entry.name}: {entry.value?.toLocaleString()}
           </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
+        ))
+      )}
+    </div>
+  );
 };
 
 // Raw Data
@@ -40,11 +45,10 @@ const rawData = [
   { month: 'May25', '2W': 2000000, '3W': 1200000, PV: 800000, TRAC: 300000, CV: 400000, Total: 2000000 },
   { month: 'Jun25', '2W': 1800000, '3W': 95000, PV: 600000, TRAC: 200000, CV: 150000, Total: 1800000 },
   { month: 'Jul25', '2W': 1500000, '3W': 1700000, PV: 900000, TRAC: 350000, CV: 450000, Total: 1500000 },
-  { month: 'Aug25', '2W': 1300000, '3W': 2100000, PV: 1000000, TRAC: 400000, CV: 500000, Total: 1300000 }
+  { month: 'Aug25', '2W': 1300000, '3W': 2100000, PV: 1000000, TRAC: 400000, CV: 500000, Total: 1300000 },
 ];
 
 const categories = ['All', '2W', '3W', 'PV', 'TRAC', 'CV', 'Total'];
-
 const colors = {
   '2W': '#FF6384',
   '3W': '#36A2EB',
@@ -61,19 +65,41 @@ const abbreviate = v => {
   return v.toString();
 };
 
-const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25'];
+const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25', 'May25', 'Jun25', 'Jul25', 'Aug25'];
+const isLockedMonth = month => ['Jun25', 'Jul25', 'Aug25'].includes(month);
 
 const CustomLineChart = () => {
   const [selectedCat, setSelectedCat] = useState('All');
+  const [chartHeight, setChartHeight] = useState(420);
+  const chartWrapperRef = useRef(null);
+
+  // Responsive height
+  useEffect(() => {
+    const updateHeight = () => {
+      const isMobile = window.innerWidth < 768;
+      setChartHeight(isMobile ? 280 : 420);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
 
   const filteredData = useMemo(() => {
     return rawData
       .filter(d => allowedMonths.includes(d.month))
-      .map(d => ({ ...d, year: d.month }));
+      .map(d => {
+        const newData = { ...d, year: d.month };
+        if (isLockedMonth(d.month)) {
+          for (let key of ['2W', '3W', 'PV', 'TRAC', 'CV', 'Total']) {
+            newData[key] = null;
+          }
+        }
+        return newData;
+      });
   }, []);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: 420 }}>
+    <div style={{ position: 'relative', width: '100%', zIndex:0 }} ref={chartWrapperRef}>
       {/* Dropdown */}
       <div style={{ marginBottom: 16, textAlign: 'left' }}>
         <select
@@ -87,14 +113,13 @@ const CustomLineChart = () => {
         </select>
       </div>
 
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={chartHeight}>
         <LineChart
           data={filteredData}
-          margin={{ top: 20, right: 20, bottom: 20, left: 30 }}
+          margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
           animationDuration={2500}
           animationEasing="ease-out"
         >
-          {/* Gradients */}
           <defs>
             {categories.filter(cat => cat !== 'All').map(cat => (
               <linearGradient id={`${cat}-grad`} x1="0" y1="0" x2="0" y2="1" key={cat}>
@@ -128,7 +153,6 @@ const CustomLineChart = () => {
             stroke="rgba(255,255,255,0.4)"
             fill="rgba(255,255,255,0.08)"
             strokeWidth={1}
-            tickFormatter={(d) => d}
             tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 9 }}
             tickMargin={4}
             traveller={
@@ -146,7 +170,6 @@ const CustomLineChart = () => {
           <Tooltip content={<CustomTooltip />} />
           <Legend wrapperStyle={{ marginTop: 24 }} />
 
-          {/* Lines with pointer & linear curve */}
           {(selectedCat === 'All' ? ['2W', '3W', 'PV', 'TRAC', 'CV', 'Total'] : [selectedCat]).map(key => (
             <Line
               key={key}
@@ -163,30 +186,36 @@ const CustomLineChart = () => {
         </LineChart>
       </ResponsiveContainer>
 
-      {/* Overlay for forecast access */}
+      {/* Overlay for forecast */}
       <div
         style={{
           position: 'absolute',
-          top: 40,
-          left: '80%',
-          width: '20%',
-          height: 'calc(100% - 60px)',
-          background: 'rgba(0, 0, 0, 0.3)',
+          top: 60,
+          left: '58%',
+          width: '41%',
+          height: `${chartHeight - 100}px`,
+          background: 'rgba(0, 0, 0, 0.35)',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
-          borderRadius: '8px',
-          border: '1px solid rgba(255,255,255,0.2)',
+          borderLeft: '2px dashed rgba(255,255,255,0.3)',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          color: 'silver',
-          fontSize: 24,
-          fontWeight: 'bold',
+          padding: '0 8px',
           textAlign: 'center',
+          zIndex: -1,
           pointerEvents: 'none',
         }}
       >
-        <h3>🔒 Subscribe to the Platinum Package to access forecast values.</h3>
+        <p style={{
+          color: '#fff',
+          fontSize: 'clamp(14px, 2.5vw, 20px)',
+          fontWeight: 600,
+          lineHeight: 1.4,
+          margin: 0,
+        }}>
+          🔒 Subscribe to the Platinum Package to access forecast values.
+        </p>
       </div>
     </div>
   );

@@ -5,8 +5,7 @@ const Highlights = () => {
         <>
             <div
                 style={{
-                    borderTopLeftRadius: 40,
-                    borderBottomLeftRadius: 40,
+                
                     color: 'white'
                 }}
                 className='px-lg-5 pb-lg-4 pt-lg-2'

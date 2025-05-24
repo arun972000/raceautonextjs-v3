@@ -50,21 +50,33 @@ const companyNames = companyData.map(item => item.name);
 
 const getComparisonData = (currentKey, compareKey, showSymbol) =>
   companyData.map((item) => {
-    const symbol =
-      showSymbol && item[currentKey] > item[compareKey] ? "▲"
-        : showSymbol && item[currentKey] < item[compareKey] ? "▼"
-          : "";
+    const currentValue = item[currentKey];
+    const compareValue = item[compareKey];
+    let symbol = "";
+    let increased = false;
+    let decreased = false;
+
+    if (showSymbol) {
+      if (currentValue > compareValue) {
+        symbol = "▲";
+        increased = true;
+      } else if (currentValue < compareValue) {
+        symbol = "▼";
+        decreased = true;
+      }
+    }
+
     return {
       name: item.name,
-      value: item[currentKey],
+      value: currentValue,
       symbol,
+      increased,
+      decreased,
     };
   });
 
 const ChartWithComparison = ({ current, compare, title }) => {
-  // Use react-responsive hook for mobile detection
   const isMobile = useMediaQuery({ query: '(max-width: 576px)' });
-
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);
 
@@ -85,10 +97,44 @@ const ChartWithComparison = ({ current, compare, title }) => {
     );
   };
 
+  // Custom label renderer to show values outside with colored arrows
+  const renderCustomLabel = ({
+    cx, cy, midAngle, innerRadius, outerRadius, index, value,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 20; // Push label outside slice
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    const item = data[index];
+    if (!item) return null;
+
+    let arrowColor = "#fff";
+    if (item.increased) arrowColor = "green";
+    else if (item.decreased) arrowColor = "red";
+
+    const labelColor = "#ccc";
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill={labelColor}
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+        fontSize={12}
+        fontWeight="bold"
+      >
+        <tspan fill={arrowColor}>{item.symbol} </tspan>
+        <tspan>{value.toFixed(1)}%</tspan>
+      </text>
+    );
+  };
+
   return (
     <div className="col-lg-6 mb-4">
       <h6 className="text-center fw-semibold mb-2">{title}</h6>
-      <div style={{ width: "100%", height: isMobile ? 250 : 400 }}>
+      <div style={{ width: "100%", height: isMobile ? 250 : 500 }}>
         <ResponsiveContainer>
           <PieChart>
             <defs>
@@ -118,10 +164,7 @@ const ChartWithComparison = ({ current, compare, title }) => {
               paddingAngle={4}
               stroke="rgba(255,255,255,0.1)"
               labelLine={false}
-              label={({ name, value }) => {
-                const item = data.find(d => d.name === name);
-                return `${item?.symbol || ''} ${value.toFixed(1)}%`;
-              }}
+              label={renderCustomLabel}
             >
               {data.map((_, i) => (
                 <Cell key={i} fill={`url(#sliceGrad-${i})`} />

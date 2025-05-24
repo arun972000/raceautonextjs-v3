@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from "react";
 import {
@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useMediaQuery } from "react-responsive";
 
 // Gradient palette
 const PALETTE = [
@@ -44,22 +45,22 @@ const companyNames = companyData.map(item => item.name);
 
 const getComparisonData = (currentKey, compareKey, showSymbol) =>
   companyData.map((item) => {
-    const symbol =
-      showSymbol && item[currentKey] > item[compareKey] ? "▲"
-        : showSymbol && item[currentKey] < item[compareKey] ? "▼"
-          : "";
+    let symbol = "";
+    if (showSymbol) {
+      if (item[currentKey] > item[compareKey]) symbol = "▲";
+      else if (item[currentKey] < item[compareKey]) symbol = "▼";
+    }
     return {
       name: item.name,
       value: item[currentKey],
       symbol,
+      increased: item[currentKey] > item[compareKey],
+      decreased: item[currentKey] < item[compareKey],
     };
   });
 
-const renderLabel = ({ name, value }) => {
-  return `${value.toFixed(1)}%`;
-};
-
 const ChartWithComparison = ({ current, compare, title }) => {
+  const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);
 
@@ -67,20 +68,66 @@ const ChartWithComparison = ({ current, compare, title }) => {
     if (!active || !payload?.length) return null;
     const { name, value, symbol } = payload[0].payload;
     return (
-      <div style={{
-        background: '#222', color: '#fff',
-        padding: 8, borderRadius: 4, fontSize: 12
-      }}>
-        <strong>{name}</strong><br />
+      <div
+        style={{
+          background: "#222",
+          color: "#fff",
+          padding: 8,
+          borderRadius: 4,
+          fontSize: 12,
+        }}
+      >
+        <strong>{name}</strong>
+        <br />
         Value: {value.toFixed(2)}% {symbol}
       </div>
+    );
+  };
+
+  // Custom label outside slices with colored arrows
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    index,
+    value,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 20; // position outside
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    const item = data[index];
+    if (!item) return null;
+
+    let arrowColor = "white";
+    if (item.increased) arrowColor = "green";
+    else if (item.decreased) arrowColor = "red";
+
+    const labelColor = "#ccc";
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill={labelColor}
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+        fontSize={12}
+        fontWeight="bold"
+      >
+        <tspan fill={arrowColor}>{item.symbol} </tspan>
+        <tspan>{value.toFixed(1)}%</tspan>
+      </text>
     );
   };
 
   return (
     <div className="col-12 col-sm-6 col-md-6 mb-4">
       <h6 className="text-center fw-semibold mb-2">{title}</h6>
-      <div style={{ width: "100%", height: 250, maxWidth: "100%" }}>
+      <div style={{ width: "100%", height: isMobile ? 260 : 300 }}>
         <ResponsiveContainer>
           <PieChart>
             <defs>
@@ -88,7 +135,10 @@ const ChartWithComparison = ({ current, compare, title }) => {
                 <linearGradient
                   key={i}
                   id={`sliceGrad-${i}`}
-                  x1="0" y1="0" x2="0" y2="1"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
                 >
                   <stop offset="0%" stopColor={getColor(i)} stopOpacity={0.8} />
                   <stop offset="100%" stopColor={getDark(i)} stopOpacity={0.3} />
@@ -102,15 +152,12 @@ const ChartWithComparison = ({ current, compare, title }) => {
               nameKey="name"
               cx="50%"
               cy="50%"
-              innerRadius={85}
-              outerRadius={120}
+              innerRadius={isMobile ? 50 : 85}
+              outerRadius={isMobile ? 90 : 120}
               paddingAngle={4}
               stroke="rgba(255,255,255,0.1)"
               labelLine={false}
-              label={({ name, value }) => {
-                const item = data.find(d => d.name === name);
-                return `${item?.symbol || ''} ${value.toFixed(1)}%`;
-              }}
+              label={renderCustomLabel}
             >
               {data.map((_, i) => (
                 <Cell key={i} fill={`url(#sliceGrad-${i})`} />
@@ -143,9 +190,9 @@ const Tractor_PieChart = () => {
 
       {/* Shared Legend */}
       <div className="mt-4 text-center">
-        <div className="d-flex flex-wrap justify-content-center gap-1">
+        <div className="d-flex flex-wrap justify-content-center gap-3">
           {companyNames.map((name, i) => (
-            <div key={name} className="d-flex align-items-center mb-2">
+            <div key={name} className="d-flex align-items-center">
               <div
                 style={{
                   width: 14,
@@ -155,7 +202,7 @@ const Tractor_PieChart = () => {
                   borderRadius: "50%",
                 }}
               />
-              <span style={{ fontSize: '0.8rem' }}>{name}</span>
+              <span>{name}</span>
             </div>
           ))}
         </div>

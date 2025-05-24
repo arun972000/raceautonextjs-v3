@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from "react";
 import {
@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useMediaQuery } from "react-responsive";
 
 // Gradient palette
 const PALETTE = [
@@ -38,46 +39,93 @@ const companyData = [
   { name: "OTHERS", Apr25: 0.08, Mar25: 0.17 },
 ];
 
-
 const companyNames = companyData.map(item => item.name);
 
 const getComparisonData = (currentKey, compareKey, showSymbol) =>
   companyData
     .filter(item => item[currentKey] && item[currentKey] > 0)
     .map((item) => {
-      const symbol =
-        showSymbol && item[currentKey] > item[compareKey] ? "▲"
-        : showSymbol && item[currentKey] < item[compareKey] ? "▼"
-        : "";
+      let symbol = "";
+      if (showSymbol) {
+        if (item[currentKey] > item[compareKey]) symbol = "▲";
+        else if (item[currentKey] < item[compareKey]) symbol = "▼";
+      }
       return {
         name: item.name,
         value: item[currentKey],
         symbol,
+        increased: item[currentKey] > item[compareKey],
+        decreased: item[currentKey] < item[compareKey],
       };
     });
 
 const ChartWithComparison = ({ current, compare, title }) => {
+  const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);
 
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null;
     const { name, value, symbol } = payload[0].payload;
+    const arrowColor = symbol === "▲" ? "green" : symbol === "▼" ? "red" : "#ccc";
     return (
-      <div style={{
-        background: '#222', color: '#fff',
-        padding: 8, borderRadius: 4, fontSize: 12
-      }}>
-        <strong>{name}</strong><br />
-        Value: {value.toFixed(2)}% {symbol}
+      <div
+        style={{
+          background: "#222",
+          color: "#fff",
+          padding: 8,
+          borderRadius: 4,
+          fontSize: 12,
+        }}
+      >
+        <strong>{name}</strong>
+        <br />
+        Value: {value.toFixed(2)}%{" "}
+        <span style={{ color: arrowColor, fontWeight: "bold" }}>{symbol}</span>
       </div>
+    );
+  };
+
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    outerRadius,
+    index,
+    value,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 20; // place label outside pie slice
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    const item = data[index];
+    if (!item) return null;
+
+    let arrowColor = "#ccc";
+    if (item.increased) arrowColor = "green";
+    else if (item.decreased) arrowColor = "red";
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#ccc"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+        fontSize={12}
+        fontWeight="bold"
+      >
+        <tspan fill={arrowColor}>{item.symbol} </tspan>
+        <tspan>{value.toFixed(1)}%</tspan>
+      </text>
     );
   };
 
   return (
     <div className="col-12 col-md-6 mb-4">
       <h6 className="text-center fw-semibold mb-2">{title}</h6>
-      <div style={{ width: "100%", height: 300, minWidth: 280 }}>
+      <div style={{ width: "100%", height: isMobile ? 260 : 300, minWidth: 280 }}>
         <ResponsiveContainer>
           <PieChart>
             <defs>
@@ -85,7 +133,10 @@ const ChartWithComparison = ({ current, compare, title }) => {
                 <linearGradient
                   key={i}
                   id={`sliceGrad-${i}`}
-                  x1="0" y1="0" x2="0" y2="1"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
                 >
                   <stop offset="0%" stopColor={getColor(i)} stopOpacity={0.8} />
                   <stop offset="100%" stopColor={getDark(i)} stopOpacity={0.3} />
@@ -99,18 +150,15 @@ const ChartWithComparison = ({ current, compare, title }) => {
               nameKey="name"
               cx="50%"
               cy="50%"
-              innerRadius={70}
-              outerRadius={100}
+              innerRadius={isMobile ? 50 : 70}
+              outerRadius={isMobile ? 90 : 100}
               paddingAngle={4}
               stroke="rgba(255,255,255,0.1)"
               labelLine={false}
-              label={({ name, value }) => {
-                const item = data.find(d => d.name === name);
-                return `${item?.symbol || ''} ${value.toFixed(1)}%`;
-              }}
+              label={renderCustomLabel}
             >
               {data.map((_, i) => (
-                <Cell key={i} fill={`url(#sliceGrad-${i})`} style={{ outline: 'none' }} />
+                <Cell key={i} fill={`url(#sliceGrad-${i})`} style={{ outline: "none" }} />
               ))}
             </Pie>
 
@@ -127,7 +175,7 @@ const FoureWheelerEV = () => {
     <div className="container px-3 px-md-5">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: '#59bea0' }}>
+          <h5 style={{ color: "#59bea0" }}>
             Passenger Vehicle EV Electric Share Comparison
           </h5>
         </div>
@@ -152,7 +200,9 @@ const FoureWheelerEV = () => {
                   borderRadius: "50%",
                 }}
               />
-              <span style={{ fontSize: '0.9rem', minWidth: 80, textAlign: 'left' }}>{name}</span>
+              <span style={{ fontSize: "0.9rem", minWidth: 80, textAlign: "left" }}>
+                {name}
+              </span>
             </div>
           ))}
         </div>

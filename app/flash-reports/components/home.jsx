@@ -21,7 +21,7 @@ const FlashReportsHome = () => {
                     {/* Overlay Text */}
 
                 </div>
-                <div className='container-fluid ms-2'>
+                <div className='container-fluid ms-lg-2'>
                     <div className='row g-0 m-0 p-0 justify-content-between'>
                         <div className='col-12 col-lg-4 '>
                             <Contents />

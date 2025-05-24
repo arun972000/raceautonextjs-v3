@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
@@ -15,6 +16,7 @@ const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const renderLabel = ({ percent }) => `${(percent * 100).toFixed(0)}%`;
 
 const CommutePieChartWithOverlay = () => {
+  const router = useRouter();
   const [hovering, setHovering] = useState(false);
 
   return (
@@ -44,83 +46,76 @@ const CommutePieChartWithOverlay = () => {
           </PieChart>
         </ResponsiveContainer>
 
-        
-          <div
+
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backdropFilter: 'blur(3px)',
+            background:
+              'linear-gradient(to bottom right, rgba(0,0,0,0.6), rgba(0,0,0,0.8))',
+            zIndex: 10,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#fff',
+            flexDirection: 'column',
+            padding: '1rem',
+            textAlign: 'center',
+            borderRadius: 4,
+          }}
+        >
+          <h2
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backdropFilter: 'blur(3px)',
-              background:
-                'linear-gradient(to bottom right, rgba(0,0,0,0.6), rgba(0,0,0,0.8))',
-              zIndex: 10,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#fff',
-              flexDirection: 'column',
-              padding: '1rem',
-              textAlign: 'center',
-              borderRadius: 4,
+              fontSize: '2rem',
+              marginBottom: '0.5rem',
+              fontWeight: 700,
             }}
           >
-            <h2
-              style={{
-                fontSize: '2rem',
-                marginBottom: '0.5rem',
-                fontWeight: 700,
-              }}
-            >
-              Access Full Insights
-            </h2>
-            <p
-              style={{
-                fontSize: '1rem',
-                marginBottom: '1rem',
-                color: '#ccc',
-                maxWidth: '320px',
-              }}
-            >
-              Subscribe to unlock detailed analytics and monthly performance data.
-            </p>
-            <button
-              style={{
-                padding: '10px 24px',
-                backgroundColor: '#007BFF',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                fontSize: '1rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                transition: 'background 0.3s ease',
-              }}
-              onClick={() => alert('Redirecting to subscription...')}
-            >
-              Subscribe Now
-            </button>
-          </div>
-      
+            Access Full Insights
+          </h2>
+          <p
+            style={{
+              fontSize: '1rem',
+              marginBottom: '1rem',
+              color: '#ccc',
+              maxWidth: '320px',
+            }}
+          >
+            Subscribe to unlock detailed analytics and monthly performance data.
+          </p>
+          <button
+            style={{
+              padding: '10px 24px',
+              backgroundColor: '#007BFF',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              fontSize: '1rem',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+              transition: 'background 0.3s ease',
+            }}
+            onClick={() => router.push('/subscription')}
+          >
+            Subscribe Now
+          </button>
+        </div>
+
       </div>
 
       {/* Legend outside of blur overlay */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: 20,
-          marginTop: 20,
-          fontSize: 14,
-          fontWeight: 600,
-        }}
-      >
+      {/* Legend outside of blur overlay */}
+      {/* Legend outside of blur overlay */}
+      <div className="row justify-content-center mt-3" style={{ fontSize: 14, fontWeight: 600 }}>
         {data.map((entry, index) => (
           <div
             key={index}
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            className="col-auto d-flex align-items-center mb-2 mx-2"
           >
             <div
               style={{
@@ -128,12 +123,16 @@ const CommutePieChartWithOverlay = () => {
                 height: 16,
                 backgroundColor: colors[index % colors.length],
                 borderRadius: 3,
+                marginRight: 8,
               }}
             />
             <span>{entry.name}</span>
           </div>
         ))}
       </div>
+
+
+
     </div>
   );
 };

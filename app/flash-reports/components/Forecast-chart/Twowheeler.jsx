@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   LineChart,
   Line,
@@ -12,26 +12,34 @@ import {
   CartesianGrid,
   Brush,
   Rectangle,
-} from "recharts";
+} from 'recharts';
 
-// Tooltip component
+// Forecast lock logic
+const isLockedMonth = (month) => ['Jun25', 'Jul25', 'Aug25'].includes(month);
+
+// Tooltip
 const CustomTooltip = ({ active, payload, label }) => {
-  if (active && payload?.length) {
-    return (
-      <div style={{ background: '#333', color: '#fff', padding: 10, borderRadius: 5 }}>
-        <p>{label}</p>
-        {payload.map((entry, index) => (
+  if (!active || !payload || !payload.length) return null;
+
+  const isLocked = isLockedMonth(label) || label === 'May25';
+
+  return (
+    <div style={{ background: '#333', color: '#fff', padding: 10, borderRadius: 5 }}>
+      <p>{label}</p>
+      {isLocked ? (
+        <p style={{ color: '#ccc', fontStyle: 'italic' }}>🔒 Subscribe to view details</p>
+      ) : (
+        payload.map((entry, index) => (
           <p key={index} style={{ color: entry.color }}>
             {entry.name}: {entry.value?.toLocaleString()}
           </p>
-        ))}
-      </div>
-    );
-  }
-  return null;
+        ))
+      )}
+    </div>
+  );
 };
 
-// Only 2W data
+// Data
 const rawData = [
   { month: 'Jan25', '2W': 1525862 },
   { month: 'Feb25', '2W': 1353280 },
@@ -43,28 +51,45 @@ const rawData = [
   { month: 'Aug25', '2W': 1300000 }
 ];
 
-// Allowed months up to May25
-const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25'];
+const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25', 'May25', 'Jun25', 'Jul25', 'Aug25'];
 
-const abbreviate = v => {
-  if (v >= 1e9)   return `${(v / 1e9).toFixed(1).replace(/\.0$/, '')}B`;
-  if (v >= 1e6)   return `${(v / 1e6).toFixed(1).replace(/\.0$/, '')}M`;
-  if (v >= 1e3)   return `${(v / 1e3).toFixed(1).replace(/\.0$/, '')}K`;
+const abbreviate = (v) => {
+  if (v >= 1e9) return `${(v / 1e9).toFixed(1).replace(/\.0$/, '')}B`;
+  if (v >= 1e6) return `${(v / 1e6).toFixed(1).replace(/\.0$/, '')}M`;
+  if (v >= 1e3) return `${(v / 1e3).toFixed(1).replace(/\.0$/, '')}K`;
   return v.toString();
-}
+};
 
 const TwoWheelerForecast = () => {
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    const updateSize = () => setWindowWidth(window.innerWidth);
+    updateSize(); // initial
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  const isMobile = windowWidth <= 640;
+  const chartHeight = isMobile ? 280 : 420;
+
   const filteredData = useMemo(
-    () => rawData.filter(d => allowedMonths.includes(d.month)),
+    () =>
+      rawData
+        .filter(d => allowedMonths.includes(d.month))
+        .map(d => ({
+          ...d,
+          '2W': isLockedMonth(d.month) ? null : d['2W'],
+        })),
     []
   );
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: 420 }}>
-      <ResponsiveContainer>
+    <div style={{ position: 'relative', width: '100%', zIndex: 0 }}>
+      <ResponsiveContainer width="100%" height={chartHeight}>
         <LineChart
           data={filteredData}
-          margin={{ top: 20, right: 20, bottom: 20, left: 30 }}
+          margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
           animationDuration={2500}
           animationEasing="ease-out"
         >
@@ -76,23 +101,21 @@ const TwoWheelerForecast = () => {
           </defs>
 
           <CartesianGrid stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
-
           <XAxis
             dataKey="month"
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+            tick={{ fill: 'rgba(255,255,255,0.7)', fontSize: 12 }}
           />
           <YAxis
             axisLine={false}
             tickLine={false}
-            tick={{ fill: "#FFC107", fontSize: 12 }}
+            tick={{ fill: '#FFC107', fontSize: 12 }}
             domain={['auto', 'auto']}
             tickFormatter={abbreviate}
             tickCount={5}
             interval="preserveStartEnd"
           />
-
           <Brush
             dataKey="month"
             startIndex={0}
@@ -101,13 +124,13 @@ const TwoWheelerForecast = () => {
             stroke="rgba(255,255,255,0.4)"
             fill="rgba(255,255,255,0.08)"
             strokeWidth={1}
-            tickFormatter={(d) => d}
             tick={{
-              fill: "rgba(255,255,255,0.6)",
+              fill: 'rgba(255,255,255,0.6)',
               fontSize: 9,
-              fontFamily: "inherit",
+              fontFamily: 'inherit',
             }}
             tickMargin={4}
+            tickFormatter={(d) => d}
             traveller={
               <Rectangle
                 width={6}
@@ -120,10 +143,8 @@ const TwoWheelerForecast = () => {
               />
             }
           />
-
           <Tooltip content={<CustomTooltip />} />
           <Legend wrapperStyle={{ marginTop: 24 }} />
-
           <Line
             dataKey="2W"
             name="2W"
@@ -131,34 +152,43 @@ const TwoWheelerForecast = () => {
             strokeWidth={3}
             connectNulls
             animationBegin={0}
-            dot={false}
+            dot={{ r: 3 }}
           />
         </LineChart>
       </ResponsiveContainer>
 
+      {/* Forecast overlay */}
       <div
         style={{
           position: 'absolute',
           top: 20,
-          left: '80%',
-          width: '20%',
-          height: 'calc(100% - 60px)',
-          background: 'rgba(0,0,0,0.3)',
+          left: '58%',
+          width: '41%',
+          height: `calc(${chartHeight}px - 100px)`,
+          background: 'rgba(0, 0, 0, 0.35)',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
-          borderRadius: '8px',
-          border: '1px solid rgba(255,255,255,0.2)',
+          borderLeft: '2px dashed rgba(255,255,255,0.3)',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          color: 'silver',
-          fontSize: 24,
-          fontWeight: 'bold',
+          padding: '0 8px',
           textAlign: 'center',
+          zIndex: -1,
           pointerEvents: 'none',
         }}
       >
-        🔒 Subscribe to the Platinum Package to access forecast values.
+        <p
+          style={{
+            color: '#fff',
+            fontSize: 'clamp(14px, 2.5vw, 20px)',
+            fontWeight: 600,
+            lineHeight: 1.4,
+            margin: 0,
+          }}
+        >
+          🔒 Subscribe to the Platinum Package to access forecast values.
+        </p>
       </div>
     </div>
   );

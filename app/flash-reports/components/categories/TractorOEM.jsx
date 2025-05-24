@@ -10,7 +10,7 @@ import TractorForecast from '../Forecast-chart/Tractor';
 
 const TractorOEM = () => {
     return (
-        <div className='px-4'>
+        <div className='px-lg-4'>
             <div className='container-fluid'>
                 <div className="row">
                     <div className='col-12'>

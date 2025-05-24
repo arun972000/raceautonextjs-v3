@@ -9,7 +9,8 @@ import "./Header.css"
 const Header = () => {
   const [isLogoHover, setLogoHover] = useState(false);
   return (
-    <div className="app-header d-flex justify-content-between align-items-center">
+    <div className="app-header d-flex justify-content-center justify-content-md-start align-items-center">
+
       <Link href="/" passHref>
         <motion.div
           className="logo-container"
@@ -31,7 +32,7 @@ const Header = () => {
             src="/images/rai.png"
             alt="Race Auto India"
             className="app-logo"
-            width={250}
+            width={230}
             height={80}
 
           />

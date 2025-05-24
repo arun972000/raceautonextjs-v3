@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React from 'react'
 import LineChartWithTotal from '../charts/LineCharts'
 import RechartsChart from '../charts/customizechart'

@@ -8,7 +8,7 @@ const TwoWheelerForecast = dynamic(() => import("../Forecast-chart/Twowheeler"),
 
 const TwoWheeler = () => {
     return (
-        <div className='px-4'>
+        <div className='px-lg-4'>
             <div className='container-fluid'>
                 <div className="row">
                     <div className='col-12'>

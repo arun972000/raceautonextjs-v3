@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import DownloadAllButton from "../Flash-report-pdf/components/DownloadButton";
+import ScrollToTop from './components/ScrollToTop'
 
 // Font setup
 const bricolage = Bricolage_Grotesque({
@@ -28,56 +29,57 @@ export default async function FlashReportsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies();
-  const token = cookieStore.get("authToken")?.value;
+  // const cookieStore = cookies();
+  // const token = cookieStore.get("authToken")?.value;
 
-  if (!token) {
-    redirect("/");
-  }
+  // if (!token) {
+  //   redirect("/");
+  // }
 
-  // Decode token
-  let email: string | undefined;
-  let role: string | undefined;
-  try {
-    const decoded: JwtPayload = jwtDecode(token);
-    email = decoded.email;
-    role = decoded.role;
-  } catch (err) {
-    console.error("Invalid token:", err);
-    redirect("/");
-  }
+  // // Decode token
+  // let email: string | undefined;
+  // let role: string | undefined;
+  // try {
+  //   const decoded: JwtPayload = jwtDecode(token);
+  //   email = decoded.email;
+  //   role = decoded.role;
+  // } catch (err) {
+  //   console.error("Invalid token:", err);
+  //   redirect("/");
+  // }
 
-  if (!email) {
-    redirect("/");
-  }
+  // if (!email) {
+  //   redirect("/");
+  // }
 
-  const specialRoles = ["admin", "ad team", "moderator"];
+  // const specialRoles = ["admin", "ad team", "moderator"];
 
-  // Only check subscription if user is not a special role
-  if (!specialRoles.includes(role || "")) {
-    const subRes = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/purchase/${email}`,
-      {
-        method: "GET",
-        cache: "no-store",
-      }
-    );
+  // // Only check subscription if user is not a special role
+  // if (!specialRoles.includes(role || "")) {
+  //   const subRes = await fetch(
+  //     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/purchase/${email}`,
+  //     {
+  //       method: "GET",
+  //       cache: "no-store",
+  //     }
+  //   );
 
-    if (!subRes.ok) {
-      redirect("/subscription");
-    }
+  //   if (!subRes.ok) {
+  //     redirect("/subscription");
+  //   }
 
-    const subscription = await subRes.json();
+  //   const subscription = await subRes.json();
 
-    if (subscription[0]?.status !== "Active") {
-      redirect("/subscription");
-    }
-  }
+  //   if (subscription[0]?.status !== "Active") {
+  //     redirect("/subscription");
+  //   }
+  // }
 
   // Authorized: render layout
   return (
     <div className={`${bricolage.className} flash-reports`}>
       {/* <DownloadAllButton /> */}
+      <ScrollToTop />
       <Header />
       <FlashReportsHome />
       {children}

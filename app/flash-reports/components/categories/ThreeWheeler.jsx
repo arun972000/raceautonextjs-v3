@@ -12,13 +12,13 @@ const ThreeWheelerApplication = dynamic(
 );
 
 const ThreeWheelerForecast = dynamic(
-    () => import("../Forecast-chart/Twowheeler"),
+    () => import("../Forecast-chart/ThreeWheeler"),
     { ssr: false }
 );
 
 const ThreeWheeler = () => {
     return (
-        <div className='px-4'>
+        <div className='px-lg-4'>
             <div className='container-fluid'>
                 <div className="row">
                     <div className='col-12'>

@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   PieChart,
   Pie,
@@ -8,6 +8,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useMediaQuery } from "react-responsive";
 
 // Gradient color palette
 const PALETTE = [
@@ -41,59 +42,93 @@ const companyData = [
   { name: "Others", Apr24: 11.47, Mar25: 5.61, Apr25: 5.61 },
 ];
 
-
-const companyNames = companyData.map(item => item.name);
+const companyNames = companyData.map((item) => item.name);
 
 const getComparisonData = (currentKey, compareKey, showSymbol) =>
   companyData.map((item) => {
-    const symbol =
-      showSymbol && item[currentKey] > item[compareKey] ? "▲"
-        : showSymbol && item[currentKey] < item[compareKey] ? "▼"
-          : "";
+    let symbol = "";
+    if (showSymbol) {
+      if (item[currentKey] > item[compareKey]) symbol = "▲";
+      else if (item[currentKey] < item[compareKey]) symbol = "▼";
+    }
     return {
       name: item.name,
       value: item[currentKey],
       symbol,
+      increased: item[currentKey] > item[compareKey],
+      decreased: item[currentKey] < item[compareKey],
     };
   });
 
 const ChartWithComparison = ({ current, compare, title }) => {
+  const isMobile = useMediaQuery({ query: "(max-width: 576px)" });
   const showSymbol = current === "Apr25";
   const data = getComparisonData(current, compare, showSymbol);
-
-  // Responsive sizes
-  const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Set sizes conditionally based on breakpoint (example: 768px)
-  const isMobile = windowWidth < 768;
-  const chartHeight = isMobile ? 220 : 400;
-  const innerRadius = isMobile ? 60 : 85;
-  const outerRadius = isMobile ? 90 : 120;
 
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null;
     const { name, value, symbol } = payload[0].payload;
+    const arrowColor = symbol === "▲" ? "green" : symbol === "▼" ? "red" : "#ccc";
     return (
-      <div style={{
-        background: '#222', color: '#fff',
-        padding: 8, borderRadius: 4, fontSize: 12
-      }}>
-        <strong>{name}</strong><br />
-        Value: {value.toFixed(2)}% {symbol}
+      <div
+        style={{
+          background: "#222",
+          color: "#fff",
+          padding: 8,
+          borderRadius: 4,
+          fontSize: 12,
+        }}
+      >
+        <strong>{name}</strong>
+        <br />
+        Value: {value.toFixed(2)}%{" "}
+        <span style={{ color: arrowColor, fontWeight: "bold" }}>{symbol}</span>
       </div>
     );
   };
 
+  // Custom label with colored arrow and percent
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    index,
+    value,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 20; // outside the pie slice
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    const item = data[index];
+    if (!item) return null;
+
+    let arrowColor = "#ccc";
+    if (item.increased) arrowColor = "green";
+    else if (item.decreased) arrowColor = "red";
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#ccc"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+        fontSize={12}
+        fontWeight="bold"
+      >
+        <tspan fill={arrowColor}>{item.symbol} </tspan>
+        <tspan>{value.toFixed(1)}%</tspan>
+      </text>
+    );
+  };
+
   return (
-    <div className="col-md-6 mb-4">
+    <div className="col-md-6 col-12 mb-4">
       <h6 className="text-center fw-semibold mb-2">{title}</h6>
-      <div style={{ width: "100%", height: chartHeight }}>
+      <div style={{ width: "100%", height: isMobile ? 260 : 300 }}>
         <ResponsiveContainer>
           <PieChart>
             <defs>
@@ -101,7 +136,10 @@ const ChartWithComparison = ({ current, compare, title }) => {
                 <linearGradient
                   key={i}
                   id={`evGrad-${i}`}
-                  x1="0" y1="0" x2="0" y2="1"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
                 >
                   <stop offset="0%" stopColor={getColor(i)} stopOpacity={0.8} />
                   <stop offset="100%" stopColor={getDark(i)} stopOpacity={0.3} />
@@ -115,15 +153,12 @@ const ChartWithComparison = ({ current, compare, title }) => {
               nameKey="name"
               cx="50%"
               cy="50%"
-              innerRadius={innerRadius}
-              outerRadius={outerRadius}
+              innerRadius={isMobile ? 50 : 85}
+              outerRadius={isMobile ? 90 : 120}
               paddingAngle={4}
               stroke="rgba(255,255,255,0.1)"
               labelLine={false}
-              label={({ name, value }) => {
-                const item = data.find(d => d.name === name);
-                return `${item?.symbol || ''} ${value.toFixed(1)}%`;
-              }}
+              label={renderCustomLabel}
             >
               {data.map((_, i) => (
                 <Cell key={i} fill={`url(#evGrad-${i})`} />
@@ -143,7 +178,9 @@ const TwoWheelerEV = () => {
     <div className="container px-3 px-md-5">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: '#59bea0' }}>2-Wheeler EV Electric Share Comparison</h5>
+          <h5 style={{ color: "#59bea0" }}>
+            2-Wheeler EV Electric Share Comparison
+          </h5>
         </div>
       </div>
 

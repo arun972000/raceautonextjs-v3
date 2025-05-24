@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from "react";
+import React from "react";
 import {
   PieChart,
   Pie,
@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { useMediaQuery } from "react-responsive";
 
-// Color palette with light/dark gradients
+// Gradient palette
 const PALETTE = [
   { light: "#15AFE4", dark: "#0D7AAB" },
   { light: "#FFC107", dark: "#B38600" },
@@ -44,33 +44,84 @@ const companyNames = companyData.map(item => item.name);
 
 const getComparisonData = (currentKey, compareKey, showSymbol) =>
   companyData.map((item) => {
-    const symbol =
-      showSymbol && item[currentKey] > item[compareKey] ? "▲"
-        : showSymbol && item[currentKey] < item[compareKey] ? "▼"
-          : "";
+    let symbol = "";
+    if (showSymbol) {
+      if (item[currentKey] > item[compareKey]) symbol = "▲";
+      else if (item[currentKey] < item[compareKey]) symbol = "▼";
+    }
     return {
       name: item.name,
       value: item[currentKey],
       symbol,
+      increased: item[currentKey] > item[compareKey],
+      decreased: item[currentKey] < item[compareKey],
     };
   });
+
+// Arrow components with colors
+const ArrowUp = () => (
+  <tspan fill="green" fontWeight="bold" fontSize={14} style={{ userSelect: 'none' }}>
+    ▲{" "}
+  </tspan>
+);
+const ArrowDown = () => (
+  <tspan fill="red" fontWeight="bold" fontSize={14} style={{ userSelect: 'none' }}>
+    ▼{" "}
+  </tspan>
+);
 
 const ChartWithComparison = ({ current, compare, title }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 576px)' });
   const showSymbol = current === "Apr25";
-  const data = useMemo(() => getComparisonData(current, compare, showSymbol), [current, compare, showSymbol]);
+  const data = getComparisonData(current, compare, showSymbol);
 
+  // Tooltip with colored arrows
   const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null;
-    const { name, value, symbol } = payload[0].payload;
+    const { name, value, increased, decreased } = payload[0].payload;
     return (
       <div style={{
-        background: '#222', color: '#fff',
-        padding: 8, borderRadius: 4, fontSize: 12
+        background: '#222',
+        color: '#fff',
+        padding: 8,
+        borderRadius: 4,
+        fontSize: 12,
+        minWidth: 120,
       }}>
         <strong>{name}</strong><br />
-        Value: {value.toFixed(2)}% {symbol}
+        Value: {value.toFixed(2)}%{" "}
+        {increased && <span style={{ color: 'green', fontWeight: 'bold' }}>▲</span>}
+        {decreased && <span style={{ color: 'red', fontWeight: 'bold' }}>▼</span>}
       </div>
+    );
+  };
+
+  // Custom label for pie slices with colored arrows
+  const renderCustomLabel = ({
+    cx, cy, midAngle, innerRadius, outerRadius, index, value,
+  }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = outerRadius + 20;  // position label outside the slice
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    const item = data[index];
+    if (!item) return null;
+
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#ccc"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+        fontSize={12}
+        fontWeight="bold"
+      >
+        {item.increased && <ArrowUp />}
+        {item.decreased && <ArrowDown />}
+        <tspan>{value.toFixed(1)}%</tspan>
+      </text>
     );
   };
 
@@ -104,10 +155,7 @@ const ChartWithComparison = ({ current, compare, title }) => {
               paddingAngle={4}
               stroke="rgba(255,255,255,0.1)"
               labelLine={false}
-              label={({ name, value }) => {
-                const item = data.find(d => d.name === name);
-                return `${item?.symbol || ''} ${value.toFixed(1)}%`;
-              }}
+              label={renderCustomLabel}
             >
               {data.map((_, i) => (
                 <Cell key={i} fill={`url(#sliceGrad-${i})`} />

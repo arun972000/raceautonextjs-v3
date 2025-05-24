@@ -107,20 +107,12 @@ const CommutePieChartWithOverlay = () => {
       </div>
 
       {/* Legend outside of blur overlay */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: 20,
-          marginTop: 20,
-          fontSize: 14,
-          fontWeight: 600,
-        }}
-      >
+     <div className="d-flex flex-wrap justify-content-center mt-1" style={{ gap: '10px', fontSize: 14, fontWeight: 600 }}>
         {data.map((entry, index) => (
           <div
             key={index}
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            className="d-flex align-items-center mb-2"
+            style={{ gap: 8, minWidth: 120 }}
           >
             <div
               style={{
@@ -134,6 +126,7 @@ const CommutePieChartWithOverlay = () => {
           </div>
         ))}
       </div>
+
     </div>
   );
 };

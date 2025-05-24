@@ -45,14 +45,17 @@ const companyNames = companyData.map(item => item.name);
 
 const getComparisonData = (currentKey, compareKey, showSymbol) =>
   companyData.map((item) => {
-    const symbol =
-      showSymbol && item[currentKey] > item[compareKey] ? "▲"
-        : showSymbol && item[currentKey] < item[compareKey] ? "▼"
-          : "";
+    let symbol = "";
+    if (showSymbol) {
+      if (item[currentKey] > item[compareKey]) symbol = "▲";
+      else if (item[currentKey] < item[compareKey]) symbol = "▼";
+    }
     return {
       name: item.name,
       value: item[currentKey],
       symbol,
+      increased: item[currentKey] > item[compareKey],
+      decreased: item[currentKey] < item[compareKey],
     };
   });
 
@@ -74,6 +77,41 @@ const ChartWithComparison = ({ current, compare, title }) => {
       </div>
     );
   };
+
+  // Custom label for pie slices with colored arrows
+  const renderCustomLabel = ({
+  cx, cy, midAngle, innerRadius, outerRadius, index, value,
+}) => {
+  const RADIAN = Math.PI / 180;
+  const radius = outerRadius + 20;  // position outside
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  const item = data[index];
+  if (!item) return null;
+
+  let arrowColor = "white";
+  if (item.increased) arrowColor = "green";
+  else if (item.decreased) arrowColor = "red";
+
+  const labelColor = "#ccc";
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill={labelColor}
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+      fontSize={12}
+      fontWeight="bold"
+    >
+      <tspan fill={arrowColor}>{item.symbol} </tspan>
+      <tspan>{value.toFixed(1)}%</tspan>
+    </text>
+  );
+};
+
 
   return (
     <div className="col-md-6 col-12 mb-4">
@@ -100,10 +138,7 @@ const ChartWithComparison = ({ current, compare, title }) => {
               paddingAngle={4}
               stroke="rgba(255,255,255,0.1)"
               labelLine={false}
-              label={({ name, value }) => {
-                const item = data.find(d => d.name === name);
-                return `${item?.symbol || ''} ${value.toFixed(1)}%`;
-              }}
+              label={renderCustomLabel}
             >
               {data.map((_, i) => (
                 <Cell key={i} fill={`url(#sliceGrad-${i})`} />

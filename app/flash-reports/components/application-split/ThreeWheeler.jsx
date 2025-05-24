@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
@@ -15,6 +16,7 @@ const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 const renderLabel = ({ percent }) => `${(percent * 100).toFixed(0)}%`;
 
 const ThreeWheelerApplication = () => {
+  const router = useRouter();
   const [hovering, setHovering] = useState(false);
 
   return (
@@ -98,7 +100,7 @@ const ThreeWheelerApplication = () => {
                 boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                 transition: 'background 0.3s ease',
               }}
-              onClick={() => alert('Redirecting to subscription...')}
+              onClick={() => router.push('/subscription')}
             >
               Subscribe Now
             </button>
@@ -107,20 +109,12 @@ const ThreeWheelerApplication = () => {
       </div>
 
       {/* Legend outside of blur overlay */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: 20,
-          marginTop: 20,
-          fontSize: 14,
-          fontWeight: 600,
-        }}
-      >
+      <div className="d-flex flex-wrap justify-content-center mt-1" style={{ gap: '10px', fontSize: 14, fontWeight: 600 }}>
         {data.map((entry, index) => (
           <div
             key={index}
-            style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+            className="d-flex align-items-center mb-2"
+            style={{ gap: 8, minWidth: 120 }}
           >
             <div
               style={{
