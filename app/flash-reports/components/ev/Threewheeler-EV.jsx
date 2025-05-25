@@ -12,15 +12,36 @@ import { useMediaQuery } from "react-responsive";
 
 // Gradient palette
 const PALETTE = [
-  { light: "#003f5c", dark: "#001c2e" },
-  { light: "#2f4b7c", dark: "#1b2949" },
-  { light: "#665191", dark: "#3b3660" },
-  { light: "#a05195", dark: "#643064" },
-  { light: "#d45087", dark: "#8c2e59" },
-  { light: "#f95d6a", dark: "#9e3139" },
-  { light: "#ff7c43", dark: "#b24c1c" },
-  { light: "#ffa600", dark: "#c76c00" },
+  { light: "#15AFE4", dark: "#0D7AAB" },   // Bright cyan-blue
+  { light: "#FFC107", dark: "#B38600" },   // Vivid amber
+  { light: "#23DD1D", dark: "#149A11" },   // Pure green
+  { light: "#A17CFF", dark: "#5E3DBD" },   // Soft purple
+  { light: "#FF8A65", dark: "#C75B39" },   // Coral
+  { light: "#607D8B", dark: "#37474F" },   // Slate blue-gray
+  { light: "#FFD166", dark: "#C79B26" },   // Yellow-orange
+  { light: "#EF476F", dark: "#A2304A" },   // Crimson red
+  { light: "#06D6A0", dark: "#04936F" },   // Teal-green
+  { light: "#073B4C", dark: "#041E25" },   // Navy-black
+  { light: "#F4A261", dark: "#B87434" },   // Desert tan
+  { light: "#9B5DE5", dark: "#6630A6" },   // Violet
+  { light: "#FEE440", dark: "#C6B000" },   // Bold yellow
+  { light: "#00F5D4", dark: "#00A88F" },   // Bright aqua
+  { light: "#C0CA33", dark: "#8A9A16" },   // Yellow-lime
+  { light: "#FF7043", dark: "#BF360C" },   // Rich orange
+  { light: "#8D6E63", dark: "#5D4037" },   // Mocha brown
+  { light: "#FF6F00", dark: "#C45000" },   // Deep orange
+  { light: "#1E88E5", dark: "#125EA9" },   // Primary blue
+  { light: "#43A047", dark: "#2B702F" },   // Forest green
+  { light: "#D81B60", dark: "#991042" },   // Rose red
+  { light: "#F4511E", dark: "#B2360F" },   // Rust
+  { light: "#3949AB", dark: "#27317C" },   // Indigo
+  { light: "#00897B", dark: "#005F56" },   // Dark teal
+  { light: "#90A4AE", dark: "#607D8B" },   // Muted steel
+  { light: "#B0EB00", dark: "#7DA300" },   // Neon lime
 ];
+
+
+
 
 const getColor = (i) => PALETTE[i % PALETTE.length].light;
 const getDark = (i) => PALETTE[i % PALETTE.length].dark;
