@@ -109,7 +109,7 @@ const ThreeWheelerApplication = () => {
       </div>
 
       {/* Legend outside of blur overlay */}
-      <div className="d-flex flex-wrap justify-content-center mt-1" style={{ gap: '10px', fontSize: 14, fontWeight: 600 }}>
+      <div className="d-flex flex-wrap justify-content-center mt-1" style={{ gap: '10px'}}>
         {data.map((entry, index) => (
           <div
             key={index}
@@ -118,13 +118,13 @@ const ThreeWheelerApplication = () => {
           >
             <div
               style={{
-                width: 16,
-                height: 16,
+                width: 10,
+                height: 10,
                 backgroundColor: colors[index % colors.length],
                 borderRadius: 3,
               }}
             />
-            <span>{entry.name}</span>
+            <span style={{ fontSize: "0.6rem", textAlign: "left" }}>{entry.name}</span>
           </div>
         ))}
       </div>

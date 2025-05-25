@@ -14,6 +14,7 @@ import {
   Rectangle,
 } from "recharts";
 import { useMediaQuery } from 'react-responsive';
+import '../styles/chart.css'
 
 // Original data
 const rawData = [
@@ -21,7 +22,7 @@ const rawData = [
   { month: 'Feb25', '3W': 94181 },
   { month: 'Mar25', '3W': 99376 },
   { month: 'Apr25', '3W': 99766 },
-  { month: 'May25', '3W': 1200000 },
+  { month: 'May25', '3W': 120000 },
   { month: 'Jun25', '3W': 95000 },
   { month: 'Jul25', '3W': 1700000 },
   { month: 'Aug25', '3W': 2100000 }
@@ -85,8 +86,8 @@ const ThreeWheelerForecast = () => {
         >
           <defs>
             <linearGradient id="threeWGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#FF5722" stopOpacity={0.9} />
-              <stop offset="100%" stopColor="#FF5722" stopOpacity={0.3} />
+              <stop offset="0%" stopColor="#ff1f23" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#ff1f23" stopOpacity={0.3} />
             </linearGradient>
           </defs>
 
@@ -167,15 +168,9 @@ const ThreeWheelerForecast = () => {
           pointerEvents: 'none',
         }}
       >
-        <p style={{
-          color: '#fff',
-          fontSize: 'clamp(14px, 2.5vw, 20px)',
-          fontWeight: 600,
-          lineHeight: 1.4,
-          margin: 0,
-        }}>
-          🔒 Subscribe to the Platifnum Package to access forecast values.
-        </p>
+        <p className="shining-white">
+            🔒 Subscribe to the Platinum Package to access forecast values.
+          </p>
       </div>
     </div>
   );

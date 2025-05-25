@@ -169,19 +169,19 @@ const ChartWithComparison = ({ current, compare, title }) => {
 
 const ThreeWheelerEV = () => {
   return (
-    <div className="container px-3 px-md-5">
+    <div className="container px-md-5">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: "#59bea0" }}>3-Wheeler EV Electric Share Comparison</h5>
+          <h4 style={{ color: "#59bea0" }}>3-Wheeler EV Electric Share Comparison</h4>
         </div>
       </div>
 
-      <div className="row">
-        <ChartWithComparison current="Mar25" compare="Apr24" title="MoM - Mar 25" />
-        <ChartWithComparison current="Apr25" compare="Mar25" title="MoM - Apr 25" />
-        <ChartWithComparison current="Apr24" compare="Apr25" title="YoY - Apr 24" />
-        <ChartWithComparison current="Apr25" compare="Apr24" title="YoY - Apr 25" />
-      </div>
+  <div className="row">
+  <ChartWithComparison current="Mar25" compare="Apr24" title="Month on Month (MoM) - Mar 25" />
+  <ChartWithComparison current="Apr25" compare="Mar25" title="Month on Month (MoM) - Apr 25" />
+  <ChartWithComparison current="Apr24" compare="Apr25" title="Year on Year (YoY) - Apr 24" />
+  <ChartWithComparison current="Apr25" compare="Apr24" title="Year on Year (YoY) - Apr 25" />
+</div>
 
       {/* Shared Legend */}
       <div className="mt-4 text-center">
@@ -190,14 +190,14 @@ const ThreeWheelerEV = () => {
             <div key={name} className="d-flex align-items-center">
               <div
                 style={{
-                  width: 14,
-                  height: 14,
+                  width: 10,
+                  height: 10,
                   backgroundColor: getColor(i),
                   marginRight: 6,
                   borderRadius: "50%",
                 }}
               />
-              <span style={{ fontSize: "0.9rem", minWidth: 80, textAlign: "left" }}>{name}</span>
+              <span style={{ fontSize: "0.6rem", minWidth: 80, textAlign: "left" }}>{name}</span>
             </div>
           ))}
         </div>

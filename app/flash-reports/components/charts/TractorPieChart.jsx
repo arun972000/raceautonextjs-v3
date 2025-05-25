@@ -182,21 +182,21 @@ const Tractor_PieChart = () => {
       </div>
 
       <div className="row">
-        <ChartWithComparison current="Mar25" compare="Apr24" title="MoM - Mar 25" />
-        <ChartWithComparison current="Apr25" compare="Mar25" title="MoM - Apr 25" />
-        <ChartWithComparison current="Apr24" compare="Apr25" title="YoY - Apr 24" />
-        <ChartWithComparison current="Apr25" compare="Apr24" title="YoY - Apr 25" />
+        <ChartWithComparison current="Mar25" compare="Apr24" title="Month on Month (MoM) - Mar 25" />
+        <ChartWithComparison current="Apr25" compare="Mar25" title="Month on Month (MoM) - Apr 25" />
+        <ChartWithComparison current="Apr24" compare="Apr25" title="Year on Year (YoY) - Apr 24" />
+        <ChartWithComparison current="Apr25" compare="Apr24" title="Year on Year (YoY) - Apr 25" />
       </div>
 
       {/* Shared Legend */}
-      <div className="mt-4 text-center">
-        <div className="d-flex flex-wrap justify-content-center gap-3">
+      <div className="mt-1 text-center">
+        <div className="d-flex flex-wrap justify-content-center gap-3" style={{ fontSize: '9px', lineHeight: '1.2' }}>
           {companyNames.map((name, i) => (
             <div key={name} className="d-flex align-items-center">
               <div
                 style={{
-                  width: 14,
-                  height: 14,
+                  width: 10,
+                  height: 10,
                   backgroundColor: getColor(i),
                   marginRight: 6,
                   borderRadius: "50%",

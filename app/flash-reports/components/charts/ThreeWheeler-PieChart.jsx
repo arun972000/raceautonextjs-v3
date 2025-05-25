@@ -9,21 +9,22 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { PALETTE } from '../colorPalette'
 
 // Gradient palette
-const PALETTE = [
-  { light: "#15AFE4", dark: "#0D7AAB" },
-  { light: "#FFC107", dark: "#B38600" },
-  { light: "#23DD1D", dark: "#149A11" },
-  { light: "#38CCD4", dark: "#1F7F84" },
-  { light: "#A17CFF", dark: "#5E3DBD" },
-  { light: "#FF8A65", dark: "#C75B39" },
-  { light: "#85FF8C", dark: "#50AA5B" },
-  { light: "#FF92E3", dark: "#C25AA8" },
-  { light: "#FFA600", dark: "#C67800" },
-  { light: "#7A5195", dark: "#50275F" },
-  { light: "#bcb8b8", dark: "#807c7c" },
-];
+// const PALETTE = [
+//   { light: "#15AFE4", dark: "#0D7AAB" },
+//   { light: "#FFC107", dark: "#B38600" },
+//   { light: "#23DD1D", dark: "#149A11" },
+//   { light: "#38CCD4", dark: "#1F7F84" },
+//   { light: "#A17CFF", dark: "#5E3DBD" },
+//   { light: "#FF8A65", dark: "#C75B39" },
+//   { light: "#85FF8C", dark: "#50AA5B" },
+//   { light: "#FF92E3", dark: "#C25AA8" },
+//   { light: "#FFA600", dark: "#C67800" },
+//   { light: "#7A5195", dark: "#50275F" },
+//   { light: "#bcb8b8", dark: "#807c7c" },
+// ];
 
 const getColor = (i) => PALETTE[i % PALETTE.length].light;
 const getDark = (i) => PALETTE[i % PALETTE.length].dark;
@@ -159,7 +160,7 @@ const ChartWithComparison = ({ current, compare, title }) => {
               nameKey="name"
               cx="50%"
               cy="50%"
-              innerRadius={isMobile ? 30 : 120}
+              innerRadius={isMobile ? 60 : 140}
               outerRadius={isMobile ? 90 : 190}
               paddingAngle={4}
               stroke="rgba(255,255,255,0.1)"
@@ -181,35 +182,45 @@ const ChartWithComparison = ({ current, compare, title }) => {
 
 const ThreeWheeler_PieChart = () => {
   return (
-    <div className="container">
+    <div className="container-fluid">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: "#ffdc00" }}>3-Wheeler OverAll OEM Share Comparison</h5>
+          <h4 style={{ color: "#ffdc00" }}>3-Wheeler OverAll OEM Market Share Comparison</h4>
         </div>
       </div>
 
-      <div className="row">
-        <ChartWithComparison current="Mar25" compare="Apr24" title="MoM - Mar 25" />
-        <ChartWithComparison current="Apr25" compare="Mar25" title="MoM - Apr 25" />
-        <ChartWithComparison current="Apr24" compare="Apr25" title="YoY - Apr 24" />
-        <ChartWithComparison current="Apr25" compare="Apr24" title="YoY - Apr 25" />
-      </div>
+   <div className="row">
+  <ChartWithComparison current="Mar25" compare="Apr24" title="Month on Month (MoM) - Mar 25" />
+  <ChartWithComparison current="Apr25" compare="Mar25" title="Month on Month (MoM) - Apr 25" />
+  <ChartWithComparison current="Apr24" compare="Apr25" title="Year on Year (YoY) - Apr 24" />
+  <ChartWithComparison current="Apr25" compare="Apr24" title="Year on Year (YoY) - Apr 25" />
+</div>
 
       {/* Shared Legend */}
-      <div className="mt-4 text-center">
-        <div className="d-flex flex-wrap justify-content-center gap-3">
+      <div className="mt-3">
+        <div
+          className="d-flex flex-wrap justify-content-center gap-2"
+          style={{ fontSize: '9px', lineHeight: '1.2' }}
+        >
           {companyNames.map((name, i) => (
-            <div key={name} className="d-flex align-items-center">
+            <div
+              key={name}
+              className="d-flex align-items-center"
+              style={{ margin: '4px 6px', maxWidth: '45%' }}
+            >
               <div
                 style={{
-                  width: 14,
-                  height: 14,
+                  width: 10,
+                  height: 10,
                   backgroundColor: getColor(i),
-                  marginRight: 6,
+                  marginRight: 4,
                   borderRadius: "50%",
+                  flexShrink: 0,
                 }}
               />
-              <span>{name}</span>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {name}
+              </span>
             </div>
           ))}
         </div>

@@ -14,6 +14,7 @@ import {
   Rectangle,
 } from 'recharts';
 import { useMediaQuery } from 'react-responsive';
+import '../styles/chart.css'
 
 const rawData = [
   { month: 'Jan25', PV: 465920 },
@@ -169,15 +170,9 @@ const PVForecast = () => {
           zIndex: -1 // ⬅️ Lower than the tooltip
         }}
       >
-        <p style={{
-          color: '#fff',
-          fontSize: 'clamp(14px, 2.5vw, 20px)',
-          fontWeight: 600,
-          lineHeight: 1.4,
-          margin: 0,
-        }}>
-          🔒 Subscribe to the Platinum Package to access forecast values.
-        </p>
+       <p className="shining-white">
+            🔒 Subscribe to the Platinum Package to access forecast values.
+          </p>
       </div>
     </div>
   );

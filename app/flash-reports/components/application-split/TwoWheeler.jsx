@@ -111,7 +111,7 @@ const CommutePieChartWithOverlay = () => {
       {/* Legend outside of blur overlay */}
       {/* Legend outside of blur overlay */}
       {/* Legend outside of blur overlay */}
-      <div className="row justify-content-center mt-3" style={{ fontSize: 14, fontWeight: 600 }}>
+      <div className="row justify-content-center mt-3" >
         {data.map((entry, index) => (
           <div
             key={index}
@@ -119,14 +119,14 @@ const CommutePieChartWithOverlay = () => {
           >
             <div
               style={{
-                width: 16,
-                height: 16,
+                width: 10,
+                height: 10,
                 backgroundColor: colors[index % colors.length],
                 borderRadius: 3,
                 marginRight: 8,
               }}
             />
-            <span>{entry.name}</span>
+            <span style={{ fontSize: "0.6rem", textAlign: "left" }}>{entry.name}</span>
           </div>
         ))}
       </div>

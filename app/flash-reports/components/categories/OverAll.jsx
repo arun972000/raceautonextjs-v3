@@ -22,9 +22,9 @@ const OverAll = () => {
                             In April 2025, India’s alternative fuel vehicle market showed mixed trends across segments:
                         </p>
                         <p className='mt-2' style={{ textAlign: 'justify' }}>
-                            Electric Vehicles (EVs) continued to dominate the three-wheeler (3W) category, reaching 62.68% market share, reflecting strong policy push and urban adoption. The passenger vehicle (PV) segment maintained steady momentum, with EVs at 3.50%, hybrids at 8.40%, and CNG/LPG at 19.67%, largely driven by OEMs like Maruti Suzuki and BYD.
-                            In the two-wheeler (2W) segment, EV penetration dropped slightly to 5.44% from March's 8.65%, despite strong sales volumes—indicating a temporary correction. Commercial vehicles (CVs) remained diesel-heavy, but CNG uptake improved to 10.58%, with EVs holding at 0.99%, led by early adopters like Tata Motors.
-                            The tractor segment saw no significant shift, with diesel dominating at 99.98%, and only negligible alternative fuel presence.
+                            <span style={{color:'#81ea81'}}>Electric Vehicles (EVs)</span> continued to dominate the <span className='text-warning'>three-wheeler (3W)</span> category, reaching 62.68% market share, reflecting strong policy push and urban adoption. <span className='text-warning'>The passenger vehicle (PV)</span> segment maintained steady momentum, with EVs at 3.50%, hybrids at 8.40%, and CNG/LPG at 19.67%, largely driven by OEMs like Maruti Suzuki and BYD.
+                            In the <span className='text-warning'>two-wheeler (2W)</span> segment, EV penetration dropped slightly to 5.44% from March's 8.65%, despite strong sales volumes—indicating a temporary correction. <span className='text-warning'>Commercial vehicles (CVs)</span> remained diesel-heavy, but CNG uptake improved to 10.58%, with EVs holding at 0.99%, led by early adopters like Tata Motors.
+                            <span className='text-warning'> The tractor</span> segment saw no significant shift, with diesel dominating at 99.98%, and only negligible alternative fuel presence.
                         </p>
                         <p className='mt-2' style={{ textAlign: 'justify' }}>
                             Overall, alternative fuels are gaining ground in 3Ws, PVs, and select CV applications, while electrification in 2Ws is stabilising. Tractors remain largely untouched due to operational demands.

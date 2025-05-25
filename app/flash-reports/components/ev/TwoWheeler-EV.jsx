@@ -175,21 +175,21 @@ const ChartWithComparison = ({ current, compare, title }) => {
 
 const TwoWheelerEV = () => {
   return (
-    <div className="container px-3 px-md-5">
+    <div className="container-fluid px-md-5">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: "#59bea0" }}>
+          <h4 style={{ color: "#59bea0" }}>
             2-Wheeler EV Electric Share Comparison
-          </h5>
+          </h4>
         </div>
       </div>
 
-      <div className="row">
-        <ChartWithComparison current="Mar25" compare="Apr24" title="MoM - Mar 25" />
-        <ChartWithComparison current="Apr25" compare="Mar25" title="MoM - Apr 25" />
-        <ChartWithComparison current="Apr24" compare="Apr25" title="YoY - Apr 24" />
-        <ChartWithComparison current="Apr25" compare="Apr24" title="YoY - Apr 25" />
-      </div>
+  <div className="row">
+  <ChartWithComparison current="Mar25" compare="Apr24" title="Month on Month (MoM) - Mar 25" />
+  <ChartWithComparison current="Apr25" compare="Mar25" title="Month on Month (MoM) - Apr 25" />
+  <ChartWithComparison current="Apr24" compare="Apr25" title="Year on Year (YoY) - Apr 24" />
+  <ChartWithComparison current="Apr25" compare="Apr24" title="Year on Year (YoY) - Apr 25" />
+</div>
 
       {/* Shared Legend */}
       <div className="mt-4 text-center">
@@ -205,7 +205,7 @@ const TwoWheelerEV = () => {
                   borderRadius: "50%",
                 }}
               />
-              <span>{name}</span>
+              <span style={{ fontSize: "0.6rem", minWidth: 80, textAlign: "left" }}>{name}</span>
             </div>
           ))}
         </div>

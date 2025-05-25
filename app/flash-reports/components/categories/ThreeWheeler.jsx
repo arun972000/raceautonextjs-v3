@@ -30,9 +30,9 @@ const ThreeWheeler = () => {
 
                             EV penetration reached a new high, accounting for 62.7% of total 3W sales—up significantly from 52.5% a year earlier. This reinforces the segment’s rapid transition towards sustainable mobility, supported by favourable policies, low running costs, and increasing urban adoption.
 
-                            Bajaj Auto maintained its leadership with 32,638 units sold, securing a 32.7% market share, while Mahindra Group and TVS Motor Company delivered standout performances. Mahindra recorded a remarkable 64.8% year-on-year growth, and TVS nearly doubled its volumes with a 98.2% increase, reflecting strong traction in electric and goods-focused models.
+                            <span className='text-warning'>Bajaj Auto</span> maintained its leadership with 32,638 units sold, securing a <span className='text-warning'>32.7%</span> market share, while <span className='text-warning'>Mahindra Group and TVS Motor Company</span> delivered standout performances. Mahindra recorded a remarkable <span className='text-warning'>64.8%</span> year-on-year growth, and <span className='text-warning'>TVS</span> nearly doubled its volumes with a <span className='text-warning'>98.2%</span> increase, reflecting strong traction in electric and goods-focused models.
 
-                            Other notable players included Piaggio Vehicles, Y.C. Electric, and Atul Auto, each contributing steadily to the segment’s diversification.
+                            Other notable players included <span className='text-warning'>Piaggio Vehicles, Y.C. Electric, and Atul Auto</span>, each contributing steadily to the segment’s diversification.
                         </p>
                     </div>
 

@@ -116,13 +116,13 @@ const CommutePieChartWithOverlay = () => {
           >
             <div
               style={{
-                width: 16,
-                height: 16,
+                width: 10,
+                height: 10,
                 backgroundColor: colors[index % colors.length],
                 borderRadius: 3,
               }}
             />
-            <span>{entry.name}</span>
+            <span style={{ fontSize: "0.6rem", minWidth: 80, textAlign: "left" }}>{entry.name}</span>
           </div>
         ))}
       </div>

@@ -16,17 +16,17 @@ const TwoWheeler = () => {
                             Two-Wheeler OEM Performance – April 2025
                         </h2>
                         <p style={{ textAlign: 'justify' }}>
-                            In April 2025, Hero MotoCorp retained its position as the market leader with 5.11 lakh units sold, though its market share declined slightly to 30.34%, down from 31.06% in April 2024, indicating a marginal dip in dominance.
+                            In April 2025, <span className='text-warning'>Hero MotoCorp</span> retained its position as the market leader with 5.11 lakh units sold, though its market share declined slightly to <span className='text-warning'>30.34%, down from 31.06%</span> in April 2024, indicating a marginal dip in dominance.
 
-                            Honda Motorcycle recorded healthy year-on-year growth in both volume and market share, rising to 24.08% from 23.97%, fuelled by sustained demand for its scooter range.
+                            <span className='text-warning'>Honda Motorcycle</span> recorded healthy year-on-year growth in both volume and market share, rising to <span className='text-warning'>24.08% from 23.97%</span>, fuelled by sustained demand for its scooter range.
 
-                            TVS Motor posted notable gains, with its share increasing to 18.34% from 17.04%, reflecting consistent performance across both internal combustion engine (ICE) and electric vehicle (EV) segments.
+                            <span className='text-warning'>TVS Motor</span> posted notable gains, with its share increasing to <span className='text-warning'>18.34% from 17.04%</span>, reflecting consistent performance across both internal combustion engine (ICE) and electric vehicle (EV) segments.
 
-                            Bajaj Auto experienced a decline in both volume and share, falling to 10.85% from 11.90%, possibly due to market headwinds or transition within its product line-up.
+                            <span className='text-warning'>Bajaj Auto</span> experienced a decline in both volume and share, falling to <span className='text-warning'>10.85% from 11.90%</span>, possibly due to market headwinds or transition within its product line-up.
 
-                            Both Suzuki and Royal Enfield improved their market positions, benefitting from strong brand loyalty and the successful launch of new models.
+                            Both <span className='text-warning'>Suzuki and Royal Enfield</span> improved their market positions, benefitting from strong brand loyalty and the successful launch of new models.
 
-                            Among electric vehicle manufacturers, Ather Energy stood out with a sharp increase in market share from 0.25% to 0.78%, while Ola Electric, despite remaining the segment leader, saw its share fall from 2.07% to 1.17%.
+                            Among electric vehicle manufacturers, <span className='text-warning'>Ather Energy</span> stood out with a sharp increase in market share from <span className='text-warning'>0.25% to 0.78%</span>, while <span className='text-warning'>Ola Electric</span>, despite remaining the segment leader, saw its share fall from <span className='text-warning'>2.07% to 1.17%</span>.
 
                             The overall data reflects a stable ICE market with rising competition in the EV space, as new entrants gain traction and legacy OEMs adapt to evolving consumer preferences.
                         </p>

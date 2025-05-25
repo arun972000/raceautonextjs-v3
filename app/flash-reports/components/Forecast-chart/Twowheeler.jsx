@@ -13,6 +13,7 @@ import {
   Brush,
   Rectangle,
 } from 'recharts';
+import '../styles/chart.css'
 
 // Forecast lock logic
 const isLockedMonth = (month) => ['Jun25', 'Jul25', 'Aug25'].includes(month);
@@ -45,7 +46,7 @@ const rawData = [
   { month: 'Feb25', '2W': 1353280 },
   { month: 'Mar25', '2W': 1508232 },
   { month: 'Apr25', '2W': 1686774 },
-  { month: 'May25', '2W': 2000000 },
+  { month: 'May25', '2W': 1756774 },
   { month: 'Jun25', '2W': 1800000 },
   { month: 'Jul25', '2W': 1500000 },
   { month: 'Aug25', '2W': 1300000 }
@@ -95,8 +96,8 @@ const TwoWheelerForecast = () => {
         >
           <defs>
             <linearGradient id="histGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1039EE" stopOpacity={0.9} />
-              <stop offset="100%" stopColor="#1039EE" stopOpacity={0.3} />
+              <stop offset="0%" stopColor="#ffff" stopOpacity={0.9} />
+              <stop offset="100%" stopColor="#ffff" stopOpacity={0.3} />
             </linearGradient>
           </defs>
 
@@ -178,17 +179,9 @@ const TwoWheelerForecast = () => {
           pointerEvents: 'none',
         }}
       >
-        <p
-          style={{
-            color: '#fff',
-            fontSize: 'clamp(14px, 2.5vw, 20px)',
-            fontWeight: 600,
-            lineHeight: 1.4,
-            margin: 0,
-          }}
-        >
-          🔒 Subscribe to the Platinum Package to access forecast values.
-        </p>
+        <p className="shining-white">
+            🔒 Subscribe to the Platinum Package to access forecast values.
+          </p>
       </div>
     </div>
   );

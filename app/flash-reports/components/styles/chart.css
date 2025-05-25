@@ -8,3 +8,41 @@
 .custom-hover:hover {
   color: green !important;
 }
+
+
+.shining-white {
+  position: relative;
+  color: white;
+  font-weight: 600;
+  font-size: clamp(14px, 2.5vw, 22px);
+  line-height: 1.4;
+  text-shadow: 0 1px 1px #aaa, 0 2px 2px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.shining-white::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(192, 192, 192, 0.6) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: gleam-sweep 2s infinite;
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes gleam-sweep {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}

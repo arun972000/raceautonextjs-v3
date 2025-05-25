@@ -13,13 +13,14 @@ import {
   Brush,
   Rectangle,
 } from 'recharts';
+import '../styles/chart.css'
 
 const rawData = [
   { month: 'Jan25', TRAC: 93381 },
   { month: 'Feb25', TRAC: 65574 },
   { month: 'Mar25', TRAC: 74013 },
   { month: 'Apr25', TRAC: 60915 },
-  { month: 'May25', TRAC: 300000 },
+  { month: 'May25', TRAC: 100000 },
   { month: 'Jun25', TRAC: 200000 },
   { month: 'Jul25', TRAC: 350000 },
   { month: 'Aug25', TRAC: 400000 }
@@ -170,17 +171,9 @@ const TRACForecast = () => {
           pointerEvents: 'none',
         }}
       >
-        <p
-          style={{
-            color: '#fff',
-            fontSize: 'clamp(14px, 2.5vw, 20px)',
-            fontWeight: 600,
-            lineHeight: 1.4,
-            margin: 0,
-          }}
-        >
-          🔒 Subscribe to the Platinum Package to access forecast values.
-        </p>
+        <p className="shining-white">
+            🔒 Subscribe to the Platinum Package to access forecast values.
+          </p>
       </div>
     </div>
   );

@@ -172,36 +172,47 @@ const ChartWithComparison = ({ current, compare, title }) => {
 
 const CM_PieChart = () => {
   return (
-    <div className="container">
+    <div className="container-fluid">
       <div className="row mb-4">
         <div className="col text-center">
-          <h5 style={{ color: "#ffdc00" }}>
-            Commercial Vehicle Overall OEM Share Comparison
-          </h5>
+          <h4 style={{ color: "#ffdc00" }}>
+            Commercial Vehicle Overall OEM Market Share Comparison
+          </h4>
         </div>
       </div>
 
-      <div className="row">
-        <ChartWithComparison current="Mar25" compare="Apr24" title="MoM - Mar 25" />
-        <ChartWithComparison current="Apr25" compare="Mar25" title="MoM - Apr 25" />
-        <ChartWithComparison current="Apr24" compare="Apr25" title="YoY - Apr 24" />
-        <ChartWithComparison current="Apr25" compare="Apr24" title="YoY - Apr 25" />
-      </div>
+  <div className="row">
+  <ChartWithComparison current="Mar25" compare="Apr24" title="Month on Month (MoM) - Mar 25" />
+  <ChartWithComparison current="Apr25" compare="Mar25" title="Month on Month (MoM) - Apr 25" />
+  <ChartWithComparison current="Apr24" compare="Apr25" title="Year on Year (YoY) - Apr 24" />
+  <ChartWithComparison current="Apr25" compare="Apr24" title="Year on Year (YoY) - Apr 25" />
+</div>
 
-      <div className="mt-4 text-center">
-        <div className="d-flex flex-wrap justify-content-center gap-3">
+
+      <div className="mt-3">
+        <div
+          className="d-flex flex-wrap justify-content-center gap-2"
+          style={{ fontSize: '9px', lineHeight: '1.2' }}
+        >
           {companyNames.map((name, i) => (
-            <div key={name} className="d-flex align-items-center">
+            <div
+              key={name}
+              className="d-flex align-items-center"
+              style={{ margin: '4px 6px', maxWidth: '45%' }}
+            >
               <div
                 style={{
-                  width: 14,
-                  height: 14,
+                  width: 10,
+                  height: 10,
                   backgroundColor: getColor(i),
-                  marginRight: 6,
+                  marginRight: 4,
                   borderRadius: "50%",
+                  flexShrink: 0,
                 }}
               />
-              <span>{name}</span>
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {name}
+              </span>
             </div>
           ))}
         </div>

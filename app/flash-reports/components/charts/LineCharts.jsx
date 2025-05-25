@@ -13,6 +13,7 @@ import {
   Brush,
   Rectangle,
 } from 'recharts';
+import '../styles/chart.css'
 
 // Tooltip component
 const CustomTooltip = ({ active, payload, label }) => {
@@ -42,7 +43,7 @@ const rawData = [
   { month: 'Feb25', '2W': 1353280, '3W': 94181, PV: 303398, TRAC: 65574, CV: 82763, Total: 1902196 },
   { month: 'Mar25', '2W': 1508232, '3W': 99376, PV: 350603, TRAC: 74013, CV: 94764, Total: 2125988 },
   { month: 'Apr25', '2W': 1686774, '3W': 99766, PV: 349939, TRAC: 60915, CV: 90558, Total: 2296952 },
-  { month: 'May25', '2W': 2000000, '3W': 1200000, PV: 800000, TRAC: 300000, CV: 400000, Total: 2000000 },
+  { month: 'May25', '2W': 1756774, '3W': 120000, PV: 800000, TRAC: 100000, CV: 400000, Total: 2000000 },
   { month: 'Jun25', '2W': 1800000, '3W': 95000, PV: 600000, TRAC: 200000, CV: 150000, Total: 1800000 },
   { month: 'Jul25', '2W': 1500000, '3W': 1700000, PV: 900000, TRAC: 350000, CV: 450000, Total: 1500000 },
   { month: 'Aug25', '2W': 1300000, '3W': 2100000, PV: 1000000, TRAC: 400000, CV: 500000, Total: 1300000 },
@@ -50,8 +51,8 @@ const rawData = [
 
 const categories = ['All', '2W', '3W', 'PV', 'TRAC', 'CV', 'Total'];
 const colors = {
-  '2W': '#FF6384',
-  '3W': '#36A2EB',
+  '2W': '#ffff',
+  '3W': '#ff1f23',
   PV: '#FFCE56',
   TRAC: '#4BC0C0',
   CV: '#9966FF',
@@ -99,125 +100,126 @@ const CustomLineChart = () => {
   }, []);
 
   return (
-    <div style={{ position: 'relative', width: '100%', zIndex:0 }} ref={chartWrapperRef}>
-      {/* Dropdown */}
-      <div style={{ marginBottom: 16, textAlign: 'left' }}>
-        <select
-          value={selectedCat}
-          onChange={e => setSelectedCat(e.target.value)}
-          style={{ padding: '4px 8px', fontSize: 14 }}
-        >
-          {categories.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
-      </div>
-
-      <ResponsiveContainer width="100%" height={chartHeight}>
-        <LineChart
-          data={filteredData}
-          margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
-          animationDuration={2500}
-          animationEasing="ease-out"
-        >
-          <defs>
-            {categories.filter(cat => cat !== 'All').map(cat => (
-              <linearGradient id={`${cat}-grad`} x1="0" y1="0" x2="0" y2="1" key={cat}>
-                <stop offset="0%" stopColor={colors[cat]} stopOpacity={0.9} />
-                <stop offset="100%" stopColor={colors[cat]} stopOpacity={0.3} />
-              </linearGradient>
+    <>
+      <div style={{ position: 'relative', width: '100%', zIndex: 0 }} ref={chartWrapperRef}>
+        {/* Dropdown */}
+        <div style={{ marginBottom: 16, textAlign: 'left' }}>
+          <select
+            value={selectedCat}
+            onChange={e => setSelectedCat(e.target.value)}
+            style={{ padding: '4px 8px', fontSize: 14 }}
+          >
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
             ))}
-          </defs>
+          </select>
+        </div>
 
-          <CartesianGrid stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
-          <XAxis
-            dataKey="year"
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-          />
-          <YAxis
-            axisLine={false}
-            tickLine={false}
-            tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-            domain={['auto', 'auto']}
-            tickFormatter={abbreviate}
-            tickCount={5}
-            interval="preserveStartEnd"
-          />
-          <Brush
-            dataKey="year"
-            startIndex={0}
-            endIndex={filteredData.length - 1}
-            height={12}
-            stroke="rgba(255,255,255,0.4)"
-            fill="rgba(255,255,255,0.08)"
-            strokeWidth={1}
-            tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 9 }}
-            tickMargin={4}
-            traveller={
-              <Rectangle
-                width={6}
-                height={16}
-                radius={3}
-                fill="rgba(255,255,255,0.6)"
-                stroke="rgba(255,255,255,0.4)"
-                strokeWidth={1}
-                cursor="ew-resize"
-              />
-            }
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend wrapperStyle={{ marginTop: 24 }} />
+        <ResponsiveContainer width="100%" height={chartHeight}>
+          <LineChart
+            data={filteredData}
+            margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
+            animationDuration={2500}
+            animationEasing="ease-out"
+          >
+            <defs>
+              {categories.filter(cat => cat !== 'All').map(cat => (
+                <linearGradient id={`${cat}-grad`} x1="0" y1="0" x2="0" y2="1" key={cat}>
+                  <stop offset="0%" stopColor={colors[cat]} stopOpacity={0.9} />
+                  <stop offset="100%" stopColor={colors[cat]} stopOpacity={0.3} />
+                </linearGradient>
+              ))}
+            </defs>
 
-          {(selectedCat === 'All' ? ['2W', '3W', 'PV', 'TRAC', 'CV', 'Total'] : [selectedCat]).map(key => (
-            <Line
-              key={key}
-              type="linear"
-              dataKey={key}
-              name={key}
-              stroke={`url(#${key}-grad)`}
-              strokeWidth={3}
-              dot={{ r: 3 }}
-              connectNulls
-              animationBegin={0}
+            <CartesianGrid stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
+            <XAxis
+              dataKey="year"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
             />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+              domain={['auto', 'auto']}
+              tickFormatter={abbreviate}
+              tickCount={5}
+              interval="preserveStartEnd"
+            />
+            <Brush
+              dataKey="year"
+              startIndex={0}
+              endIndex={filteredData.length - 1}
+              height={12}
+              stroke="rgba(255,255,255,0.4)"
+              fill="rgba(255,255,255,0.08)"
+              strokeWidth={1}
+              tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 9 }}
+              tickMargin={4}
+              traveller={
+                <Rectangle
+                  width={6}
+                  height={16}
+                  radius={3}
+                  fill="rgba(255,255,255,0.6)"
+                  stroke="rgba(255,255,255,0.4)"
+                  strokeWidth={1}
+                  cursor="ew-resize"
+                />
+              }
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend wrapperStyle={{ marginTop: 24 }} />
 
-      {/* Overlay for forecast */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 60,
-          left: '58%',
-          width: '41%',
-          height: `${chartHeight - 100}px`,
-          background: 'rgba(0, 0, 0, 0.35)',
-          backdropFilter: 'blur(6px)',
-          WebkitBackdropFilter: 'blur(6px)',
-          borderLeft: '2px dashed rgba(255,255,255,0.3)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '0 8px',
-          textAlign: 'center',
-          zIndex: -1,
-          pointerEvents: 'none',
-        }}
-      >
-        <p style={{
-          color: '#fff',
-          fontSize: 'clamp(14px, 2.5vw, 20px)',
-          fontWeight: 600,
-          lineHeight: 1.4,
-          margin: 0,
-        }}>
-          🔒 Subscribe to the Platinum Package to access forecast values.
-        </p>
+            {(selectedCat === 'All' ? ['2W', '3W', 'PV', 'TRAC', 'CV', 'Total'] : [selectedCat]).map(key => (
+              <Line
+                key={key}
+                type="linear"
+                dataKey={key}
+                name={key}
+                stroke={`url(#${key}-grad)`}
+                strokeWidth={3}
+                dot={{ r: 3 }}
+                connectNulls
+                animationBegin={0}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+
+        {/* Overlay for forecast */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 60,
+            left: '58%',
+            width: '41%',
+            height: 'calc(100% - 100px)',
+            background: 'rgba(0, 0, 0, 0.35)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+            borderLeft: '2px dashed rgba(255,255,255,0.3)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '0 8px',
+            textAlign: 'center',
+            zIndex: -1,
+            pointerEvents: 'none',
+          }}
+        >
+          <p className="shining-white">
+            🔒 Subscribe to the Platinum Package to access forecast values.
+          </p>
+
+        </div>
+
+
+
       </div>
-    </div>
+
+    </>
   );
 };
 
