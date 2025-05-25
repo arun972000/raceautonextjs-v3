@@ -30,7 +30,7 @@ const Contents = () => {
 
   const linkStyle = isMobile
     ? { fontSize: '0.9rem', paddingTop: '0.3rem', paddingBottom: '0.3rem' }
-    : { fontSize: '1rem', paddingTop: '0.5rem', paddingBottom: '0.5rem' };
+    : { fontSize: '1.5rem', paddingTop: '0.5rem', paddingBottom: '0.5rem' };
 
   // Full width separator for all lines on mobile
   const separatorFull = {
