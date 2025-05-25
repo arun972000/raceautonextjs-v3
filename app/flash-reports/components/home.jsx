@@ -11,16 +11,35 @@ import Image from 'next/image'
 const FlashReportsHome = () => {
     const contentRef = useRef(null);
     // const reactToPrintFn = useReactToPrint({ contentRef });
+
     return (
         <>
-            {/* <btton onClick={reactToPrintFn}>Print</btton> */}
+            {/* <button onClick={reactToPrintFn}>Print</button> */}
             <div className='container-fluid'>
-                <div style={{ position: 'relative', width: '100%', aspectRatio: '4.17/1' }} className='mb-1'>
-                    <Image src='/images/flash-report-banner-2.jpg' alt='flash-reports-banner' fill />
+                <div style={{ position: 'relative', width: '100%' }} className='mb-1 flash-banner'>
+                    {/* Desktop Banner */}
+                    <div className="banner-desktop">
+                        <Image
+                            src='/images/flash-report-banner-2.jpg'
+                            alt='flash-reports-banner'
+                            fill
+                            className="image-fit"
+                            priority
+                        />
+                    </div>
 
-                    {/* Overlay Text */}
-
+                    {/* Mobile Banner */}
+                    <div className="banner-mobile">
+                        <Image
+                            src='/images/flash-report-mobile.jpeg' // use your mobile version image here
+                            alt='flash-reports-banner-mobile'
+                            fill
+                            className="image-fit"
+                            priority
+                        />
+                    </div>
                 </div>
+
                 <div className='container-fluid ms-lg-2'>
                     <div className='row g-0 m-0 p-0 justify-content-between'>
                         <div className='col-12 col-lg-4 '>

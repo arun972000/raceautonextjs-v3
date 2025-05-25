@@ -85,3 +85,41 @@
   /* subtle text-shadow for extra depth */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
+
+.logo-wrapper {
+  position: relative;
+  width: 230px;
+  height: 80px;
+}
+
+.logo-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.image-fit {
+  object-fit: contain;
+}
+
+/* Show mobile logo by default */
+.mobile-logo {
+  display: block;
+  height: 60px;
+}
+
+/* For screens >=768px (tablet and up), show desktop logo only */
+@media (min-width: 768px) {
+  .logo-wrapper {
+    height: 80px;
+  }
+
+  .desktop-logo {
+    display: block;
+  }
+
+  .mobile-logo {
+    display: none;
+  }
+}

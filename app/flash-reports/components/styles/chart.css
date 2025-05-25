@@ -46,3 +46,45 @@
     left: 100%;
   }
 }
+
+
+.flash-banner {
+  aspect-ratio: 4.17 / 1; /* keeps the banner ratio */
+  position: relative;
+  width: 100%;
+}
+
+/* Hide mobile by default, show desktop */
+.banner-desktop {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Hide desktop by default, show mobile */
+.banner-mobile {
+  display: none;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+}
+
+
+/* Media query for mobile devices */
+@media (max-width: 767px) {
+  .banner-desktop {
+    display: none;
+  }
+
+  .banner-mobile {
+    display: block;
+  }
+}
+
+/* Ensure images fill container and scale */
+.image-fit {
+  object-fit: cover;
+}
+
+
