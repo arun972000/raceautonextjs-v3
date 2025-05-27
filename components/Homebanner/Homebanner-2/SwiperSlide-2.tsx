@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 import Image from "next/image";
 import Link from "next/link";
-import "../HomeSwiper.css";
+import "../HomeSwiper.css"; // Make sure the CSS below is here
 
 type SliderType = {
   id: number;
@@ -48,26 +48,11 @@ export default function SwiperSlide_2({ slides }: { slides: SliderType[] }) {
                 src={process.env.NEXT_PUBLIC_S3_BUCKET_URL + item.image_default}
                 alt={item.title}
               />
-              <div
-                className="overlay-title-banner"
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "50px",
-                  backgroundColor: "rgba(0, 0, 0, 0.5)", // 50% opacity black background
-                  // display: "flex",
-                  // alignItems: "center",
-                  // justifyContent: "center",
-                  color: "#fff", // White text color
-                  zIndex: 3, // Place above the image
-                  textAlign: "center",
-                  padding: "1rem",
-                }}
-              >
-                <h6 style={{ fontWeight: "bold", margin: 0 }}>{item.title}</h6>
+
+              <div className="overlay-title-banner">
+                <h6 className="overlay-title-text">{item.title}</h6>
               </div>
+
               <div className="overlay-content">
                 <h3 className="slide-title">{item.title}</h3>
                 <p className="slide-summary">{item.summary}</p>

@@ -13,7 +13,8 @@ import {
   Brush,
   Rectangle,
 } from 'recharts';
-import '../styles/chart.css'
+import '../styles/chart.css';
+import Link from 'next/link';
 
 // Tooltip component
 const CustomTooltip = ({ active, payload, label }) => {
@@ -100,126 +101,135 @@ const CustomLineChart = () => {
   }, []);
 
   return (
-    <>
-      <div style={{ position: 'relative', width: '100%', zIndex: 0 }} ref={chartWrapperRef}>
-        {/* Dropdown */}
-        <div style={{ marginBottom: 16, textAlign: 'left' }}>
-          <select
-            value={selectedCat}
-            onChange={e => setSelectedCat(e.target.value)}
-            style={{ padding: '4px 8px', fontSize: 14 }}
-          >
-            {categories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-        </div>
-
-        <ResponsiveContainer width="100%" height={chartHeight}>
-          <LineChart
-            data={filteredData}
-            margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
-            animationDuration={2500}
-            animationEasing="ease-out"
-          >
-            <defs>
-              {categories.filter(cat => cat !== 'All').map(cat => (
-                <linearGradient id={`${cat}-grad`} x1="0" y1="0" x2="0" y2="1" key={cat}>
-                  <stop offset="0%" stopColor={colors[cat]} stopOpacity={0.9} />
-                  <stop offset="100%" stopColor={colors[cat]} stopOpacity={0.3} />
-                </linearGradient>
-              ))}
-            </defs>
-
-            <CartesianGrid stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
-            <XAxis
-              dataKey="year"
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
-              domain={['auto', 'auto']}
-              tickFormatter={abbreviate}
-              tickCount={5}
-              interval="preserveStartEnd"
-            />
-            <Brush
-              dataKey="year"
-              startIndex={0}
-              endIndex={filteredData.length - 1}
-              height={12}
-              stroke="rgba(255,255,255,0.4)"
-              fill="rgba(255,255,255,0.08)"
-              strokeWidth={1}
-              tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 9 }}
-              tickMargin={4}
-              traveller={
-                <Rectangle
-                  width={6}
-                  height={16}
-                  radius={3}
-                  fill="rgba(255,255,255,0.6)"
-                  stroke="rgba(255,255,255,0.4)"
-                  strokeWidth={1}
-                  cursor="ew-resize"
-                />
-              }
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend wrapperStyle={{ marginTop: 24 }} />
-
-            {(selectedCat === 'All' ? ['2W', '3W', 'PV', 'TRAC', 'CV', 'Total'] : [selectedCat]).map(key => (
-              <Line
-                key={key}
-                type="linear"
-                dataKey={key}
-                name={key}
-                stroke={`url(#${key}-grad)`}
-                strokeWidth={3}
-                dot={{ r: 3 }}
-                connectNulls
-                animationBegin={0}
-              />
-            ))}
-          </LineChart>
-        </ResponsiveContainer>
-
-        {/* Overlay for forecast */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 60,
-            left: '58%',
-            width: '41%',
-            height: 'calc(100% - 100px)',
-            background: 'rgba(0, 0, 0, 0.35)',
-            backdropFilter: 'blur(6px)',
-            WebkitBackdropFilter: 'blur(6px)',
-            borderLeft: '2px dashed rgba(255,255,255,0.3)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: '0 8px',
-            textAlign: 'center',
-            zIndex: -1,
-            pointerEvents: 'none',
-          }}
+    <div style={{ position: 'relative', width: '100%', zIndex: 0 }} ref={chartWrapperRef}>
+      {/* Dropdown */}
+      <div style={{ marginBottom: 16, textAlign: 'left' }}>
+        <select
+          value={selectedCat}
+          onChange={e => setSelectedCat(e.target.value)}
+          style={{ padding: '4px 8px', fontSize: 14 }}
         >
-          <p className="shining-white">
-            🔒 Subscribe to the Platinum Package to access forecast values.
-          </p>
-
-        </div>
-
-
-
+          {categories.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
       </div>
 
-    </>
+      <ResponsiveContainer width="100%" height={chartHeight}>
+        <LineChart
+          data={filteredData}
+          margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
+          animationDuration={2500}
+          animationEasing="ease-out"
+        >
+          <defs>
+            {categories.filter(cat => cat !== 'All').map(cat => (
+              <linearGradient id={`${cat}-grad`} x1="0" y1="0" x2="0" y2="1" key={cat}>
+                <stop offset="0%" stopColor={colors[cat]} stopOpacity={0.9} />
+                <stop offset="100%" stopColor={colors[cat]} stopOpacity={0.3} />
+              </linearGradient>
+            ))}
+          </defs>
+
+          <CartesianGrid stroke="rgba(255,255,255,0.1)" strokeDasharray="3 3" />
+          <XAxis
+            dataKey="year"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 12 }}
+            domain={['auto', 'auto']}
+            tickFormatter={abbreviate}
+            tickCount={5}
+            interval="preserveStartEnd"
+          />
+          <Brush
+            dataKey="year"
+            startIndex={0}
+            endIndex={filteredData.length - 1}
+            height={12}
+            stroke="rgba(255,255,255,0.4)"
+            fill="rgba(255,255,255,0.08)"
+            strokeWidth={1}
+            tick={{ fill: "rgba(255,255,255,0.6)", fontSize: 9 }}
+            tickMargin={4}
+            traveller={
+              <Rectangle
+                width={6}
+                height={16}
+                radius={3}
+                fill="rgba(255,255,255,0.6)"
+                stroke="rgba(255,255,255,0.4)"
+                strokeWidth={1}
+                cursor="ew-resize"
+              />
+            }
+          />
+          <Tooltip content={<CustomTooltip />} />
+          <Legend wrapperStyle={{ marginTop: 24 }} />
+
+          {(selectedCat === 'All' ? ['2W', '3W', 'PV', 'TRAC', 'CV', 'Total'] : [selectedCat]).map(key => (
+            <Line
+              key={key}
+              type="linear"
+              dataKey={key}
+              name={key}
+              stroke={`url(#${key}-grad)`}
+              strokeWidth={3}
+              dot={{ r: 3 }}
+              connectNulls
+              animationBegin={0}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+
+      {/* Blurred visual overlay (non-clickable) */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 60,
+          left: '58%',
+          width: '41%',
+          height: 'calc(100% - 145px)',
+          background: 'rgba(0, 0, 0, 0.35)',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+          borderLeft: '2px dashed rgba(255,255,255,0.3)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '0 8px',
+          textAlign: 'center',
+          zIndex: 0,
+          pointerEvents: 'none',
+        }}
+      >
+        <p className="shining-white" style={{ pointerEvents: 'none' }}>
+          🔒 Subscribe to the Platinum Package to access forecast values.
+        </p>
+      </div>
+
+      {/* Transparent clickable link overlay */}
+      <Link
+        href="/subscription"
+        style={{
+          position: 'absolute',
+          top: 60,
+          left: '58%',
+          width: '41%',
+          height: 'calc(100% - 145px)',
+          zIndex: 2,
+          pointerEvents: 'auto',
+        }}
+      >
+        <span style={{ display: 'block', width: '100%', height: '100%' }} />
+      </Link>
+    </div>
   );
 };
 

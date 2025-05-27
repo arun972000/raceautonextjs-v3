@@ -15,6 +15,7 @@ import {
 } from 'recharts';
 import { useMediaQuery } from 'react-responsive';
 import '../styles/chart.css'
+import Link from 'next/link';
 
 const rawData = [
   { month: 'Jan25', PV: 465920 },
@@ -153,7 +154,7 @@ const PVForecast = () => {
       <div
         style={{
           position: 'absolute',
-          top: 20,
+         top: 20,
           left: '58%',
           width: '41%',
           height: 'calc(100% - 100px)',
@@ -166,14 +167,30 @@ const PVForecast = () => {
           alignItems: 'center',
           padding: '0 8px',
           textAlign: 'center',
+          zIndex: 0,
           pointerEvents: 'none',
-          zIndex: -1 // ⬅️ Lower than the tooltip
         }}
       >
-       <p className="shining-white">
-            🔒 Subscribe to the Platinum Package to access forecast values.
-          </p>
+        <p className="shining-white" style={{ pointerEvents: 'none' }}>
+          🔒 Subscribe to the Platinum Package to access forecast values.
+        </p>
       </div>
+
+      {/* Transparent clickable link overlay */}
+      <Link
+        href="/subscription"
+        style={{
+          position: 'absolute',
+          top: 20,
+          left: '58%',
+          width: '41%',
+          height: 'calc(100% - 100px)',
+          zIndex: 2,
+          pointerEvents: 'auto',
+        }}
+      >
+        <span style={{ display: 'block', width: '100%', height: '100%' }} />
+      </Link>
     </div>
   );
 };

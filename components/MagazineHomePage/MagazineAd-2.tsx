@@ -38,10 +38,10 @@ const MagazineAd_2 = () => {
 
   return (
     <>
-      <h2 className="my-4 mt-5" style={{ fontWeight: 700 }}>
-        Race Auto India Magazine
-      </h2>
-      <p className="mb-5">
+      <h4 className="my-2 mt-3">
+        RACE AUTO INDIA Magazine
+      </h4>
+      <p className="mb-2">
         Stay ahead in the automotive world with top reviews, trends, and expert
         analysis in our latest edition.
       </p>

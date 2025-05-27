@@ -15,6 +15,7 @@ import {
 } from "recharts";
 import { useMediaQuery } from 'react-responsive';
 import '../styles/chart.css'
+import Link from 'next/link';
 
 // Original data
 const rawData = [
@@ -32,7 +33,7 @@ const rawData = [
 const allowedMonths = ['Jan25', 'Feb25', 'Mar25', 'Apr25', 'May25', 'Jun25', 'Jul25', 'Aug25'];
 
 // Define which months are locked forecast months
-const isLockedMonth = (month) => [ 'Jun25', 'Jul25', 'Aug25'].includes(month);
+const isLockedMonth = (month) => ['Jun25', 'Jul25', 'Aug25'].includes(month);
 
 const abbreviate = v => {
   if (v >= 1e9) return `${(v / 1e9).toFixed(1).replace(/\.0$/, '')}B`;
@@ -76,7 +77,7 @@ const ThreeWheelerForecast = () => {
   }, []);
 
   return (
-    <div style={{ position: 'relative', width: '100%', zIndex:0 }}>
+    <div style={{ position: 'relative', width: '100%', zIndex: 0 }}>
       <ResponsiveContainer width="100%" height={isMobile ? 280 : 420}>
         <LineChart
           data={filteredData}
@@ -164,14 +165,30 @@ const ThreeWheelerForecast = () => {
           alignItems: 'center',
           padding: '0 8px',
           textAlign: 'center',
-          zIndex:-1,
+          zIndex: 0,
           pointerEvents: 'none',
         }}
       >
-        <p className="shining-white">
-            🔒 Subscribe to the Platinum Package to access forecast values.
-          </p>
+        <p className="shining-white" style={{ pointerEvents: 'none' }}>
+          🔒 Subscribe to the Platinum Package to access forecast values.
+        </p>
       </div>
+
+      {/* Transparent clickable link overlay */}
+      <Link
+        href="/subscription"
+        style={{
+          position: 'absolute',
+          top: 20,
+          left: '58%',
+          width: '41%',
+          height: 'calc(100% - 100px)',
+          zIndex: 2,
+          pointerEvents: 'auto',
+        }}
+      >
+        <span style={{ display: 'block', width: '100%', height: '100%' }} />
+      </Link>
     </div>
   );
 };

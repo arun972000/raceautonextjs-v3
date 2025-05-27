@@ -14,6 +14,7 @@ import {
   Rectangle,
 } from 'recharts';
 import '../styles/chart.css'
+import Link from 'next/link';
 
 // Forecast lock logic
 const isLockedMonth = (month) => ['Jun25', 'Jul25', 'Aug25'].includes(month);
@@ -162,10 +163,10 @@ const TwoWheelerForecast = () => {
       <div
         style={{
           position: 'absolute',
-          top: 20,
+         top: 20,
           left: '58%',
           width: '41%',
-          height: `calc(${chartHeight}px - 100px)`,
+          height: 'calc(100% - 100px)',
           background: 'rgba(0, 0, 0, 0.35)',
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
@@ -175,14 +176,30 @@ const TwoWheelerForecast = () => {
           alignItems: 'center',
           padding: '0 8px',
           textAlign: 'center',
-          zIndex: -1,
+          zIndex: 0,
           pointerEvents: 'none',
         }}
       >
-        <p className="shining-white">
-            🔒 Subscribe to the Platinum Package to access forecast values.
-          </p>
+        <p className="shining-white" style={{ pointerEvents: 'none' }}>
+          🔒 Subscribe to the Platinum Package to access forecast values.
+        </p>
       </div>
+
+      {/* Transparent clickable link overlay */}
+      <Link
+        href="/subscription"
+        style={{
+          position: 'absolute',
+          top: 20,
+          left: '58%',
+          width: '41%',
+          height: 'calc(100% - 100px)',
+          zIndex: 2,
+          pointerEvents: 'auto',
+        }}
+      >
+        <span style={{ display: 'block', width: '100%', height: '100%' }} />
+      </Link>
     </div>
   );
 };

@@ -3,6 +3,7 @@ import Slider from "./Slider";
 import FeatureCard from "./FeatureCard";
 import styles from "./HomeBanner.module.css";
 import SliderMobile from "./SliderMobile";
+import MobileFeature from "./MobileFeature";
 
 type Feature = {
   id: number;
@@ -45,16 +46,10 @@ const HomeBanner = async () => {
         </div>
       </div>
       <div className={`${styles.mobile_homebanner} row mb-4`}>
-        <div className="col-12 p-0">
-          <SliderMobile />
+        <div className="col-12 p-0 mb-3">
+          <Slider />
         </div>
-        <div className="col-12">
-          <div className="row">{FeatureCardData1}</div>
-        </div>
-
-        {/* <div className="col-12-3">
-          <div className="row">{FeatureCardData2}</div>
-        </div> */}
+        <MobileFeature featureList={orderedFeatures} />
       </div>
     </>
   );

@@ -12,22 +12,22 @@ const HomeMarketCard = async ({ category }: { category: string }) => {
   const listData = data.slice(1);
 
   return (
-    <div className="col-md-6 col-lg-3 mt-3">
+    <div className="col-md-6 col-lg-3 mt-1" style={{ borderBottom: "1px solid black" }}>
       <Link href={`/market/${category}`}>
         {" "}
-        <h6 style={{ fontWeight: 400 }} className="mb-3 market-heading">
+        <h4 style={{ fontWeight: 600 }} className="mb-3 ms-3 market-heading">
           {category.split("-").join(" ").toUpperCase()}{" "}
           <span className="ms-1 pb-2">
             <FaAngleRight />
           </span>
-        </h6>
+        </h4>
       </Link>
       <div
         className="mb-3 image-container"
       >
         <Link href={`/post/${data[0].title_slug}`}>
           <Image
-            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data[0].image_big}`}
+            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data[0].image_default}`}
             alt={data[0].title}
             fill
             className="varient-image"
@@ -36,9 +36,9 @@ const HomeMarketCard = async ({ category }: { category: string }) => {
       </div>
       {listData.map((item: any) => (
         <Link href={`/post/${item.title_slug}`} key={item.id}>
-          <p className="pt-1 market-title" style={{ borderTop: "1px solid black" }}>
+          <h6 className="pt-1 market-title px-2" style={{ borderTop: "1px solid black" }}>
             {item.title}
-          </p>
+          </h6>
         </Link>
       ))}
     </div>

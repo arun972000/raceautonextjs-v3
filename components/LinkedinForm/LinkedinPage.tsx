@@ -10,12 +10,13 @@ import "./linkedin.css";
 const LinkedinPage = () => {
   return (
     <>
-      <h4 style={{ fontSize: "1.4rem" }} className="text-center my-3 mt-5">
+      <h4 className="text-center mt-5 linkedin-heading">
         <b>
           Register your email, and we'll keep you informed about our latest
           content and events. Unsubscribe anytime.
         </b>
       </h4>
+
       <div className="row event_subscribe">
         <div className="col-md-4">
           <div className="linkedin-image-container">
@@ -33,6 +34,7 @@ const LinkedinPage = () => {
             </a>
           </div>
         </div>
+
         <div className="col-md-8">
           <SubscribeComponent />
         </div>

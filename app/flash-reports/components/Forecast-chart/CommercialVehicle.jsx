@@ -14,6 +14,7 @@ import {
   Rectangle,
 } from 'recharts';
 import '../styles/chart.css'
+import Link from 'next/link';
 
 const rawData = [
   { month: 'Jan25', CV: 99425 },
@@ -167,14 +168,31 @@ const CVForecast = () => {
           alignItems: 'center',
           padding: '0 8px',
           textAlign: 'center',
-          zIndex:-1,
+          zIndex: 0,
           pointerEvents: 'none',
         }}
       >
-        <p className="shining-white">
-            🔒 Subscribe to the Platinum Package to access forecast values.
-          </p>
+        <p className="shining-white" style={{ pointerEvents: 'none' }}>
+          🔒 Subscribe to the Platinum Package to access forecast values.
+        </p>
       </div>
+
+      {/* Transparent clickable link overlay */}
+      <Link
+        href="/subscription"
+        style={{
+          position: 'absolute',
+          top: 20,
+          left: '58%',
+          width: '41%',
+          height: 'calc(100% - 100px)',
+          zIndex: 2,
+          pointerEvents: 'auto',
+        }}
+      >
+        <span style={{ display: 'block', width: '100%', height: '100%' }} />
+      </Link>
+ 
     </div>
   );
 };

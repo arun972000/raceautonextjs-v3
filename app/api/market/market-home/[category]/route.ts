@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     const parent_id = row[0].id;
 
     const [results] = await db.execute(
-      `SELECT id, title, title_slug, summary, image_big, image_mid, created_at FROM posts WHERE market = ? ORDER BY created_at DESC LIMIT 4`,
+      `SELECT id, title, title_slug, summary, image_default, image_big, image_mid, created_at FROM posts WHERE market = ? ORDER BY created_at DESC LIMIT 4`,
       [parent_id]
     );
     return NextResponse.json(results);

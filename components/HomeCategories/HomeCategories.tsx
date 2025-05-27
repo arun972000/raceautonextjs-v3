@@ -43,7 +43,7 @@ const HomeCategories = async ({ item }: catgeorypropType) => {
 
   return (
     <>
-      <div className="d-flex justify-content-between mt-5 align-items-center">
+      <div className="d-flex justify-content-between mt-2 align-items-center">
         <h2 className="">
           <span
             className="home-component-heading"
@@ -59,7 +59,7 @@ const HomeCategories = async ({ item }: catgeorypropType) => {
           </span>
         </h2>
       </div>
-      <div className="row home_categories_desktop">
+      <div className="row">
         <div className="col-12">
           <div className="row mt-3">
             {item.block_type == "block-1" &&
@@ -77,7 +77,10 @@ const HomeCategories = async ({ item }: catgeorypropType) => {
           </div>
         </div>
       </div>
-      <div className="row home_categories_mobile">
+      <div className="w-100 mt-1 mb-1">
+    <hr style={{ borderTop: "1px solid #ccc", margin: 0 }} />
+  </div>
+      {/* <div className="row home_categories_mobile">
         <div className="mb-3 col-12">
           <div className="card card-no-bg" style={{ height: "100%" }}>
             <Link
@@ -103,7 +106,7 @@ const HomeCategories = async ({ item }: catgeorypropType) => {
             </Link>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

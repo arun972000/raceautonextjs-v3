@@ -83,3 +83,54 @@
   font-size: 1.5rem;
   margin-top: 1rem;
 }
+
+
+.swiper-title-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  padding: 1rem;
+  text-align: center;
+}
+
+.swiper-title {
+  font-weight: bold;
+  margin: 0;
+  font-size: 1rem;
+  color: #fff;
+  line-height: 1.2;
+  padding: 0 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mobile specific: reduce font size */
+@media (max-width: 768px) {
+  .swiper-title {
+    font-size: 0.75rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .overlay-title-text {
+    font-size: 0.75rem;
+  }
+
+  .slide-title {
+    font-size: 1rem;
+  }
+
+  .slide-summary {
+    font-size: 0.75rem;
+  }
+}

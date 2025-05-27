@@ -55,7 +55,7 @@ export default function SwiperSlide_4({ slides }: { slides: SliderType[] }) {
             <div
               style={{
                 position: "absolute",
-                top: 0,
+                bottom: 0,
                 left: 0,
                 width: "100%",
                 height: "50px",
@@ -69,7 +69,9 @@ export default function SwiperSlide_4({ slides }: { slides: SliderType[] }) {
                 padding: "1rem",
               }}
             >
-              <h6 style={{ fontWeight: "bold", margin: 0 }}>{item.title}</h6>
+             <div className="swiper-title-container">
+              <h6 className="swiper-title">{item.title}</h6>
+            </div>
             </div>
           </Link>
         </SwiperSlide>
