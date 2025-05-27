@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 function Main({ contentList }) {
   const truncateSummary = (text, maxLength = 60) =>
@@ -19,12 +20,14 @@ function Main({ contentList }) {
         const summary = truncateSummary(
           item.summary || "No summary available."
         );
+        const title_slug= item.title_slug;
         const imageSrc = item.image_mid
           ? `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_mid}`
           : "/default.png";
 
         return (
-          <div className="row mb-2" key={index}>
+          <Link href={`/post/${title_slug}`} key={index}>
+          <div className="row mb-2" >
             <div className="col-6 pe-0">
               <h5 className="fs-6 mb-1">
                 <small>{title}</small>
@@ -53,6 +56,7 @@ function Main({ contentList }) {
               </div>
             </div>
           </div>
+          </Link>
         );
       })}
     </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const Exclusive = ({ value }) => {
   const truncateTitle = (text, maxLength = 60) =>
@@ -18,12 +19,14 @@ const Exclusive = ({ value }) => {
         <div className="row g-3">
           {value?.slice(0, 4).map((item, index, array) => {
             const title = truncateTitle(item.title || "Untitled News");
+            const title_slug = item.title_slug;
             const imageSrc = item.image_mid
               ? `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_mid}`
               : "/default.png";
 
             return (
-              <div key={index} className="col-12">
+              <Link href={`/post/${title_slug}`} key={index}>
+              <div className="col-12">
                 <div className="row g-0 align-items-center border rounded">
                   <div className="col-6">
                     <h6 className="mb-0 pe-3">{title}</h6>
@@ -54,6 +57,7 @@ const Exclusive = ({ value }) => {
                   <hr style={{ borderTop: "2px solid #333", margin: "0" }} />
                 )}
               </div>
+              </Link>
             );
           })}
         </div>
