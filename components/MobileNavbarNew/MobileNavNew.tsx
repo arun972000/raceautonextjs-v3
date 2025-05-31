@@ -405,7 +405,7 @@ const MobileNavNew = () => {
             </div>
           </Link>
 
-          <Link href="/">
+          <Link href="/forecast-preview">
             <div className={styles.navItem}>
               <BiLineChart color={iconColor} size={iconSize} title="Forecast" />
               <span className={styles.caption}>Forecast</span>

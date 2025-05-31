@@ -11,6 +11,7 @@ import ThemeToggle from "../NextThemes";
 import LoginNavButton from "../Navbuttons/LoginNavButton";
 import MobileNavbarSample from "./MobileNavSample";
 import ForexRates from "../Stocks/Forex";
+import ReportsDropdown from './ReportsButton'
 
 export type mainMenu = {
   id: number;
@@ -191,11 +192,7 @@ const Navbar = async () => {
           <div className={styles.header_icons}>
             <div className="d-flex align-items-center">
               <ThemeToggle />
-              <Link href="/flash-reports" className={styles.flashReportsLink}>
-                <button className={styles.flashReportsButton}>
-                  Flash Reports
-                </button>
-              </Link>
+              <ReportsDropdown/>
               <Link href="/subscription">
                 <button className={styles.subscribeButton}>Subscribe</button>
               </Link>

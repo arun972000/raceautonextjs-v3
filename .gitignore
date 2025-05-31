@@ -11,6 +11,39 @@
 
 /public/*
 
+/app/admin/flash-dynamic/*
+
+/app/flash-dynamic/*
+
+/app/api/admin/flash-dynamic/*
+
+/app/api/2w-app/*
+/app/api/2w-ev/*
+/app/api/3w-app/*
+/app/api/3w-ev/*
+/app/api/3w-overall/*
+
+/app/api/bus-app/*
+/app/api/bus-ev/*
+/app/api/bus-overall/*
+
+# /app/api/truck-app/*
+# /app/api/truck-ev/*
+# /app/api/truck-overall/*
+
+# /app/api/commercial-overall/*
+
+# /app/api/overall/*
+# /app/api/overall-bar/*
+
+# /app/api/passenger-app/*
+# /app/api/passenger-ev/*
+# /app/api/passenger-overall/*
+# /app/api/piechart/*
+
+/app/test/*
+
+
 
 # next.js
 /.next/
