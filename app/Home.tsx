@@ -32,10 +32,9 @@ const Home = async () => {
   const sliderType = slide[0].slider_type;
   return (
     <>
-        
       {/* This component will check for "verified" query param and reload if present */}
-      <ContactModal/>
-      <PageViewTracker  page='home'/>
+      <ContactModal />
+      <PageViewTracker page="home" />
       <RefreshOnVerified />
       <MobileNavNew />
       <div className="container-fluid m-0 p-0">
@@ -62,11 +61,10 @@ const Home = async () => {
 
             <div className={styles.ad_header}>
               <span
-                style={{ borderBottom:'1px solid black'  }}
+                style={{ borderBottom: "1px solid black" }}
                 className="m-0 mb-2 p-0 text-center"
               >
                 Advertisement
-
               </span>
               <AdHeader />
             </div>
