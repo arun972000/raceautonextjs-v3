@@ -64,7 +64,6 @@ const truncatedSummary =
           />
         </div>
       </div>
-       
     </div>
    </Link>
     </div>

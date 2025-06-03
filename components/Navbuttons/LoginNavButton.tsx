@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import ProfileButton from "./ProfileButton";
 import { CiLogin } from "react-icons/ci";
-import Link from "next/link";
 import AuthModal from "@/app/test/components/LoginFormTest";
 
 const LoginNavButton = () => {
@@ -22,7 +21,7 @@ const LoginNavButton = () => {
         <CiLogin
           onClick={() => setShowAuth(true)}
           size={25}
-          style={{cursor:'pointer'}}
+          style={{ cursor: "pointer" }}
           className="ms-auto"
         />
         <AuthModal show={showAuth} onClose={() => setShowAuth(false)} />

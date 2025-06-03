@@ -96,7 +96,7 @@ export default function PricingCard({
               fontWeight: 500
             }}
           >
-            {(price * 2).toLocaleString("en-US", {
+            {(price / 0.3).toLocaleString("en-US", {
               style: "currency",
               currency: currency || "INR",
             })}
@@ -114,6 +114,8 @@ export default function PricingCard({
             />
           </div>
         )}
+
+
         <h2 className="plan-price" style={{ color: 'black' }}>
           {typeof price === "number"
             ? price.toLocaleString("en-US", {

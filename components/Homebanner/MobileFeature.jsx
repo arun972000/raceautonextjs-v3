@@ -6,7 +6,7 @@ function MobileFeature({ featureList }) {
     const truncateSummary = (text, maxLength = 60) =>
         text && text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
 
-    const truncateTitle = (text, maxWords = 50) => {
+    const truncateTitle = (text, maxWords = 6) => {
         if (!text) return "";
         const words = text.trim().split(/\s+/);
         return words.length > maxWords
@@ -16,7 +16,6 @@ function MobileFeature({ featureList }) {
 
     return (
         <div className="container-fluid border-bottom border-2 mt-3">
-
             {featureList?.slice(0, 2).map((item, index) => {
                 const title = truncateTitle(item.title || "Default Title");
                 const summary = truncateSummary(item.summary || "No summary available.");
@@ -25,9 +24,8 @@ function MobileFeature({ featureList }) {
                     : "/default.png";
 
                 return (
-                    <Link className="link-style" href={`/post/${item.title_slug}`}>
-                        <div className="row mb-2" key={index}>
-
+                    <Link className="link-style" href={`/post/${item.title_slug}`} key={index}>
+                        <div className="row mb-2" >
                             <div className="col-7">
                                 <div
                                     style={{
@@ -55,7 +53,6 @@ function MobileFeature({ featureList }) {
                                     <small>{summary}</small>
                                 </p>
                             </div>
-
                         </div>
                     </Link>
                 );
