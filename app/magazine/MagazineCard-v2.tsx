@@ -29,9 +29,6 @@ const MagazineCard_v2 = ({ item }: { item: magazineCardType }) => {
           />
         </div>
         </Link>
-        <Card.Body>
-          <Card.Title>{item.title}</Card.Title>
-        </Card.Body>
       </Card>
     </div>
   );

@@ -3,6 +3,7 @@ import HomeCategories from "./HomeCategories";
 import { category } from "@/types/category";
 import Image from "next/image";
 import ReactPlayer_Server from "../Sidebar/ReactPlayer";
+import Link from "next/link";
 
 const MainComponent = async () => {
   const res = await fetch(
@@ -25,16 +26,17 @@ const MainComponent = async () => {
 
   return (
     <>
-      <div className="mt-4"
+      <div
+        className="mt-4"
         style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
       >
-        <a href="https://raceinnovations.in/contact/" target="_blank">
+        <Link href={adTopData[0].link || 'https://raceautoindia.com/'} target="_blank">
           <Image
             src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${adTopData[0].ad_code_728}`}
             alt="index top"
             fill
           />
-        </a>
+        </Link>
       </div>
       {showOnHome.map((item) => (
         <HomeCategories key={item.id} item={item} />
@@ -46,13 +48,13 @@ const MainComponent = async () => {
       <div
         style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
       >
-        <a href="https://raceinnovations.in/contact/" target="_blank">
+        <Link href={adBottomData[0].link || 'https://raceautoindia.com/'} target="_blank">
           <Image
             src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${adBottomData[0].ad_code_728}`}
             alt="index Bottom"
             fill
           />
-        </a>
+        </Link>
       </div>
     </>
   );

@@ -70,7 +70,7 @@ const HeaderAd = () => {
             objectFit: "contain",
           }}
         >
-          <Link href="/subscription">
+          <Link href={data.link || 'https://raceautoindia.com/'}>
             <Image
               src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_728}`}
               alt="index top"

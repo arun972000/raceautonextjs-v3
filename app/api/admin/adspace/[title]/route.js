@@ -20,6 +20,7 @@ export async function GET(req) {
   }
 }
 
+
 export async function PUT(req) {
   try {
     const { pathname } = new URL(req.url);
@@ -28,6 +29,7 @@ export async function PUT(req) {
     const formData = await req.formData();
     const responsiveCode = formData.get("responsiveCode");
     const isChecked = formData.get("isChecked");
+    const link = formData.get("link"); // ✅ Get link field
 
     const size_1200 = formData.get("size_1200");
     const size_728 = formData.get("size_728");
@@ -40,7 +42,9 @@ export async function PUT(req) {
     let query = "UPDATE ad_spaces SET";
     let queryParams = [];
 
-    // Helper function to handle S3 uploads
+    const setFields = [];
+
+    // Upload helper
     const uploadToS3 = async (file, folder) => {
       const fileExtension = path.extname(file.name);
       const newFileName = `${uuidv4()}${fileExtension}`;
@@ -55,43 +59,48 @@ export async function PUT(req) {
       };
 
       await s3Client.send(new PutObjectCommand(uploadParams));
-      return s3Key; // Return the key for further use in the database
+      return s3Key;
     };
 
-    // Dynamic query construction for file fields
+    // File uploads
     if (size_1200) {
       const imageKey = await uploadToS3(size_1200, "uploads/blocks");
-      query += " ad_code_1200 = ?,";
+      setFields.push("ad_code_1200 = ?");
       queryParams.push(imageKey);
     }
     if (size_728) {
       const imageKey = await uploadToS3(size_728, "uploads/blocks");
-      query += " ad_code_728 = ?,";
+      setFields.push("ad_code_728 = ?");
       queryParams.push(imageKey);
     }
     if (size_468) {
       const imageKey = await uploadToS3(size_468, "uploads/blocks");
-      query += " ad_code_468 = ?,";
+      setFields.push("ad_code_468 = ?");
       queryParams.push(imageKey);
     }
     if (size_300) {
       const imageKey = await uploadToS3(size_300, "uploads/blocks");
-      query += " ad_code_300 = ?,";
+      setFields.push("ad_code_300 = ?");
       queryParams.push(imageKey);
     }
     if (size_234) {
       const imageKey = await uploadToS3(size_234, "uploads/blocks");
-      query += " ad_code_234 = ?,";
+      setFields.push("ad_code_234 = ?");
       queryParams.push(imageKey);
     }
 
     // Static fields
-    query += " responsive_ad_code = ?, is_responsive = ? WHERE ad_space = ?";
-    queryParams.push(
-      responsiveCode || null,
-      isChecked === "true" ? 1 : 0,
-      title
-    );
+    setFields.push("responsive_ad_code = ?");
+    queryParams.push(responsiveCode || null);
+
+    setFields.push("is_responsive = ?");
+    queryParams.push(isChecked === "true" ? 1 : 0);
+
+    setFields.push("link = ?"); // ✅ Add link field to DB
+    queryParams.push(link || null);
+
+    query += ` ${setFields.join(", ")} WHERE ad_space = ?`;
+    queryParams.push(title);
 
     await db.execute(query, queryParams);
 
@@ -104,3 +113,4 @@ export async function PUT(req) {
     );
   }
 }
+

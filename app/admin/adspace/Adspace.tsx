@@ -10,18 +10,21 @@ const AdForm = () => {
   const [isChecked, setIsChecked] = useState<any>(false);
   const [title, setTitle] = useState([]);
 
-  // Separate states for each ad size
+  // Ad image file states
   const [adSize1200, setAdSize1200] = useState(null);
   const [adSize728, setAdSize728] = useState(null);
   const [adSize300, setAdSize300] = useState(null);
   const [adSize234, setAdSize234] = useState(null);
-  const [responsiveCode, setResponsiveCode] = useState("");
 
-  // States for preview URLs
+  // Ad preview URLs
   const [preview1200, setPreview1200] = useState("");
   const [preview728, setPreview728] = useState("");
   const [preview300, setPreview300] = useState("");
   const [preview234, setPreview234] = useState("");
+
+  // Responsive code and link field
+  const [responsiveCode, setResponsiveCode] = useState("");
+  const [link, setLink] = useState("");
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -54,24 +57,23 @@ const AdForm = () => {
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/adspace/${selectedOption}`
       );
 
-      setIsChecked(res.data[0].is_responsive === 1);
+      const data = res.data[0];
+      setIsChecked(data.is_responsive === 1);
+      setLink(data.link || "");
 
       setPreview1200(
-        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${res.data[0].ad_code_1200}` ||
-          ""
+        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_1200}` || ""
       );
       setPreview728(
-        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${res.data[0].ad_code_728}` ||
-          ""
+        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_728}` || ""
       );
       setPreview300(
-        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${res.data[0].ad_code_300}` ||
-          ""
+        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_300}` || ""
       );
       setPreview234(
-        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${res.data[0].ad_code_234}` ||
-          ""
+        `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${data.ad_code_234}` || ""
       );
+      setResponsiveCode(data.responsive_code || "");
     } catch (err) {
       console.log(err);
     }
@@ -85,7 +87,6 @@ const AdForm = () => {
     try {
       const formData = new FormData();
 
-      // Append each ad size to formData if they are not empty
       if (adSize1200) formData.append("size_1200", adSize1200);
       if (adSize728) formData.append("size_728", adSize728);
       if (adSize300) formData.append("size_300", adSize300);
@@ -93,6 +94,7 @@ const AdForm = () => {
 
       formData.append("isChecked", isChecked);
       formData.append("responsiveCode", responsiveCode);
+      formData.append("link", link); // ⬅️ New link field
 
       await axios.put(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/adspace/${selectedOption}`,
@@ -143,6 +145,17 @@ const AdForm = () => {
               ))}
             </Form.Control>
           </Form.Group>
+
+          <Form.Group controlId="linkInput" className="mt-3">
+            <Form.Label>Ad Link</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter link for this ad"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+            />
+          </Form.Group>
+
           <Form.Group
             controlId="responsiveCheckbox"
             className="form-check my-4"
@@ -154,6 +167,7 @@ const AdForm = () => {
               onChange={handleCheckboxChange}
             />
           </Form.Group>
+
           <Form.Group controlId="size_1200">
             <Form.Label>Upload Image for Size 1200</Form.Label>
             <Form.Control
@@ -165,33 +179,43 @@ const AdForm = () => {
             />
             {preview1200 && <Image src={preview1200} alt="Preview" fluid />}
           </Form.Group>
+
           <Form.Group controlId="size_728">
             <Form.Label>Upload Image for Size 728</Form.Label>
             <Form.Control
               type="file"
               accept="image/*"
-              onChange={(e) => handleFileUpload(e, setAdSize728, setPreview728)}
+              onChange={(e) =>
+                handleFileUpload(e, setAdSize728, setPreview728)
+              }
             />
             {preview728 && <Image src={preview728} alt="Preview" fluid />}
           </Form.Group>
+
           <Form.Group controlId="size_300">
             <Form.Label>Upload Image for Size 300</Form.Label>
             <Form.Control
               type="file"
               accept="image/*"
-              onChange={(e) => handleFileUpload(e, setAdSize300, setPreview300)}
+              onChange={(e) =>
+                handleFileUpload(e, setAdSize300, setPreview300)
+              }
             />
             {preview300 && <Image src={preview300} alt="Preview" fluid />}
           </Form.Group>
+
           <Form.Group controlId="size_234">
             <Form.Label>Upload Image for Size 234</Form.Label>
             <Form.Control
               type="file"
               accept="image/*"
-              onChange={(e) => handleFileUpload(e, setAdSize234, setPreview234)}
+              onChange={(e) =>
+                handleFileUpload(e, setAdSize234, setPreview234)
+              }
             />
             {preview234 && <Image src={preview234} alt="Preview" fluid />}
           </Form.Group>
+
           <Form.Group controlId="formResponsiveCode">
             <Form.Label>Responsive Code</Form.Label>
             <Form.Control

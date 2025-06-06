@@ -13,6 +13,8 @@ import { Autoplay, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import styles from "./page.module.css";
+import Link from "next/link";
+import { Card } from "react-bootstrap";
 
 const Magazine_v2 = () => {
   const [data, setData] = useState<magazineCardType[]>([]);
@@ -83,6 +85,7 @@ const Magazine_v2 = () => {
           delay: 2000,
           disableOnInteraction: true,
         }}
+        loop={true}
         modules={[Autoplay, Pagination]}
         className="mb-4"
       >
@@ -150,9 +153,64 @@ const Magazine_v2 = () => {
       <div className="container mb-5">
         <div className="row mb-4">
           <h2 className="mt-4 my-4">Latest Edition</h2>
-          {data
-            .map((item) => <MagazineCard_v2 key={item.id} item={item} />)
-            .slice(0, 4)}
+          <Swiper
+            pagination={true}
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: true,
+            }}
+            loop={true}
+            modules={[Autoplay, Pagination]}
+            className="mb-4"
+            breakpoints={{
+              // When the viewport is >= 0px (mobile devices)
+              0: {
+                slidesPerView: 1, // Show 1 slide
+                spaceBetween: 10, // Adjust space if needed
+              },
+              // When the viewport is >= 768px (tablets and larger devices)
+              768: {
+                slidesPerView: 2, // Show 2 slides
+                spaceBetween: 20,
+              },
+              // When the viewport is >= 1024px (desktop devices)
+              1024: {
+                slidesPerView: 4, // Show 3 slides
+                spaceBetween: 30,
+              },
+            }}
+          >
+            {data
+              .map((item) => (
+                <SwiperSlide key={item.id}>
+                  <div className="col-12">
+                    <Card>
+                      <Link href={`/magazine/${item.title_slug}`}>
+                        <div
+                          className={styles.magazinecardcontainer}
+                          style={{
+                            position: "relative",
+                            aspectRatio: "1/1.414",
+                            width: "100%",
+                          }}
+                        >
+                          <Image
+                            className={styles.magazinecard}
+                            alt={item.title}
+                            fill
+                            priority
+                            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_url}`}
+                            sizes="(max-width: 480px) 100vw, (max-width: 768px) 75vw, (max-width: 1200px) 40vw, 25vw"
+                          />
+                        </div>
+                      </Link>
+                      
+                    </Card>
+                  </div>
+                </SwiperSlide>
+              ))
+              .slice(0, 6)}
+          </Swiper>
           {isloading && (
             <>
               <div className="col-3">
@@ -228,8 +286,8 @@ const Magazine_v2 = () => {
           <div className="col-6 col-md-3 col-lg-2 text-center">
             <button
               className={`btn ${styles.button_category} ${
-                  selectedCategory === 0 ? "btn-warning" : "btn-light"
-                }`}
+                selectedCategory === 0 ? "btn-warning" : "btn-light"
+              }`}
               onClick={() => setSelectedCatgeory(0)}
             >
               All Magazines

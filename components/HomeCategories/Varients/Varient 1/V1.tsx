@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -28,44 +28,43 @@ const Varient1 = ({ item }: varientproptype) => {
   // Truncate title and summary
   const truncatedTitle =
     item.title.length > 50 ? item.title.slice(0, 50) + "..." : item.title;
-const truncatedSummary =
-  typeof item.summary === 'string' && item.summary.length > 60
-    ? item.summary.slice(0, 60) + "..."
-    : item.summary ?? "";
-
+  const truncatedSummary =
+    typeof item.summary === "string" && item.summary.length > 60
+      ? item.summary.slice(0, 60) + "..."
+      : item.summary ?? "";
 
   return isMobile ? (
- <div className="col-12" key={item.id}>
-  <Link className="link-style" href={`/post/${item.title_slug}`}>
-    <div className="row mb-1" >
-      <div className="col-7 p-0 ps-2">
-        <h6 className=" fs-6">
-          <small>{truncatedTitle}</small>
-        </h6>
-        <p className="text-muted fs-7 mb-0">
-          <small>{truncatedSummary}</small>
-        </p>
-      </div>
-      <div className="col-5">
-        <div
-          style={{
-            position: "relative",
-            width: "100%",
-            aspectRatio: "16/9",
-          }}
-        >
-          <Image
-            src={imageSrc}
-            alt={item.title || "news image"}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            style={{ objectFit: "cover" }}
-            className="rounded"
-          />
+    <div className="col-12" key={item.id}>
+      <Link className="link-style" href={`/post/${item.title_slug}`}>
+        <div className="row mb-1">
+          <div className="col-7 p-0 ps-2">
+            <h6 className=" fs-6">
+              <small>{truncatedTitle}</small>
+            </h6>
+            <p className="text-muted fs-7 mb-0">
+              <small>{truncatedSummary}</small>
+            </p>
+          </div>
+          <div className="col-5">
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "16/9",
+              }}
+            >
+              <Image
+                src={imageSrc}
+                alt={item.title || "news image"}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: "cover" }}
+                className="rounded"
+              />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-   </Link>
+      </Link>
     </div>
   ) : (
     // 👉 Tablet/Desktop layout

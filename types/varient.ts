@@ -10,8 +10,8 @@ export type varient = {
   title: string;
   title_slug: string;
   image_mid: string;
+  summary: string;
   created_at: any;
-
 };
 
 export type varientproparray = {

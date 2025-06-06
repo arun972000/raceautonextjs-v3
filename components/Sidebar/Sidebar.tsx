@@ -61,16 +61,16 @@ const Sidebar = async () => {
 
   return (
     <div className="col-lg-4 mb-4">
-      <AdSidebar />
-      <div className="row mt-3">
+      {/* <AdSidebar /> */}
+      <div className="row mt-1">
         <div className="col-12">
           <div>
-            <div
+            {/* <div
               className="side-scrollbar side-scrollbar-primary"
-              style={{ maxHeight: 300 }}
+             
             >
               <ExclusiveNewsSwiper ExclusiveNewsData={ExclusiveNewsData} />
-            </div>
+            </div> */}
           </div>
         </div>
         <div

@@ -16,7 +16,7 @@ const PostListCard = async ({ item }: { item: CateoryPostType }) => {
         <Link className="link-style" href={`/post/${item.title_slug}`}>
           <div className={styles.postList_image_container}>
             <Image
-              src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_big}`}
+              src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_mid}`}
               style={{objectFit:"cover"}}
               fill
               alt={item.title || "Placeholder"}

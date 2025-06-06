@@ -2,15 +2,16 @@
     font-family: "Roboto", sans-serif;
     font-weight: 900;
     font-style: normal;
-    background-color: #59BEA0;
+    background-color: #3A3939;
     color: white !important;
     z-index: 9999;
     position: absolute;
   }
   
+
   
   .breaking-news__container{
-    background-color: #59BEA0;
+    background-color: #3A3939;
     color: white  !important;
     position: sticky;
     top: 0;
@@ -48,3 +49,4 @@
     }
   }
   
+

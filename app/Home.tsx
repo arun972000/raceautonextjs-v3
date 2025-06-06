@@ -21,6 +21,7 @@ import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 import PageViewTracker from "./pageTracker";
 import Script from "next/script";
 import ContactModal from "@/components/SubscribeModal";
+import LatestNewsDesktop from "@/components/Latest-news-Desktop/LatestDesktop";
 
 const Home = async () => {
   const sliderRes = await fetch(
@@ -58,7 +59,7 @@ const Home = async () => {
               <HomeBanner />
             )}
             <h1>Latest Updates on Automobiles, Agriculture & Construction</h1>
-
+            <LatestNewsDesktop />
             <div className={styles.ad_header}>
               <span
                 style={{ borderBottom: "1px solid black" }}

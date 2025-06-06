@@ -2,7 +2,7 @@ import React from "react";
 // import HomeMarketCard from "./HomeMarketCard";
 import db from "@/lib/db";
 import "@/components/Home-Market/home-market.css";
-import HomeMarketCard from "@/components/Home-Market/HomeMarketCard";
+import HomeMarketCard from "./HomeMarketCard";
 
 const HomeMarket = async () => {
   const [marketList]: any = await db.execute("SELECT * FROM post_market");

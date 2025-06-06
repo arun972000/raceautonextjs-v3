@@ -16,6 +16,7 @@ type varient = {
   title: string;
   title_slug: string;
   image_mid: string;
+  summary:string;
   created_at: any;
 };
 
@@ -72,7 +73,7 @@ const HomeCategories = async ({ item }: catgeorypropType) => {
                 .map((item) => <Varient4 key={item.id} item={item} />)
                 .slice(0, 2)}
             {item.block_type == "block-5" && (
-              <Varient5 item={v3data} single={v3Single} />
+              <Varient5 item={v3data} single={v3Single} three={threeData}/>
             )}
           </div>
         </div>

@@ -61,7 +61,7 @@ export default function PricingCard({
       {/* "50% OFF" animated label */}
       {typeof price === 'number' && (
         <span className="badge bg-danger position-absolute top-0 start-0 m-2">
-          50% OFF
+          70% OFF
         </span>
       )}
 

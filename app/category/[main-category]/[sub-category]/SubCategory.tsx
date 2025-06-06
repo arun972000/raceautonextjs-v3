@@ -2,6 +2,7 @@ import React from "react";
 import PostListCard from "../CategoryCard";
 import PaginateComponent from "./paginate";
 import Image from "next/image";
+import Link from "next/link";
 
 export type CateoryPostType = {
   id: number;
@@ -49,7 +50,7 @@ const SubCategory = async ({
 
   return (
     <>
-      <a href="https://raceinnovations.in/contact/" target="_blank">
+      <Link href={adTopData[0].link || 'https://raceautoindia.com/'} target="_blank">
         <div
           style={{ position: "relative", aspectRatio: "8.9/1", width: "100%" }}
         >
@@ -59,14 +60,14 @@ const SubCategory = async ({
             fill
           />
         </div>
-      </a>
+      </Link>
 
       <div className="row my-3">
         {post.map((item) => (
           <PostListCard key={item.id} item={item} />
         ))}
 
-        <a href="https://raceinnovations.in/contact/" target="_blank">
+        <Link href={adBottomData[0].link || 'https://raceautoindia.com/'} target="_blank">
           <div
             style={{
               position: "relative",
@@ -80,7 +81,7 @@ const SubCategory = async ({
               fill
             />
           </div>
-        </a>
+        </Link>
         <div className="d-flex justify-content-center my-4">
           <PaginateComponent totalCount={totalCount} />
         </div>

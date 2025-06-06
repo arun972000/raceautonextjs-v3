@@ -58,7 +58,7 @@ export default function SwiperSlide_4({ slides }: { slides: SliderType[] }) {
                 bottom: 0,
                 left: 0,
                 width: "100%",
-                height: "50px",
+                height: "35px",
                 backgroundColor: "rgba(0, 0, 0, 0.5)", // 50% opacity black background
                 display: "flex",
                 alignItems: "center",

@@ -9,7 +9,7 @@ const HomeMarket = async () => {
   return (
     <>
       <div className="row mt-5 mb-5">
-        <h2 className="mb-4" style={{ fontWeight: 700 }}>
+        <h2 className="mb-4">
           Market
         </h2>
         {marketList

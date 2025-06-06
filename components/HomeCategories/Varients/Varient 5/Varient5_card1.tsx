@@ -22,9 +22,8 @@ const SubCardV5_1 = ({ item }: varientproptype) => {
               </div>
             </div>
             <div className="col-6">
-              <div className="content">
+              <div className="content mt-3 pe-2">
                 <p className="card-heading">{item.title}</p>
-
                 <p className="card-text small">{formatDate(item.created_at)}</p>
               </div>
             </div>

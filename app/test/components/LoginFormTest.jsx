@@ -8,7 +8,6 @@ import SignupForm from "@/app/register/signup";
 export default function AuthModal({ show, onClose }) {
     const [mode, setMode] = useState("login");
 
-
     return (
         <Modal
             show={show}

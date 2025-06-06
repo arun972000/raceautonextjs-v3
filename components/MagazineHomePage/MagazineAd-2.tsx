@@ -68,7 +68,7 @@ const MagazineAd_2 = () => {
           },
           // When the viewport is >= 1024px (desktop devices)
           1024: {
-            slidesPerView: 4, // Show 3 slides
+            slidesPerView: 5, // Show 3 slides
             spaceBetween: 30,
           },
         }}
