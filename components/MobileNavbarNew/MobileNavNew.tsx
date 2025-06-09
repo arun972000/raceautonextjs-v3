@@ -394,7 +394,7 @@ const MobileNavNew = () => {
 
         {/* Bottom Navigation */}
         <div className={styles.navigation}>
-          <Link href="/flash-reports">
+          <Link href="https://raceautoanalytics.com/">
             <div className={styles.navItem}>
               <TbChartHistogram
                 color={iconColor}

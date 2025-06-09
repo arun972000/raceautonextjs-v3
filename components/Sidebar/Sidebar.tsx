@@ -8,6 +8,7 @@ import { FaCrown } from "react-icons/fa";
 import ExclusiveNewsSwiper from "./ExclusiveNewsList";
 import AdSidebar from "../GoogleAds/AdSidebar";
 import Link from "next/link";
+import Exclusive from './ExclusiveV2'
 
 export type LatestNewsType = {
   id: number;
@@ -65,12 +66,10 @@ const Sidebar = async () => {
       <div className="row mt-1">
         <div className="col-12">
           <div>
-            {/* <div
-              className="side-scrollbar side-scrollbar-primary"
-             
-            >
-              <ExclusiveNewsSwiper ExclusiveNewsData={ExclusiveNewsData} />
-            </div> */}
+            <div className="side-scrollbar side-scrollbar-primary">
+              <Exclusive value={ExclusiveNewsData} />
+              {/* <ExclusiveNewsSwiper ExclusiveNewsData={ExclusiveNewsData} /> */}
+            </div>
           </div>
         </div>
         <div

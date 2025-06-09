@@ -43,7 +43,7 @@
 
 /app/test/*
 
-
+/app/api/test/*
 
 # next.js
 /.next/
