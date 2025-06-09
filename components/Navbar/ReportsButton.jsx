@@ -17,7 +17,7 @@ const ReportsDropdown = () => {
       </button>
       <ul className="dropdown-menu custom-dropdown-menu" aria-labelledby="reportsDropdown">
         <li>
-          <Link className="dropdown-item custom-dropdown-item" href="/flash-reports">
+          <Link className="dropdown-item custom-dropdown-item" href="https://raceautoanalytics.com/">
             ⚡ Flash Reports
           </Link>
         </li>
