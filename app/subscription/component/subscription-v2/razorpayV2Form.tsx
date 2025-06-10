@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { Button, Form, Spinner, Card } from "react-bootstrap";
 import axios from "axios";
@@ -24,7 +24,10 @@ interface RazorpayPaymentFormProps {
   } | null;
 }
 
-const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({ planInfo, closeModal }) => {
+const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({
+  planInfo,
+  closeModal,
+}) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [token, setToken] = useState<string | null>(null);
@@ -106,6 +109,13 @@ const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({ planInfo, clo
       setIsLoading(false);
     }
   };
+  const formattedPlanTier = planInfo?.planTier
+    ? planInfo.planTier.charAt(0).toUpperCase() + planInfo.planTier.slice(1)
+    : "Unknown";
+  const formattedBillingCycle = planInfo?.billingCycle
+    ? planInfo.billingCycle.charAt(0).toUpperCase() +
+      planInfo.billingCycle.slice(1)
+    : "Unknown"; // Default value if billingCycle is undefined
 
   return (
     <Card className={styles.paymentCard}>
@@ -118,32 +128,50 @@ const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({ planInfo, clo
 
         <ul className={styles.summaryList}>
           <li>
-            <strong>Tier:</strong> {planInfo?.planTier.charAt(0).toUpperCase() + planInfo?.planTier.slice(1)}
+            <strong>Tier:</strong> {formattedPlanTier}
           </li>
           <li>
-            <strong>Billing:</strong> {planInfo?.billingCycle.charAt(0).toUpperCase() + planInfo?.billingCycle.slice(1)}
+            <strong>Billing:</strong> {formattedBillingCycle}
+             
           </li>
           <li>
-            <strong>Amount:</strong> ₹{planInfo?.price.toLocaleString('en-IN')}
+            <strong>Amount:</strong> ₹{planInfo?.price.toLocaleString("en-IN")}
           </li>
         </ul>
 
         <div className={styles.paymentMethods}>
           <span>We accept:</span>
           <div className={styles.icons}>
-            <SiGooglepay className={`${styles.icon} ${styles.googleIcon}`} title="Google Pay" />
-            <SiAmazonpay className={`${styles.icon} ${styles.amazonIcon}`} title="Amazon Pay" />
-            <SiPhonepe className={`${styles.icon} ${styles.phonepeIcon}`} title="PhonePe" />
-            <FaCcVisa className={`${styles.icon} ${styles.visaIcon}`} title="Visa" />
-            <FaCcMastercard className={`${styles.icon} ${styles.mastercardIcon}`} title="Mastercard" />
-            <FaWallet className={`${styles.icon} ${styles.walletIcon}`} title="Wallets" />
+            <SiGooglepay
+              className={`${styles.icon} ${styles.googleIcon}`}
+              title="Google Pay"
+            />
+            <SiAmazonpay
+              className={`${styles.icon} ${styles.amazonIcon}`}
+              title="Amazon Pay"
+            />
+            <SiPhonepe
+              className={`${styles.icon} ${styles.phonepeIcon}`}
+              title="PhonePe"
+            />
+            <FaCcVisa
+              className={`${styles.icon} ${styles.visaIcon}`}
+              title="Visa"
+            />
+            <FaCcMastercard
+              className={`${styles.icon} ${styles.mastercardIcon}`}
+              title="Mastercard"
+            />
+            <FaWallet
+              className={`${styles.icon} ${styles.walletIcon}`}
+              title="Wallets"
+            />
           </div>
         </div>
 
         <Form.Group className="my-3">
           <input
             type="checkbox"
-            
             checked={isChecked}
             onChange={() => setIsChecked(!isChecked)}
           />
@@ -170,7 +198,9 @@ const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({ planInfo, clo
             <div className={styles.loadingBox}>
               <Spinner animation="border" variant="light" />
               <p className="mt-3 mb-0">
-                Processing payment...<br />Please don’t close this window.
+                Processing payment...
+                <br />
+                Please don’t close this window.
               </p>
             </div>
           </div>
