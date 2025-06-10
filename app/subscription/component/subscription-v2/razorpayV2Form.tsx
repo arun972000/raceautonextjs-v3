@@ -162,10 +162,6 @@ const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({
               className={`${styles.icon} ${styles.mastercardIcon}`}
               title="Mastercard"
             />
-            <FaWallet
-              className={`${styles.icon} ${styles.walletIcon}`}
-              title="Wallets"
-            />
           </div>
         </div>
 

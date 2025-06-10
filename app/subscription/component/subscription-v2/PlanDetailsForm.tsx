@@ -132,9 +132,9 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
     onNext(planTier, billingCycle, price);
   };
 
-  const formatPrice = (price :any) => {
-  return price.toLocaleString('en-IN'); // 'en-IN' formats the price in Indian number system
-};
+  const formatPrice = (price: any) => {
+    return price.toLocaleString("en-IN"); // 'en-IN' formats the price in Indian number system
+  };
 
   return (
     <div className="card border-0">
@@ -224,7 +224,108 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
                 style={{ maxWidth: "100px" }}
                 disabled={isVerified}
               >
-                {["+91", "+1", "+44", "+61", "+86", "+971"].map((code) => (
+                {[
+                  "+1", // USA, Canada
+                  "+7", // Russia, Kazakhstan
+                  "+20", // Egypt
+                  "+27", // South Africa
+                  "+30", // Greece
+                  "+31", // Netherlands
+                  "+32", // Belgium
+                  "+33", // France
+                  "+34", // Spain
+                  "+39", // Italy
+                  "+40", // Romania
+                  "+41", // Switzerland
+                  "+44", // UK
+                  "+49", // Germany
+                  "+51", // Peru
+                  "+52", // Mexico
+                  "+55", // Brazil
+                  "+60", // Malaysia
+                  "+61", // Australia
+                  "+62", // Indonesia
+                  "+65", // Singapore
+                  "+81", // Japan
+                  "+82", // South Korea
+                  "+86", // China
+                  "+91", // India
+                  "+92", // Pakistan
+                  "+93", // Afghanistan
+                  "+94", // Sri Lanka
+                  "+95", // Myanmar
+                  "+98", // Iran
+                  "+212", // Morocco
+                  "+213", // Algeria
+                  "+218", // Libya
+                  "+220", // Gambia
+                  "+221", // Senegal
+                  "+230", // Mauritius
+                  "+234", // Nigeria
+                  "+251", // Ethiopia
+                  "+254", // Kenya
+                  "+256", // Uganda
+                  "+260", // Zambia
+                  "+263", // Zimbabwe
+                  "+298", // Faroe Islands
+                  "+351", // Portugal
+                  "+352", // Luxembourg
+                  "+355", // Albania
+                  "+358", // Finland
+                  "+371", // Latvia
+                  "+375", // Belarus
+                  "+380", // Ukraine
+                  "+381", // Serbia
+                  "+387", // Bosnia & Herzegovina
+                  "+420", // Czech Republic
+                  "+421", // Slovakia
+                  "+423", // Liechtenstein
+                  "+500", // Falkland Islands
+                  "+501", // Belize
+                  "+502", // Guatemala
+                  "+503", // El Salvador
+                  "+504", // Honduras
+                  "+505", // Nicaragua
+                  "+506", // Costa Rica
+                  "+507", // Panama
+                  "+509", // Haiti
+                  "+590", // Guadeloupe
+                  "+591", // Bolivia
+                  "+592", // Guyana
+                  "+595", // Paraguay
+                  "+597", // Suriname
+                  "+598", // Uruguay
+                  "+670", // Timor-Leste
+                  "+673", // Brunei
+                  "+852", // Hong Kong
+                  "+853", // Macau
+                  "+855", // Cambodia
+                  "+856", // Laos
+                  "+880", // Bangladesh
+                  "+886", // Taiwan
+                  "+960", // Maldives
+                  "+961", // Lebanon
+                  "+962", // Jordan
+                  "+963", // Syria
+                  "+964", // Iraq
+                  "+965", // Kuwait
+                  "+966", // Saudi Arabia
+                  "+967", // Yemen
+                  "+968", // Oman
+                  "+970", // Palestine
+                  "+971", // UAE
+                  "+972", // Israel
+                  "+973", // Bahrain
+                  "+974", // Qatar
+                  "+975", // Bhutan
+                  "+977", // Nepal
+                  "+992", // Tajikistan
+                  "+993", // Turkmenistan
+                  "+994", // Azerbaijan
+                  "+995", // Georgia
+                  "+996", // Kyrgyzstan
+                  "+998", // Uzbekistan
+                ].map((code) => (
                   <option key={code} value={code}>
                     {code}
                   </option>
