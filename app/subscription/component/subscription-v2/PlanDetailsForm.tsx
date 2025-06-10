@@ -5,7 +5,7 @@ import Link from "next/link";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
-import { Button, Form } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { FaMedal } from "react-icons/fa";
 import { toast } from "react-toastify";
 
@@ -122,7 +122,6 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
   };
 
   const handleNextClick = () => {
-
     if (!isChecked) {
       setShakeCheckbox(true);
       toast.warn("Please agree to the terms and conditions before proceeding.");
@@ -132,6 +131,10 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
 
     onNext(planTier, billingCycle, price);
   };
+
+  const formatPrice = (price) => {
+  return price.toLocaleString('en-IN'); // 'en-IN' formats the price in Indian number system
+};
 
   return (
     <div className="card border-0">
@@ -154,47 +157,51 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
 
         <Form>
           {/* Plan Tier Selection */}
-          <div className="d-flex align-items-end mb-3">
-            {/* Plan Tier */}
-            <Form.Group className="me-3">
-              <Form.Label>Select Plan Tier</Form.Label>
-              <Form.Select
-                value={planTier}
-                onChange={(e) => setPlanTier(e.target.value)}
-              >
-                <option value="platinum">Platinum</option>
-                <option value="gold">Gold</option>
-                <option value="silver">Silver</option>
-              </Form.Select>
-            </Form.Group>
+          {/* Plan Tier Selection */}
+          <Row className="mb-3 align-items-end">
+            <Col md={4}>
+              <Form.Group>
+                <Form.Label>Select Plan Tier</Form.Label>
+                <Form.Select
+                  value={planTier}
+                  onChange={(e) => setPlanTier(e.target.value)}
+                >
+                  <option value="platinum">Platinum</option>
+                  <option value="gold">Gold</option>
+                  <option value="silver">Silver</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
 
-            {/* Billing Cycle */}
-            <Form.Group className="me-3">
-              <Form.Label className="mb-3">Billing Cycle</Form.Label>
-              <div>
-                <Form.Check
-                  inline
-                  label="Monthly"
-                  type="radio"
-                  checked={billingCycle === "monthly"}
-                  onChange={() => setBillingCycle("monthly")}
-                />
-                <Form.Check
-                  inline
-                  label="Annual"
-                  type="radio"
-                  checked={billingCycle === "annual"}
-                  onChange={() => setBillingCycle("annual")}
-                />
-              </div>
-            </Form.Group>
+            <Col md={5}>
+              <Form.Group>
+                <Form.Label>Billing Cycle</Form.Label>
+                <div className="d-flex align-items-center">
+                  <Form.Check
+                    inline
+                    label="Monthly"
+                    type="radio"
+                    id="monthly"
+                    checked={billingCycle === "monthly"}
+                    onChange={() => setBillingCycle("monthly")}
+                  />
+                  <Form.Check
+                    inline
+                    label="Annual"
+                    type="radio"
+                    id="annual"
+                    checked={billingCycle === "annual"}
+                    onChange={() => setBillingCycle("annual")}
+                  />
+                </div>
+              </Form.Group>
+            </Col>
 
-            {/* Price Display */}
-            <div>
-              <Form.Label className="d-block mb-3">Price</Form.Label>
-              <span className="price-badge">₹{price}</span>
-            </div>
-          </div>
+            <Col md={3}>
+              <Form.Label>Price</Form.Label>
+              <div className="price-badge">₹{formatPrice(price)}</div>
+            </Col>
+          </Row>
 
           {/* Email Display */}
           <Form.Group className="mb-3">

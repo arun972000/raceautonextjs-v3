@@ -3,50 +3,67 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { Button, Modal, Form } from "react-bootstrap";
-import Image from "next/image";
+import {
+  Button,
+  Modal,
+  Collapse,
+  Card,
+  Row,
+  Col,
+} from "react-bootstrap";
 
 import PlanDetailsForm from "./PlanDetailsForm";
 import ManualPaymentForm from "./ManualPaymentForm";
 import BankTransferForm from "./BankTranferForm";
-import RazorpayPaymentForm from "./RazorPayForm";
+import RazorpayPaymentForm from "./razorpayV2Form";
 import AuthModal from "@/app/test/components/LoginFormTest";
+
+interface PlanInfo {
+  planTier: string;
+  billingCycle: "monthly" | "annual";
+  price: number;
+}
 
 const SubscriptionForm = ({ plan }: { plan: string }) => {
   const router = useRouter();
-
-  const [planInfo, setPlanInfo] = useState<{
-    planTier: string;
-    billingCycle: "monthly" | "annual";
-    price: number;
-  } | null>(null);
-
-  const [show, setShow] = useState(false);
-  const [step, setStep] = useState<1 | 2>(1);
-  const [payType, setPayType] = useState<"UPI" | "BANK" | "Card Payment">("UPI");
   const [token, setToken] = useState<string | null>(null);
-  const [showAuth, setShowAuth] = useState(false);
 
+  const [showAuth, setShowAuth] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [step, setStep] = useState<1 | 2>(1);
+  const [planInfo, setPlanInfo] = useState<PlanInfo | null>(null);
+
+  // Track collapse state for Manual/UPI and Bank sections
+  const [openManual, setOpenManual] = useState(false);
+  const [openBank, setOpenBank] = useState(false);
+
+  // Load auth token (if user is logged in)
   useEffect(() => {
     const authToken = Cookies.get("authToken");
     setToken(authToken || null);
   }, []);
 
+  // When "Buy Now" is clicked, either prompt login or open modal
   const handleBuyClick = () => {
     if (!token) {
       toast.warn("Please login to subscribe", { position: "top-center" });
       setShowAuth(true);
     } else {
-      setShow(true);
+      setShowModal(true);
     }
   };
 
-  const close = () => {
-    setShow(false);
+  // Close modal and reset to step 1
+  const handleClose = () => {
+    setShowModal(false);
     setStep(1);
+    // collapse any opened secondary forms
+    setOpenManual(false);
+    setOpenBank(false);
   };
 
-  const next = (
+  // Called by PlanDetailsForm when user selects a plan & clicks Next
+  const handleNext = (
     planTier: string,
     billingCycle: "monthly" | "annual",
     price: number
@@ -55,126 +72,137 @@ const SubscriptionForm = ({ plan }: { plan: string }) => {
     setStep(2);
   };
 
-  const back = () => setStep(1);
+  // Go back to step 1 (PlanDetailsForm)
+  const handleBack = () => {
+    setStep(1);
+    // ensure secondary forms are closed
+    setOpenManual(false);
+    setOpenBank(false);
+  };
 
   return (
     <>
-      {/* Auth Modal */}
+      {/* 1) AUTH MODAL (if user is not logged in) */}
       <AuthModal show={showAuth} onClose={() => setShowAuth(false)} />
 
-      {/* Buy Button */}
+      {/* 2) BUY BUTTON */}
       <div className="text-center">
         <Button variant="dark" onClick={handleBuyClick}>
           Buy Now
         </Button>
       </div>
 
-      {/* Subscription Modal */}
-      <Modal show={show} onHide={close} size="lg" centered>
+      {/* 3) SUBSCRIPTION MODAL */}
+      <Modal
+        show={showModal}
+        onHide={handleClose}
+        size="lg"
+        centered
+        backdrop="static"
+      >
         <Modal.Header closeButton>
-          <Modal.Title>
-            {step === 1
-              ? "Confirm Subscription"
-              : payType === "UPI"
-              ? "UPI / Manual Payment"
-              : payType === "BANK"
-              ? "Bank Transfer"
-              : "Card Payment"}
+          <Modal.Title className="text-center w-100">
+            {step === 1 ? "Confirm Subscription" : "Choose Payment"}
           </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           {step === 1 ? (
-            <PlanDetailsForm onNext={next} plan={plan} />
+            // ----------- STEP 1: PlanDetailsForm -----------
+            <PlanDetailsForm onNext={handleNext} plan={plan} />
           ) : (
+            // ----------- STEP 2: PAYMENT OPTIONS -----------
             <>
-              {/* Payment Options */}
-              <div className="mb-3">
-                <Form.Check
-                  inline
-                  type="radio"
-                  name="pay"
-                  id="upi"
-                  label="UPI"
-                  checked={payType === "UPI"}
-                  onChange={() => setPayType("UPI")}
-                />
-                <Form.Check
-                  inline
-                  type="radio"
-                  name="pay"
-                  id="bank"
-                  label="Bank Transfer"
-                  checked={payType === "BANK"}
-                  onChange={() => setPayType("BANK")}
-                />
-                <Form.Check
-                  inline
-                  type="radio"
-                  name="pay"
-                  id="Card Payment"
-                  label="Card Payment"
-                  checked={payType === "Card Payment"}
-                  onChange={() => setPayType("Card Payment")}
-                />
+              {/* ======= RAZORPAY CARD (PRIMARY) ======= */}
+              <Card className="mb-2 shadow-sm border-0">
+                <Card.Body className="py-3">
+                  {/* <h5 className="text-center mb-1">Pay with Card (Razorpay)</h5> */}
+                  {planInfo && (
+                    <RazorpayPaymentForm
+                      closeModal={handleClose}
+                      planInfo={planInfo}
+                    />
+                  )}
+                </Card.Body>
+              </Card>
+
+              {/* ======= SECONDARY OPTION: MANUAL/UPI ======= */}
+              <div className="text-center mb-1">
+                <small
+                  className="text-primary"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setOpenBank(false);
+                    setOpenManual((prev) => !prev);
+                  }}
+                >
+                  {openManual ? "Hide Manual/UPI" : "Show Manual/UPI Payment"}
+                </small>
               </div>
 
-              {/* Payment Form */}
-              {payType === "UPI" && (
-                <>
-                  <ManualPaymentForm closeModal={close} planInfo={planInfo} />
-                  <hr />
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="payment-info">
-                        <h6>Subscribe using any of the payment methods below:</h6>
-                        <p>
-                          Account Name:{" "}
-                          <span className="text-primary">RACE EDITORIALE LLP</span>
-                        </p>
-                        <p>
-                          Account Number:{" "}
-                          <span className="text-primary">218505001886</span>
-                        </p>
-                        <p>
-                          IFSC: <span className="text-primary">ICIC0002185</span>
-                        </p>
-                        <p>
-                          Branch Name:{" "}
-                          <span className="text-primary">Saidapet Branch</span>
-                        </p>
-                        <p>
-                          UPI ID:{" "}
-                          <span className="text-primary">
-                            raceeditorialellp.9840490241.ibz@icici
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                    <div className="col-md-6 d-flex justify-content-center">
-                      <Image
-                        src="/images/upi scanner-uuIYAzO1.png"
-                        alt="upi scanner"
-                        width={120}
-                        height={120}
-                      />
-                    </div>
-                  </div>
-                </>
-              )}
+              <Collapse in={openManual}>
+                <div>
+                  <Card className="mb-2 shadow-sm border-0">
+                    <Card.Body className="py-3">
+                      <h6 className="mb-2">Manual / UPI Payment</h6>
+                      {planInfo && (
+                        <ManualPaymentForm
+                          closeModal={handleClose}
+                          planInfo={planInfo}
+                        />
+                      )}
+                    </Card.Body>
+                  </Card>
+                </div>
+              </Collapse>
 
-              {payType === "BANK" && (
-                <BankTransferForm closeModal={close} planInfo={planInfo} />
-              )}
-
-              {payType === "Card Payment" && (
-                <RazorpayPaymentForm closeModal={close} planInfo={planInfo} />
-              )}
-
-              <div className="d-flex justify-content-between mt-3">
-                <Button variant="secondary" onClick={back}>
-                  Back
-                </Button>
+              {/* ======= SECONDARY OPTION: BANK TRANSFER ======= */}
+              <div className="text-center mb-1">
+                <small
+                  className="text-primary"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setOpenManual(false);
+                    setOpenBank((prev) => !prev);
+                  }}
+                >
+                  {openBank ? "Hide Bank Transfer" : "Show Bank Transfer"}
+                </small>
               </div>
+
+              <Collapse in={openBank}>
+                <div>
+                  <Card className="mb-2 shadow-sm border-0">
+                    <Card.Body className="py-3">
+                      <h6 className="mb-2">Bank Transfer / NEFT / RTGS</h6>
+                      {planInfo && (
+                        <BankTransferForm
+                          closeModal={handleClose}
+                          planInfo={planInfo}
+                        />
+                      )}
+                    </Card.Body>
+                  </Card>
+                </div>
+              </Collapse>
+
+              {/* ======= NAVIGATION BUTTONS ======= */}
+              <Row className="mt-2">
+                <Col className="text-start">
+                  <Button variant="secondary" size="sm" onClick={handleBack}>
+                    Back
+                  </Button>
+                </Col>
+                <Col className="text-end">
+                  <Button
+                    variant="outline-primary"
+                    size="sm"
+                    onClick={handleClose}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+              </Row>
             </>
           )}
         </Modal.Body>
