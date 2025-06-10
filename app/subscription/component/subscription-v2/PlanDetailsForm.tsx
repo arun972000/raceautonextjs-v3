@@ -132,7 +132,7 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
     onNext(planTier, billingCycle, price);
   };
 
-  const formatPrice = (price) => {
+  const formatPrice = (price :any) => {
   return price.toLocaleString('en-IN'); // 'en-IN' formats the price in Indian number system
 };
 
