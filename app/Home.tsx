@@ -22,6 +22,7 @@ import PageViewTracker from "./pageTracker";
 import Script from "next/script";
 import ContactModal from "@/components/SubscribeModal";
 import LatestNewsDesktop from "@/components/Latest-news-Desktop/LatestDesktop";
+import HomeVideo from '@/components/Home-video/homeVideo'
 
 const Home = async () => {
   const sliderRes = await fetch(

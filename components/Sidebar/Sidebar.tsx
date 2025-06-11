@@ -8,7 +8,8 @@ import { FaCrown } from "react-icons/fa";
 import ExclusiveNewsSwiper from "./ExclusiveNewsList";
 import AdSidebar from "../GoogleAds/AdSidebar";
 import Link from "next/link";
-import Exclusive from './ExclusiveV2'
+import Exclusive from "./ExclusiveV2";
+import DeskTopView from './View'
 
 export type LatestNewsType = {
   id: number;
@@ -61,7 +62,7 @@ const Sidebar = async () => {
   const eventSettingsData = await eventSettingsRes.json();
 
   return (
-    <div className="col-lg-4 mb-4">
+    <div className="col-lg-4 mb-4 mt-4">
       {/* <AdSidebar /> */}
       <div className="row mt-1">
         <div className="col-12">
@@ -76,7 +77,7 @@ const Sidebar = async () => {
           className="my-4"
           style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
         >
-          <Link href="/subscription">
+          <Link href={sidebarTopData[0].link || "https://raceautoindia.com/"}>
             {" "}
             <Image
               unoptimized
@@ -100,13 +101,16 @@ const Sidebar = async () => {
           </h6>
           <LatestNewsSwiper latestNewsData={LatestNewsData} />
         </div>
+        <div className="col-12">
+          <DeskTopView />
+        </div>
       </div>
 
       <div
         className="my-4"
         style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
       >
-        <Link href="/subscription">
+        <Link href={sidebarbottomData[0].link || "https://raceautoindia.com/"}>
           <Image
             unoptimized
             src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sidebarbottomData[0].ad_code_300}`}

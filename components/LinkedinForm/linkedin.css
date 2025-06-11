@@ -1,10 +1,6 @@
-.linkedin-image-container {
-    width: 100%; /* Set your desired width */
-    height: 150px; /* Set your desired height */
-    overflow: hidden; /* Hide overflow */
-  }
+/*  */
   
-  .linkedin-cropped-image {
+.linkedin-cropped-image {
     width: 100%;
     aspect-ratio: 16/9;
     object-fit: cover; /* Cover the container */

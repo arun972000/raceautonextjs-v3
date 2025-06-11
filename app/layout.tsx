@@ -167,9 +167,9 @@ export default async function RootLayout({
       </head>
       <body>
         <Script
-                type="text/javascript"
-                src="https://checkout.razorpay.com/v1/checkout.js"
-              />
+          type="text/javascript"
+          src="https://checkout.razorpay.com/v1/checkout.js"
+        />
         <AddBootstrap />
         <ToastContainer />
         <ConditionalChatbot />

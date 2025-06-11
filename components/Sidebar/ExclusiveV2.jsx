@@ -7,10 +7,9 @@ const Exclusive = ({ value }) => {
 
     return (
         <>
-            <h2 className="py-2 text-center bg-dark text-white">Exclusive News</h2>
-
+            <h4 className="py-2 text-center bg-dark text-white">Exclusive News</h4>
             <div
-                className="container-fluid py-3"
+                className="container-fluid py-1"
                 style={{ backgroundColor: "#EAEAEA" }}
             >
                 <div className="row g-3">
@@ -25,7 +24,7 @@ const Exclusive = ({ value }) => {
                                 <div className="col-12">
                                     <div className="row g-0 align-items-center border rounded">
                                         <div className="col-6">
-                                            <h6 className="mb-0 px-2" style={{ fontWeight: 700 }}>{title}</h6>
+                                            <h6 className="mb-0 px-2 text-dark" style={{ fontWeight: 700 }}>{title}</h6>
                                         </div>
                                         <div className="col-6">
                                             <div

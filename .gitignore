@@ -27,6 +27,8 @@
 /app/api/bus-ev/*
 /app/api/bus-overall/*
 
+/app/test/*
+
 # /app/api/truck-app/*
 # /app/api/truck-ev/*
 # /app/api/truck-overall/*
@@ -41,9 +43,9 @@
 # /app/api/passenger-overall/*
 # /app/api/piechart/*
 
-/app/test/*
 
-/app/api/test/*
+
+/app/api/test/
 
 # next.js
 /.next/

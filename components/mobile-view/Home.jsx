@@ -10,7 +10,7 @@ import View from "./View";
 import Caurosel from "./Caurosel";
 import HomeMarket from "./Market";
 import HomeCategories from "@/components/HomeCategories/HomeCategories";
-import ReactPlayer_Server from "@/components/Sidebar/ReactPlayer";
+import ReactPlayer_Server from "./ReactPlayerVideo";
 import Link from "next/link";
 import Image from "next/image";
 import LinkedinPage from "@/components/LinkedinForm/LinkedinPage";
@@ -43,6 +43,14 @@ const mobileHome = async () => {
   const data = await res.json();
 
   const showOnHome = data.filter((item) => item.show_at_homepage == 1);
+
+
+  const sidebartopres = await fetch(
+    `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/adspace/sidebar_top`,
+    { cache: "no-store" }
+  );
+
+  const sidebartopData = await sidebartopres.json();
 
   const sidebarbottomres = await fetch(
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/adspace/sidebar_bottom`,
@@ -77,7 +85,7 @@ const mobileHome = async () => {
       </div>
       <Main contentList={MainContent} />
       <div className="container-fluid">
-      <MagazineAd_2 />
+        <MagazineAd_2 />
       </div>
       <hr className='mt-3' style={{ borderTop: "2px solid #333", margin: "0" }} />
       <HomeMarket />
@@ -87,18 +95,30 @@ const mobileHome = async () => {
           <HomeCategories key={item.id} item={item} />
         ))}
       </div>
-
+      <div
+        className="mt-1"
+        style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
+      >
+        <Link href={sidebartopData[0].link || 'https://raceautoindia.com/'}>
+          <Image
+            unoptimized
+            src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sidebartopData[0].ad_code_300}`}
+            alt="sidebar top"
+            fill
+          />
+        </Link>
+      </div>
       <View />
       <ReactPlayer_Server />
       <div
         className="mt-1"
         style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
       >
-        <Link href="/subscription">
+        <Link href={sidebarbottomData[0].link || 'https://raceautoindia.com/'}>
           <Image
             unoptimized
             src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${sidebarbottomData[0].ad_code_300}`}
-            alt="sidebar top"
+            alt="sidebar bottom"
             fill
           />
         </Link>

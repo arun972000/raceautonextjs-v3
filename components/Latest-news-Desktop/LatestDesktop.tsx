@@ -48,7 +48,7 @@ export default function LatestNewsDesktop() {
                   <h6 className="fw-semibold mb-1">
                     {isMobileOrTablet ? truncate(item.title, 40) : item.title}
                   </h6>
-                  <p className="mb-0 small text-muted">
+                  <p className="mb-0 small">
                     {isMobileOrTablet
                       ? truncate(item.summary, 60)
                       : item.summary}

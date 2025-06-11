@@ -6,6 +6,7 @@
 import React from "react";
 import SubscribeComponent from "./SubscribeForm";
 import "./linkedin.css";
+import Image from "next/image";
 
 const LinkedinPage = () => {
   return (
@@ -26,11 +27,20 @@ const LinkedinPage = () => {
               rel="noreferrer"
               style={{ color: "inherit" }}
             >
-              <img
-                src="/images/LinkedIn-Logo.wine.png"
-                height={150}
-                className="linkedin-cropped-image"
-              />
+              <div
+                style={{
+                  aspectRatio: "3.13/1",
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
+                <Image
+                  src="/images/LinkedIn-Logo.wine.png"
+                  fill
+                  alt="linkedin image"
+                  className="mt-2"
+                />
+              </div>
             </a>
           </div>
         </div>
