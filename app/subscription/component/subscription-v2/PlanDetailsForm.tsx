@@ -369,7 +369,7 @@ const PlanDetailsForm: React.FC<PlanDetailsFormProps> = ({ onNext, plan }) => {
               />
               <span>
                 I agree to the{" "}
-                <Link href="/terms" target="_blank">
+                <Link href="/page/terms-conditions" target="_blank" className="text-primary">
                   terms & conditions
                 </Link>
               </span>

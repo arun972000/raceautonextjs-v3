@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { FaCcVisa, FaCcMastercard, FaWallet, FaLock } from "react-icons/fa";
 import { SiGooglepay, SiAmazonpay, SiPhonepe } from "react-icons/si";
 import styles from "./razorpayv2.module.css"; // Import CSS module
+import Link from "next/link";
 
 declare global {
   interface Window {
@@ -132,7 +133,6 @@ const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({
           </li>
           <li>
             <strong>Billing:</strong> {formattedBillingCycle}
-             
           </li>
           <li>
             <strong>Amount:</strong> ₹{planInfo?.price.toLocaleString("en-IN")}
@@ -171,7 +171,16 @@ const RazorpayPaymentForm: React.FC<RazorpayPaymentFormProps> = ({
             checked={isChecked}
             onChange={() => setIsChecked(!isChecked)}
           />
-          <span className="ms-2">I agree to the terms and conditions.</span>
+          <span className="ms-2">
+            I agree to the{" "}
+            <Link
+              href="/page/terms-conditions"
+              target="_blank"
+              className="text-primary"
+            >
+              terms & conditions
+            </Link>
+          </span>
         </Form.Group>
 
         <Button
