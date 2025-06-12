@@ -106,7 +106,7 @@ const Sidebar = async () => {
         </div>
       </div>
 
-      <div
+      {/* <div
         className="my-4"
         style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
       >
@@ -118,7 +118,7 @@ const Sidebar = async () => {
             fill
           />
         </Link>
-      </div>
+      </div> */}
     </div>
   );
 };
