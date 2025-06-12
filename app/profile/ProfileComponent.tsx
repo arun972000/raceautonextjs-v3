@@ -107,7 +107,7 @@ function ProfileDashboard({ token }: { token: string }) {
   return (
     <Row className="">
       {/* Subscription Card */}
-      <Col md={6} className="mb-3 mb-lg-0">
+      <Col md={6} className="mb-2 mb-lg-0">
         <Card className="p-3 shadow-sm rounded-3">
           <Card.Body>
             <Card.Title className="text-center">Subscription</Card.Title>
@@ -119,7 +119,7 @@ function ProfileDashboard({ token }: { token: string }) {
               </Card.Text>
             ) : (
               <>
-                <div className="text-center">
+                <div className="text-center mb-2">
                   <Card.Text>
                     You are currently on the{" "}
                     <span className={planClass(currentPlan)}>
@@ -137,6 +137,10 @@ function ProfileDashboard({ token }: { token: string }) {
                 </div>
               </>
             )}
+            <Link href="/subscription">
+            <div className="d-flex justify-content-center">
+            <button className="btn btn-dark text-center">Upgarde Now</button></div>
+          </Link>
           </Card.Body>
         </Card>
       </Col>
@@ -146,13 +150,18 @@ function ProfileDashboard({ token }: { token: string }) {
         <Card className="p-3 shadow-sm rounded-3">
           <Card.Body>
             <Card.Title className="text-center mt-3">Plan Details</Card.Title>
-            {plan.map((item: any, i) => (
-              <li key={i} className="py-1">
-                {item.plan}
-              </li>
-            ))}
+            {plan
+              .filter((item: any) => item.plan !== "usd")
+              .map((item: any, i) => (
+                <li key={i} className="py-1">
+                  {item.plan}
+                </li>
+              ))}
+              
           </Card.Body>
+
         </Card>
+         
       </Col>
 
       {/* Profile Card */}

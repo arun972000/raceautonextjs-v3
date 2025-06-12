@@ -2,6 +2,7 @@
 import { formatDate } from "@/components/Time";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 
@@ -74,10 +75,7 @@ function SubscriptionProfile({ token }: { token: any }) {
   return (
     <Card className="shadow p-4 border-0 rounded-3">
       <Row>
-        <Col
-          md={6}
-          className="d-flex flex-column justify-content-center mb-4 mb-md-0"
-        >
+        <Col md={6} className="d-flex flex-column  mb-4 mb-md-0">
           <h4 className="fw-semibold mb-3">Subscription</h4>
           {isExpired ? (
             <p className="text-danger">
@@ -90,32 +88,37 @@ function SubscriptionProfile({ token }: { token: any }) {
               now.
             </p>
           )}
+          {isActive && (
+            <Row className="mt-2">
+              <Col>
+                <h4 className="fw-semibold mb-3">Active Plan Period</h4>
+                <p>Start Date: {formatDate(subscriptionPack[0]?.start_date)}</p>
+                <p>End Date: {formatDate(subscriptionPack[0]?.end_date)}</p>
+              </Col>
+            </Row>
+          )}
         </Col>
 
         {/* Plan Details */}
         <Col md={6}>
           <h4 className="fw-semibold mb-3">Plan Details</h4>
           <ul className="text-start pl-2">
-            {plan.map((item: any, i) => (
-              <li key={i} className="py-1">
-                {item.plan}
-              </li>
-            ))}
+            {plan
+              .filter((item: any) => item.plan !== "usd")
+              .map((item: any, i) => (
+                <li key={i} className="py-1">
+                  {item.plan}
+                </li>
+              ))}
             <li className="d-block py-1">&nbsp;</li>
           </ul>
+          <Link href="/subscription">
+            <button className="btn btn-dark ms-auto">Upgarde Now</button>
+          </Link>
         </Col>
       </Row>
 
       {/* Active Plan Dates */}
-      {isActive && (
-        <Row className="mt-4">
-          <Col>
-            <h4 className="fw-semibold mb-3">Active Plan Period</h4>
-            <p>Start Date: {formatDate(subscriptionPack[0]?.start_date)}</p>
-            <p>End Date: {formatDate(subscriptionPack[0]?.end_date)}</p>
-          </Col>
-        </Row>
-      )}
     </Card>
   );
 }

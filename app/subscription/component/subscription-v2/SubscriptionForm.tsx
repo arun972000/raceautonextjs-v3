@@ -3,20 +3,15 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import {
-  Button,
-  Modal,
-  Collapse,
-  Card,
-  Row,
-  Col,
-} from "react-bootstrap";
+import { Button, Modal, Collapse, Card, Row, Col } from "react-bootstrap";
 
 import PlanDetailsForm from "./PlanDetailsForm";
 import ManualPaymentForm from "./ManualPaymentForm";
 import BankTransferForm from "./BankTranferForm";
 import RazorpayPaymentForm from "./razorpayV2Form";
 import AuthModal from "@/app/test/components/LoginFormTest";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 interface PlanInfo {
   planTier: string;
@@ -26,7 +21,6 @@ interface PlanInfo {
 
 const SubscriptionForm = ({ plan }: { plan: string }) => {
   const router = useRouter();
-  const [token, setToken] = useState<string | null>(null);
 
   const [showAuth, setShowAuth] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -38,10 +32,38 @@ const SubscriptionForm = ({ plan }: { plan: string }) => {
   const [openBank, setOpenBank] = useState(false);
 
   // Load auth token (if user is logged in)
+  const [email, setEmail] = useState("");
+  const [token, setToken] = useState(null);
+  const [subcriptionData, setSubcriptionData] = useState<any>([]);
+
+  const subscriptionApi = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/purchase/${email}`
+      );
+      setSubcriptionData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    const authToken = Cookies.get("authToken");
-    setToken(authToken || null);
+    const token: any = Cookies.get("authToken");
+    if (token) {
+      setToken(token);
+      const decoded: any = jwtDecode(token);
+      setEmail(decoded.email);
+    }
   }, []);
+
+  useEffect(() => {
+    if (email !== "") {
+      subscriptionApi();
+    }
+  }, [email]);
+
+  const isActivePlan =
+    subcriptionData.length !== 0 && subcriptionData[0].status === "Active";
 
   // When "Buy Now" is clicked, either prompt login or open modal
   const handleBuyClick = () => {
@@ -88,7 +110,7 @@ const SubscriptionForm = ({ plan }: { plan: string }) => {
       {/* 2) BUY BUTTON */}
       <div className="text-center">
         <Button variant="dark" onClick={handleBuyClick}>
-          Buy Now
+          {isActivePlan ? "Upgarde Now" : "Buy Now"}
         </Button>
       </div>
 
