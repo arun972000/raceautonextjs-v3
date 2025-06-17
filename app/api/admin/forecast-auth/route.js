@@ -5,7 +5,7 @@ export async function OPTIONS(req) {
   return new Response(null, {
     status: 204,
     headers: {
-      "Access-Control-Allow-Origin": "http://localhost:3001",
+      "Access-Control-Allow-Origin": "https://raceautoanalytics.com/",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization",
     },
@@ -28,7 +28,7 @@ export async function POST(req) {
         {
           status: 404,
           headers: {
-            "Access-Control-Allow-Origin": "http://localhost:3001",
+            "Access-Control-Allow-Origin": "https://raceautoanalytics.com/",
           },
         }
       );
@@ -43,7 +43,7 @@ export async function POST(req) {
         {
           status: 400,
           headers: {
-            "Access-Control-Allow-Origin": "http://localhost:3001",
+            "Access-Control-Allow-Origin": "https://raceautoanalytics.com/",
           },
         }
       );
@@ -54,7 +54,7 @@ export async function POST(req) {
       {
         status: 200,
         headers: {
-          "Access-Control-Allow-Origin": "http://localhost:3001",
+          "Access-Control-Allow-Origin": "https://raceautoanalytics.com/",
         },
       }
     );
@@ -65,7 +65,7 @@ export async function POST(req) {
       {
         status: 500,
         headers: {
-          "Access-Control-Allow-Origin": "http://localhost:3001",
+          "Access-Control-Allow-Origin": "https://raceautoanalytics.com/",
         },
       }
     );
