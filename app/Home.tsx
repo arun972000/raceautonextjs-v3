@@ -72,7 +72,7 @@ const Home = async () => {
             </div>
             <MagazineAd_2 />
             <HomeMarket />
-            <HomeReports />
+            {/* <HomeReports /> */}
             <div className="row mt-4">
               <div className={`${styles.desktop_category} col-lg-8`}>
                 <MainComponent />

@@ -84,7 +84,7 @@ export default function PricingCard({
       <p className="plan-subtitle">{subtitle}</p>
 
       <div className="price-section" style={{ textAlign: "center" }}>
-        {typeof price === "number" && (
+        {(title.toLowerCase() === "platinum" || title.toLowerCase() === "gold") && typeof price === "number" && (
           <div
             className="fake-price"
             style={{
@@ -115,6 +115,41 @@ export default function PricingCard({
           </div>
         )}
 
+        {title.toLowerCase() === "silver" && (
+          <div
+            style={{
+              background: "linear-gradient(135deg, #f0faff, #dbefff)",
+              padding: "14px 18px",
+              borderRadius: "12px",
+              textAlign: "center",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+              marginBottom: "8px",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "1.15rem",
+                fontWeight: 700,
+                textTransform: "uppercase",
+                color: "#004b8d",
+                letterSpacing: "0.6px",
+                marginBottom: "4px",
+              }}
+            >
+             Limited-Time Offer!
+            </div>
+            <div
+              style={{
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                color: "#2c3e50",
+                opacity: 0.85,
+              }}
+            >
+              ⏳ Hurry, offer ends this month!
+            </div>
+          </div>
+        )}
 
         <h2 className="plan-price" style={{ color: 'black' }}>
           {typeof price === "number"

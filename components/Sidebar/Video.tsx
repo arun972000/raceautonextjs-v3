@@ -14,7 +14,7 @@ const Video = () => {
 
   return (
     <Row className=" g-4">
-      <h4 style={{ fontWeight: 600 }}>Race Videos</h4>
+      <h2 style={{ fontWeight: 700 }}>Race Videos</h2>
       {/* Main Large Video */}
       <Col md={8}>
         <div style={{ position: "relative", paddingTop: "56.25%" }}>

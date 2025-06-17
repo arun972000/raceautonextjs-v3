@@ -12,7 +12,7 @@ const Exclusive = ({ value }) => {
                 className="container-fluid py-1"
                 style={{ backgroundColor: "#EAEAEA" }}
             >
-                <div className="row g-3">
+                <div className="row g-2">
                     {value?.slice(0, 4).map((item, index, array) => {
                         const title = item.title || "Untitled News";
                         const title_slug = item.title_slug;
@@ -23,10 +23,10 @@ const Exclusive = ({ value }) => {
                             <Link href={`/post/${title_slug}`} key={index}>
                                 <div className="col-12">
                                     <div className="row g-0 align-items-center border rounded">
-                                        <div className="col-6">
+                                        <div className="col-8">
                                             <h6 className="mb-0 px-2 text-dark" style={{ fontWeight: 700 }}>{title}</h6>
                                         </div>
-                                        <div className="col-6">
+                                        <div className="col-4">
                                             <div
                                                 style={{
                                                     width: "100%",
@@ -49,14 +49,14 @@ const Exclusive = ({ value }) => {
 
                                     {/* Add a divider below each post except the last one */}
                                     {index < array.length - 1 && (
-                                        <hr style={{ borderTop: "2px solid #333", marginBottom:0 }} />
+                                        <hr style={{ borderTop: "2px solid #333", marginBottom: 0 }} />
                                     )}
                                 </div>
                             </Link>
                         );
                     })}
                 </div>
-          
+
             </div>
         </>
     );

@@ -20,7 +20,7 @@ html.dark {
 
 /* Apply to Bootstrap components */
 body {
-  font-family: Arial, sans-serif;
+  /* font-family: Arial, sans-serif; */
   background-color: var(--bg-color);
   color: var(--text-color) !important;
 }
@@ -34,13 +34,13 @@ a {
   color: inherit;
   text-decoration: none;
 }
-.font-inter {
+/* .font-inter {
   font-family: "Inter", sans-serif;
 }
 
 .font-roboto {
   font-family: "Roboto", sans-serif;
-}
+} */
 
 /* Add other fallback fonts here as needed */
 

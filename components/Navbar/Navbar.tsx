@@ -115,7 +115,7 @@ const Navbar = async () => {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Market
+                    MARKET
                   </button>
                   <div
                     className={`${styles.dropdown_menu_custom} dropdown-menu`}
@@ -145,7 +145,7 @@ const Navbar = async () => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                       >
-                        {item.name}
+                        {item.name.toUpperCase()}
                       </button>
                       <Subcategory id={item.id} main={item.name_slug} />
                     </li>
@@ -161,7 +161,7 @@ const Navbar = async () => {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    More
+                    MORE
                   </button>
                   <div
                     className={`${styles.dropdown_menu_custom} dropdown-menu`}
@@ -183,7 +183,7 @@ const Navbar = async () => {
                     className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
                     href="/magazine"
                   >
-                    <span>E-Magazine</span>
+                    <span>E-MAGAZINE</span>
                   </Link>
                 </li>
               </ul>

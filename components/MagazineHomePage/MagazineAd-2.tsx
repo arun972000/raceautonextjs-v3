@@ -41,7 +41,7 @@ const MagazineAd_2 = () => {
   // Optional autoplay force start (for rare cases)
   useEffect(() => {
     const timer = setTimeout(() => {
-      const swiperEl = document.querySelector('.mySwiper') as any;
+      const swiperEl = document.querySelector(".mySwiper") as any;
       swiperEl?.swiper?.autoplay?.start();
     }, 500);
     return () => clearTimeout(timer);
@@ -49,7 +49,9 @@ const MagazineAd_2 = () => {
 
   return (
     <>
-      <h4 className="my-2 mt-3">RACE AUTO INDIA Magazine</h4>
+      <h2 className="my-2 mt-3" style={{ fontWeight: 700 }}>
+        RACE AUTO INDIA Magazine
+      </h2>
       <p className="mb-2">
         Stay ahead in the automotive world with top reviews, trends, and expert
         analysis in our latest edition.

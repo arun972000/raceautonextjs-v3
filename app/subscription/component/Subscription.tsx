@@ -15,8 +15,6 @@ const Subscription = async () => {
   );
 
 
-
-
   const data: SubscriptionType[] = await res.json();
   return (
     <>

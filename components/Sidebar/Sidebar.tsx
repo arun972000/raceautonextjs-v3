@@ -87,7 +87,7 @@ const Sidebar = async () => {
             />
           </Link>
         </div>
-        <div className="col-12">
+        {/* <div className="col-12">
           <h6
             style={{
               backgroundColor: "#0192ef",
@@ -100,7 +100,7 @@ const Sidebar = async () => {
             Latest News
           </h6>
           <LatestNewsSwiper latestNewsData={LatestNewsData} />
-        </div>
+        </div> */}
         <div className="col-12">
           <DeskTopView />
         </div>
@@ -119,6 +119,22 @@ const Sidebar = async () => {
           />
         </Link>
       </div> */}
+      <Link href="/subscription">
+              <div
+                style={{
+                  position: "relative",
+                  aspectRatio: "1/1.414",
+                  width: "100%",
+                }}
+              >
+                <Image
+                  src="/images/Research & strategies-01.jpg"
+                  alt="news"
+                  fill
+                  className="rounded object-fit-cover"
+                />
+              </div>
+            </Link>
     </div>
   );
 };
