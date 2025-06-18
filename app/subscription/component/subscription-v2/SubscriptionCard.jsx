@@ -59,11 +59,12 @@ export default function PricingCard({
       style={{ backgroundColor: color, position: 'relative' }}
     >
       {/* "50% OFF" animated label */}
-      {typeof price === 'number' && (
-        <span className="badge bg-danger position-absolute top-0 start-0 m-2">
-          70% OFF
-        </span>
-      )}
+      {typeof price === 'number' &&
+        (title.toLowerCase() === "gold" || title.toLowerCase() === "platinum") && (
+          <span className="badge bg-danger position-absolute top-0 start-0 m-2">
+            70% OFF
+          </span>
+        )}
 
       {isPopular && <div className="popular-badge">Popular</div>}
 
@@ -136,7 +137,7 @@ export default function PricingCard({
                 marginBottom: "4px",
               }}
             >
-             Limited-Time Offer!
+              Limited-Time Offer!
             </div>
             <div
               style={{

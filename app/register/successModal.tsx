@@ -13,11 +13,15 @@ const SignupSuccessBanner = () => {
       localStorage.removeItem("showSignupBanner");
     }
   }, []);
-
   if (!visible) return null;
 
   return (
-    <Alert variant="success" onClose={() => setVisible(false)} dismissible className="text-center">
+    <Alert
+      variant="success"
+      onClose={() => setVisible(false)}
+      dismissible
+      className="text-center"
+    >
       🎉 Registration Successful! Welcome to RaceAuto India.
     </Alert>
   );

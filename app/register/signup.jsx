@@ -1,16 +1,13 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client'
 import React, { useState } from "react";
-import { Form, Button, Alert, Container, Row, Col } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-import Image from "next/image";
 import './signup.css'
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { auth } from "@/firebase"; // Import Firebase auth
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import GoogleLoginButton from "../login/GoogleLogin";
 
 // Validation schema for form fields with strong password
@@ -31,13 +28,14 @@ const validationSchema = Yup.object().shape({
 
 const SignupForm = ({ onSuccess }) => {
   const [error, setError] = useState("");
-  const router = useRouter()
+  const [showSuccess, setShowSuccess] = useState(false);
+  const router = useRouter();
 
-  // Handle form submission
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-      setError(""); // Clear previous error messages
+      setError("");
       await axios.post("/api/register", values);
+
       toast.info("Login success", {
         position: "top-right",
         autoClose: 5000,
@@ -49,17 +47,8 @@ const SignupForm = ({ onSuccess }) => {
         theme: "light",
       });
 
-      // const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-      // const user = userCredential.user;
 
-      // await sendEmailVerification(user);
-
-      // setTimeout(() => {
-      //   router.push('/subscription');           // 1st back → login page
-
-      // }, 1000);
-      onSuccess();
-      window.location.reload();
+      setShowSuccess(true);
     } catch (error) {
       if (error.response) {
         if (error.response.status === 409) {
@@ -77,78 +66,119 @@ const SignupForm = ({ onSuccess }) => {
     }
   };
 
+  const SuccessUI = () => (
+    <div className="text-center p-4 mt-4 border rounded shadow bg-white">
+      <div style={{ fontSize: '2.5rem' }}>✅</div>
+      <h5 className="fw-semibold mt-3 mb-2">You're all set!</h5>
+      <p className="text-muted mb-4" style={{ fontSize: '0.95rem' }}>
+        Your account has been created. Choose where to go next.
+      </p>
+      <div className="d-flex flex-column align-items-center gap-2">
+        <Button
+          onClick={() => {
+            onSuccess();
+            window.location.reload();
+          }}
+          style={{
+            background: "#000",
+            color: "#fff",
+            borderRadius: "6px",
+            padding: "10px 20px",
+            fontWeight: 500,
+            border: "none",
+          }}
+        >
+          Stay here
+        </Button>
+        <Button
+          onClick={() => router.push("https://raceautoanalytics.com/flash-reports")}
+          style={{
+            border: "1.5px solid #000",
+            background: "#fbeec1",
+            color: "#000",
+            fontWeight: 500,
+            padding: "10px 20px",
+            borderRadius: "6px",
+            transition: "all 0.2s ease-in-out",
+          }}
+        >
+          Explore Reports
+        </Button>
+      </div>
+    </div>
+  );
+
+
   return (
-
     <div className="signup-box px-3 py-2">
-
       {error && <Alert variant="danger">{error}</Alert>}
-      <Formik
-        initialValues={{ username: "", email: "", password: "", confirmPassword: "" }}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
-          <Form noValidate onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formUsername">
-              {/* <Form.Label>Username</Form.Label> */}
-              <Form.Control
-                type="text"
-                name="username"
-                value={values.username}
-                onChange={handleChange}
-                isInvalid={touched.username && errors.username}
-                placeholder="Enter username"
-                style={{ border: '1px solid #000', boxShadow: 'none' }}
-              />
-              <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formEmail">
-              {/* <Form.Label>Email address</Form.Label> */}
-              <Form.Control
-                type="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-                isInvalid={touched.email && errors.email}
-                placeholder="Enter email"
-                style={{ border: '1px solid #000', boxShadow: 'none' }}
-              />
-              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formPassword">
-              {/* <Form.Label>Password</Form.Label> */}
-              <Form.Control
-                type="password"
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-                isInvalid={touched.password && errors.password}
-                placeholder="Password"
-                style={{ border: '1px solid #000', boxShadow: 'none' }}
-              />
-              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formConfirmPassword">
-              {/* <Form.Label>Confirm Password</Form.Label> */}
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                value={values.confirmPassword}
-                onChange={handleChange}
-                isInvalid={touched.confirmPassword && errors.confirmPassword}
-                placeholder="Confirm password"
-                style={{ border: '1px solid #000', boxShadow: 'none' }}
-              />
-              <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
-            </Form.Group>
-            <Button variant="dark" type="submit" disabled={isSubmitting} className="w-100">
-              {isSubmitting ? "Signing up..." : "Sign Up"}
-            </Button>
-            <p className="text-center text-muted mt-2 mb-1 p-0 m-0">or</p>
-            <div className="d-flex justify-content-center mb-3"><GoogleLoginButton /></div>
-          </Form>
-        )}
-      </Formik>
+      {showSuccess ? (
+        <SuccessUI />
+      ) : (
+        <Formik
+          initialValues={{ username: "", email: "", password: "", confirmPassword: "" }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ handleSubmit, handleChange, values, touched, errors, isSubmitting }) => (
+            <Form noValidate onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="formUsername">
+                <Form.Control
+                  type="text"
+                  name="username"
+                  value={values.username}
+                  onChange={handleChange}
+                  isInvalid={touched.username && errors.username}
+                  placeholder="Enter username"
+                  style={{ border: '1px solid #000', boxShadow: 'none' }}
+                />
+                <Form.Control.Feedback type="invalid">{errors.username}</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formEmail">
+                <Form.Control
+                  type="email"
+                  name="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  isInvalid={touched.email && errors.email}
+                  placeholder="Enter email"
+                  style={{ border: '1px solid #000', boxShadow: 'none' }}
+                />
+                <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formPassword">
+                <Form.Control
+                  type="password"
+                  name="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  isInvalid={touched.password && errors.password}
+                  placeholder="Password"
+                  style={{ border: '1px solid #000', boxShadow: 'none' }}
+                />
+                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="formConfirmPassword">
+                <Form.Control
+                  type="password"
+                  name="confirmPassword"
+                  value={values.confirmPassword}
+                  onChange={handleChange}
+                  isInvalid={touched.confirmPassword && errors.confirmPassword}
+                  placeholder="Confirm password"
+                  style={{ border: '1px solid #000', boxShadow: 'none' }}
+                />
+                <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+              </Form.Group>
+              <Button variant="dark" type="submit" disabled={isSubmitting} className="w-100">
+                {isSubmitting ? "Signing up..." : "Sign Up"}
+              </Button>
+              <p className="text-center text-muted mt-2 mb-1 p-0 m-0">or</p>
+              <div className="d-flex justify-content-center mb-3"><GoogleLoginButton /></div>
+            </Form>
+          )}
+        </Formik>
+      )}
     </div>
   );
 };

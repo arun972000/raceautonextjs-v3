@@ -9,6 +9,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import ConditionalChatbot from "@/components/ConditionalChatBot";
 import Script from "next/script";
 import { AuthModalProvider } from "@/utils/AuthModelProvider";
+import SignupSuccessBanner from "./register/successModal";
 
 async function fetchLogoData() {
   try {
@@ -179,9 +180,8 @@ export default async function RootLayout({
           defaultTheme="light"
           enableSystem={false}
         >
-          <AuthModalProvider>
-            
-            {children}</AuthModalProvider>
+          <SignupSuccessBanner />
+          <AuthModalProvider>{children}</AuthModalProvider>
         </ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />
