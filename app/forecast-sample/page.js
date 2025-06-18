@@ -1,4 +1,3 @@
-// File: app/forecast/page.js
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -48,11 +47,12 @@ export default function ForecastPage() {
     return ids.length > 0 ? ids[0] : null;
   });
 
-  const [selectedRegions, setSelectedRegions] = useState([]); // will default to allRegions when dataset chosen
+  const [selectedRegions, setSelectedRegions] = useState([]);
   const [selectedGraphId, setSelectedGraphId] = useState(null);
+  const [showPrompt, setShowPrompt] = useState(false);
 
   // ─── MOBILE DETECTION ──────────────────────────────────────────────
-  // Set isMobile = true whenever window width ≤ 550px
+  // Set isMobile = true whenever window width ≤ 480px
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth <= 550);
@@ -61,7 +61,7 @@ export default function ForecastPage() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // ─── When dataset changes: pick the first graph and auto‐select all regions ─────────────────────────────────────
+  // When dataset changes: pick the first graph and auto‐select all regions
   useEffect(() => {
     if (selectedDatasetId) {
       const available = graphs.filter((g) =>
@@ -105,6 +105,7 @@ export default function ForecastPage() {
     if (!bothData.length) return [];
     const results = [];
 
+    // Helper to compute CAGR using only valid data points (ignores nulls)
     const computeCagr = (key) => {
       const filtered = bothData
         .map((row) => ({ year: row.year, val: row[key] }))
@@ -112,16 +113,23 @@ export default function ForecastPage() {
       if (filtered.length < 2) return null;
       const first = filtered[0];
       const last = filtered[filtered.length - 1];
+      // Use (filtered.length - 1) as the number of intervals
       const periods = filtered.length - 1;
       if (periods <= 0 || first.val <= 0) return null;
-      return Math.pow(last.val / first.val, 1 / periods) - 1;
+      const cagrValue = Math.pow(last.val / first.val, 1 / periods) - 1;
+      return cagrValue;
     };
 
-    // Historical CAGR
+    // Historical CAGR (value)
     const histCagr = computeCagr("value");
     if (histCagr !== null) {
-      results.push({ name: "Historical", color: "#D64444", cagr: histCagr });
+      results.push({
+        name: "Historical",
+        color: "#D64444",
+        cagr: histCagr,
+      });
     }
+    // Forecast Linear CAGR
     if (hasLinear) {
       const linCagr = computeCagr("forecastLinear");
       if (linCagr !== null)
@@ -131,6 +139,7 @@ export default function ForecastPage() {
           cagr: linCagr,
         });
     }
+    // Forecast Score CAGR
     if (hasScore) {
       const scoreCagr = computeCagr("forecastScore");
       if (scoreCagr !== null)
@@ -140,11 +149,13 @@ export default function ForecastPage() {
           cagr: scoreCagr,
         });
     }
+    // Forecast AI CAGR
     if (hasAi) {
       const aiCagr = computeCagr("forecastAi");
       if (aiCagr !== null)
         results.push({ name: "Forecast (AI)", color: "#0080FF", cagr: aiCagr });
     }
+    // Forecast Race Insights CAGR
     if (hasRaceInsights) {
       const riCagr = computeCagr("forecastRaceInsights");
       if (riCagr !== null)
@@ -186,11 +197,52 @@ export default function ForecastPage() {
     return v;
   };
 
+  // ─── Subscription overlay ──────────────────────────────────────────
+  function SubscriptionPrompt({ onClose }) {
+    return (
+      <div className="subscribe-prompt">
+        <p>Please subscribe to unlock this feature.</p>
+        <button
+          className="subscribe-btn"
+          onClick={() => {
+            onClose();
+            router.push("https://raceautoindia.com/subscription");
+          }}
+        >
+          Subscribe Now
+        </button>
+        <style jsx>{`
+          .subscribe-prompt {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(20, 20, 20, 0.9);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            color: #fff;
+            text-align: center;
+            z-index: 10;
+          }
+          .subscribe-btn {
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: bold;
+          }
+        `}</style>
+      </div>
+    );
+  }
+
   return (
     <>
       <GlobalStyles />
       <motion.div
-        className="de-view container-fluid"
+        className="container-fluid"
         style={{ background: "#2C2E31" }}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -200,7 +252,7 @@ export default function ForecastPage() {
         <div className="container mt-1">
           {/* APP HEADER */}
           <div className="app-header d-flex justify-content-between align-items-center">
-            <Link href="/" passHref>
+            <Link href="/forecast-sample" passHref>
               <motion.div
                 className="logo-container"
                 onMouseEnter={() => setLogoHover(true)}
@@ -209,7 +261,7 @@ export default function ForecastPage() {
                 animate={{
                   scale: isLogoHover ? 1.05 : 1,
                   filter: isLogoHover
-                    ? "drop-shadow(0 0 12px var(--accent, #15AFE4))"
+                    ? "drop-shadow(0 0 12px var(--accent))"
                     : "none",
                 }}
                 transition={{
@@ -226,18 +278,47 @@ export default function ForecastPage() {
               </motion.div>
             </Link>
             <div className="nav-buttons">
+              {/* Button #1 */}
               <button
                 className="nav-btn"
-                onClick={() => router.push("/score-card")}
+                onClick={() => {
+                  if (!button1Prompt) {
+                    setButton1Prompt(true);
+                    setTimeout(() => setButton1Prompt(false), 3000);
+                  } else {
+                    router.push("https://raceautoindia.com/subscription");
+                  }
+                }}
               >
-                <FaClipboardList className="btn-icon" /> Build Your Own Tailored
-                Forecast
+                {button1Prompt ? (
+                  "Subscribe to unlock"
+                ) : (
+                  <>
+                    <FaClipboardList className="btn-icon" /> Build Your Own
+                    Tailored Forecast
+                  </>
+                )}
               </button>
+
+              {/* Button #2 */}
               <button
                 className="nav-btn"
-                onClick={() => router.push("/reports")}
+                onClick={() => {
+                  if (!button2Prompt) {
+                    setButton2Prompt(true);
+                    setTimeout(() => setButton2Prompt(false), 3000);
+                  } else {
+                    router.push("https://raceautoindia.com/subscription");
+                  }
+                }}
               >
-                <FaBolt className="btn-icon" /> Flash Reports
+                {button2Prompt ? (
+                  "Subscribe to unlock"
+                ) : (
+                  <>
+                    <FaBolt className="btn-icon" /> Flash Reports
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -259,11 +340,17 @@ export default function ForecastPage() {
               <div
                 className={`chart-dropdown ${isDatasetHovering ? "open" : ""}`}
               >
-                {Object.entries(datasetMap).map(([id, ds]) => (
+                {Object.entries(datasetMap).map(([id, ds], idx) => (
                   <div
                     key={id}
                     onClick={() => {
-                      setSelectedDatasetId(id);
+                      // First two categories work normally; 3rd+ show prompt
+                      if (idx >= 2) {
+                        setShowPrompt(true);
+                      } else {
+                        setShowPrompt(false);
+                        setSelectedDatasetId(id);
+                      }
                       setIsDatasetHovering(false);
                     }}
                     className="mt-1"
@@ -297,11 +384,11 @@ export default function ForecastPage() {
               >
                 {/* select/remove all */}
                 <div
-                  onClick={() =>
+                  onClick={() => {
                     selectedRegions.length === allRegions.length
                       ? setSelectedRegions([])
-                      : setSelectedRegions(allRegions)
-                  }
+                      : setSelectedRegions(allRegions);
+                  }}
                   className="mt-1 select-all"
                   style={{
                     cursor: "pointer",
@@ -314,7 +401,7 @@ export default function ForecastPage() {
                     : "Select all"}
                 </div>
 
-                {/* grouped regions: now fully selectable */}
+                {/* grouped regions: all other clicks show prompt */}
                 {Object.entries(regionsByGroup).map(([grp, nodes]) => (
                   <div key={grp} style={{ marginBottom: 8, color: "white" }}>
                     <label
@@ -330,28 +417,7 @@ export default function ForecastPage() {
                         checked={nodes.every((n) =>
                           selectedRegions.includes(n.name)
                         )}
-                        onChange={() => {
-                          // toggle entire group
-                          const allInGroup = nodes.every((n) =>
-                            selectedRegions.includes(n.name)
-                          );
-                          if (allInGroup) {
-                            // remove these from selectedRegions
-                            setSelectedRegions((prev) =>
-                              prev.filter(
-                                (reg) => !nodes.map((n) => n.name).includes(reg)
-                              )
-                            );
-                          } else {
-                            // add missing ones
-                            setSelectedRegions((prev) => [
-                              ...new Set([
-                                ...prev,
-                                ...nodes.map((n) => n.name),
-                              ]),
-                            ]);
-                          }
-                        }}
+                        onChange={() => setShowPrompt(true)}
                       />
                       <strong
                         onClick={(e) => {
@@ -380,15 +446,7 @@ export default function ForecastPage() {
                             type="checkbox"
                             className="me-2"
                             checked={selectedRegions.includes(n.name)}
-                            onChange={() => {
-                              if (selectedRegions.includes(n.name)) {
-                                setSelectedRegions((prev) =>
-                                  prev.filter((reg) => reg !== n.name)
-                                );
-                              } else {
-                                setSelectedRegions((prev) => [...prev, n.name]);
-                              }
-                            }}
+                            onChange={() => setShowPrompt(true)}
                           />
                           {n.name}
                         </label>
@@ -402,7 +460,9 @@ export default function ForecastPage() {
           {/* CHART HEADER */}
           <h5 className="chart-header">
             {!selectedDatasetId ? (
-              <span className="chart-title">Please select a category</span>
+              <span className="chart-title">
+                Please select a category first
+              </span>
             ) : (
               <div
                 className={`dropdown-toggle ${
@@ -415,11 +475,16 @@ export default function ForecastPage() {
                 <div className={`chart-dropdown ${isHovering ? "open" : ""}`}>
                   {graphs
                     .filter((g) => g.dataset_ids.includes(selectedDatasetId))
-                    .map((g) => (
+                    .map((g, idx) => (
                       <div
                         key={g.id}
                         onClick={() => {
-                          setSelectedGraphId(g.id);
+                          if (idx === 0) {
+                            setSelectedGraphId(g.id);
+                            setShowPrompt(false);
+                          } else {
+                            setShowPrompt(true);
+                          }
                           setIsHovering(false);
                         }}
                         className="mt-1"
@@ -450,7 +515,7 @@ export default function ForecastPage() {
                     color: item.color,
                     ...(isMobile
                       ? {
-                          background: `${item.color}20`,
+                          background: `${item.color}20`, // low‐opacity “pill” background
                           padding: "4px 8px",
                           borderRadius: "4px",
                           fontSize: "0.8rem",
@@ -482,7 +547,18 @@ export default function ForecastPage() {
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <div className="chart-card">
+                      <div
+                        className="chart-card"
+                        style={{
+                          filter: showPrompt ? "blur(4px)" : "none",
+                          pointerEvents: showPrompt ? "none" : "auto",
+                        }}
+                      >
+                        {/* 
+                          ResponsiveContainer height is dynamic:
+                          - 400px on desktop
+                          - 250px on mobile (isMobile === true)
+                        */}
                         <ResponsiveContainer
                           width="100%"
                           height={isMobile ? 250 : 400}
@@ -540,8 +616,10 @@ export default function ForecastPage() {
                             <YAxis
                               axisLine={false}
                               tickLine={false}
-                              width={isMobile ? 20 : 40}
+                              width={isMobile ? 20 : 40} // shrink the total axis‐label width on mobile
+                              // On mobile, shift tick labels 10px inside
                               tick={{
+                                // On mobile: use a translucent white instead of #FFC107
                                 fill: isMobile
                                   ? "rgba(255,255,255,0.5)"
                                   : "#FFC107",
@@ -556,7 +634,7 @@ export default function ForecastPage() {
                               wrapperStyle={{ marginTop: 24 }}
                               payload={legendPayload}
                               itemStyle={{
-                                fontSize: isMobile ? "0.6rem" : "0.75rem",
+                                fontSize: isMobile ? "0.3rem" : "0.75rem",
                                 whiteSpace: "nowrap",
                               }}
                             />
@@ -611,6 +689,11 @@ export default function ForecastPage() {
                           </LineChart>
                         </ResponsiveContainer>
                       </div>
+                      {showPrompt && (
+                        <SubscriptionPrompt
+                          onClose={() => setShowPrompt(false)}
+                        />
+                      )}
                     </motion.div>
                   </AnimatePresence>
                   <style jsx>{`

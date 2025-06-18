@@ -179,7 +179,9 @@ export default async function RootLayout({
           defaultTheme="light"
           enableSystem={false}
         >
-          <AuthModalProvider>{children}</AuthModalProvider>
+          <AuthModalProvider>
+            
+            {children}</AuthModalProvider>
         </ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />
