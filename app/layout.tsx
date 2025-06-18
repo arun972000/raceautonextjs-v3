@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import ConditionalChatbot from "@/components/ConditionalChatBot";
 import Script from "next/script";
+import { AuthModalProvider } from "@/utils/AuthModelProvider";
 
 async function fetchLogoData() {
   try {
@@ -178,7 +179,7 @@ export default async function RootLayout({
           defaultTheme="light"
           enableSystem={false}
         >
-          {children}
+          <AuthModalProvider>{children}</AuthModalProvider>
         </ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />

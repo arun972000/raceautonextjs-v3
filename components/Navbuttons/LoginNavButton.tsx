@@ -1,30 +1,26 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import ProfileButton from "./ProfileButton";
+import React from "react";
 import { CiLogin } from "react-icons/ci";
+import ProfileButton from "./ProfileButton";
+import Cookies from "js-cookie";
 import AuthModal from "@/app/test/components/LoginFormTest";
+import { useAuthModal } from "@/utils/AuthModelProvider";
 
 const LoginNavButton = () => {
-  const [token, setToken] = useState(null);
-  const [showAuth, setShowAuth] = useState(false);
-
-  useEffect(() => {
-    const cookieToken: any = Cookies.get("authToken");
-    setToken(cookieToken);
-  }, []);
+  const token = Cookies.get("authToken") || null;
+  const { show, close, open } = useAuthModal();
 
   if (!token) {
     return (
       <>
         <CiLogin
-          onClick={() => setShowAuth(true)}
+          onClick={open}
           size={25}
           style={{ cursor: "pointer" }}
           className="ms-auto"
         />
-        <AuthModal show={showAuth} onClose={() => setShowAuth(false)} />
+        {show && <AuthModal show={show} onClose={close} />}
       </>
     );
   }
