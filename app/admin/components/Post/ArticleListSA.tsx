@@ -437,7 +437,7 @@ At=${scheduledAt}&page=${page || 1}`;
                           color: "white",
                         }}
                       >
-                        Recommended
+                        Exclusive
                       </span>
                     )}
                   </div>
