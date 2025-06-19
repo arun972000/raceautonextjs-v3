@@ -164,15 +164,19 @@ export default function PricingCard({
       </div>
 
       <ul className="feature-list">
-        {features.map((f, i) => (
-          <li key={i} className={!f.available && "unavailable"} style={{ color: 'black' }}>
-            {f.available
-              ? <PiCheckCircleFill className="icon text-success" />
-              : <PiXCircleFill className="icon text-muted" />}
-            {f.plan}
-          </li>
-        ))}
+        {features
+          .slice() // make a copy to avoid mutating original
+          .sort((a, b) => (a.available === b.available ? 0 : a.available ? -1 : 1))
+          .map((f, i) => (
+            <li key={i} className={!f.available && "unavailable"} style={{ color: 'black' }}>
+              {f.available
+                ? <PiCheckCircleFill className="icon text-success" />
+                : <PiXCircleFill className="icon text-muted" />}
+              {f.plan}
+            </li>
+          ))}
       </ul>
+
 
       {!isActivePlan && (
         <SubscriptionForm plan={title.toLowerCase()} />

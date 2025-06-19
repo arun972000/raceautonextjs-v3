@@ -46,8 +46,6 @@ const SignupForm = ({ onSuccess }) => {
         progress: undefined,
         theme: "light",
       });
-
-
       setShowSuccess(true);
     } catch (error) {
       if (error.response) {

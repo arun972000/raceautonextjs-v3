@@ -70,7 +70,7 @@ const PostPage = async ({
   const data: postType[] = await res.json();
   return (
     <>
-      <ContentComponent token={token?.value} is_recommended={data[0].is_recommended}/>
+      {/* <ContentComponent token={token?.value} is_recommended={data[0].is_recommended}/> */}
       <div className="container">
         <div className={`row`}>
           <Post
