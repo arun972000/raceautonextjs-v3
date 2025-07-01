@@ -12,6 +12,7 @@ import PricingTable from "./component/ComparisonTable";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 import SubscriptionPage from "./component/subscription-v2/SubscriptionPage";
 import PageViewTracker from "../pageTracker";
+import Navbar_V2 from "@/components/Navbar/Navbar_v2";
 
 const page = async () => {
   const cookieStore = await cookies();
@@ -24,14 +25,14 @@ const page = async () => {
       />
       <PageViewTracker page="subscription" />
       <BreakingNews />
-      <Navbar />
+      <Navbar_V2 />
       <MobileNavNew />
       <div className="main_content__position">
         <SubscriptionPage />
         {/* <PricingTable /> */}
       </div>
       <Footer />
-      <GreenBar />
+      {/* <GreenBar /> */}
     </>
   );
 };

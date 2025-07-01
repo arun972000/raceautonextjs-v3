@@ -7,6 +7,7 @@ import BreakingNews from "@/components/BreakingNews/BreakingNews";
 import Footer from "@/components/Footer/Footer";
 import GreenBar from "@/components/GreenBar/MagazineBar";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
+import Navbar_V2 from "@/components/Navbar/Navbar_v2";
 
 export async function generateMetadata({
   params,
@@ -45,7 +46,7 @@ const page = ({
   return (
     <>
       <BreakingNews />
-      <Navbar />
+      <Navbar_V2 />
       <MobileNavNew/>
       <div className="main_content__position">
       <div className="my-3">
@@ -53,7 +54,7 @@ const page = ({
       </div>
       </div>
       <Footer />
-      <GreenBar />
+      {/* <GreenBar /> */}
     </>
   );
 };

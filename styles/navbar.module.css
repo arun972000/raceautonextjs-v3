@@ -96,7 +96,7 @@
 }
 
 .navbar ul li a {
-  font-weight: 800;
+  /* font-weight: 800; */
   font-style: normal;
   font-size: 14px !important;
   letter-spacing: 0.8px;
@@ -110,7 +110,7 @@
 }
 
 .navbar ul li a span {
-  font-weight: 800;
+  /* font-weight: 800; */
   font-style: normal;
   font-size: 13px !important;
   letter-spacing: 0.8px;
@@ -144,6 +144,16 @@
   height: 40px;
 }
 
+/* Position submenus to the right */
+.dropdown_submenu {
+  position: relative;
+}
+
+.dropdown_submenu .dropdown_menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
 
 
 
@@ -251,35 +261,8 @@
   margin-top: 1px;
 }
 
-.subscribeButton {
-  background-color: #ff6347; /* Tomato color */
-  color: #fff;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  animation: pulse 2s infinite ease-in-out; /* Pulsing animation */
-  transition: transform 0.3s ease;
-}
 
-/* Define the pulsing animation */
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    box-shadow: 0 0 5px rgba(255, 99, 71, 0.7); /* Initial glow */
-  }
-  50% {
-    transform: scale(1.1); /* Slightly bigger */
-    box-shadow: 0 0 10 rgba(255, 99, 71, 1); /* Brighter glow */
-  }
-}
 
-.subscribeButton:hover {
-  /* background-color: white; */
-  color: black;
-}
 
 @media (max-width: 1000px) {
   .navPosition nav {
@@ -292,3 +275,75 @@
     display: none;
   }
 }
+
+
+.flash_link {
+  font-weight: 800;
+  color: #1f2937; /* default gray-800 */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+/* Electric hover effect */
+.flash_link:hover {
+  color: transparent;
+  background: linear-gradient(
+    90deg,
+    #170072 0%,
+    #170072 40%,
+    #ffffff 50%,
+    #170072 60%,
+    #170072 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: electricShine 2.5s linear infinite;
+}
+
+/* Thunder icon animation */
+.flash_link .thunder_icon {
+  color: #090042; /* yellow-400 */
+  transition: transform 0.3s ease;
+}
+
+.flash_link:hover .thunder_icon {
+  transform: scale(1.2) rotate(10deg);
+}
+
+@keyframes electricShine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+
+/* .forecast_text {
+  background: linear-gradient(
+    90deg,
+    #1e3a8a 0%,
+    #3b82f6 50%,
+    #1e3a8a 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shimmerSlide 3s ease-in-out infinite;
+  font-weight: 800;
+}
+
+@keyframes shimmerSlide {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+} */

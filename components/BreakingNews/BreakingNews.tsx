@@ -11,7 +11,7 @@ const BreakingNews = async () => {
 
   return (
     <div className="breaking-news__container">
-      <span className="News__label text-center">Breaking News</span>
+      <span className="News__label text-center">Latest News</span>
       <div className="breaking-news__content">
         <SlickSlider data={breakingNewsData} />
       </div>

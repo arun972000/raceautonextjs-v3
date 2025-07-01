@@ -44,6 +44,20 @@ a {
 
 /* Add other fallback fonts here as needed */
 
+/* Position submenus to the right */
+.dropdown-submenu {
+  position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+
+
+
 .main_content__position {
   background-color: var(--bg-color);
   color: var(--text-color) !important;

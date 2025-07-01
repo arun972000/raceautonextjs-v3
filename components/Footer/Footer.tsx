@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import React from "react";
 import {
@@ -52,7 +51,6 @@ const Footer = async () => {
     `${process.env.NEXT_PUBLIC_BACKEND_URL}api/general-settings/social-media`
   );
 
-  
   const socialData: SocialData[] = await socialResponse.json();
 
   const pageResponse = await fetch(
@@ -64,13 +62,12 @@ const Footer = async () => {
   );
 
   return (
-
     <div className="footer mt-5 pb-2">
       <div className="container">
         <div className="row justify-content-center align-items-center mt-4">
           <div className=" col-md-2 mt-3">
             <div className="d-flex justify-content-center">
-              <ScrollToTopLogo logoData={logoData[0].logo_footer}/>
+              <ScrollToTopLogo logoData={logoData[0].logo_footer} />
               {/* <Image
                 src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${logoData[0].logo_footer}`}
                 width={130}

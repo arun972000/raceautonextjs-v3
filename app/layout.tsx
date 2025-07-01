@@ -10,6 +10,8 @@ import ConditionalChatbot from "@/components/ConditionalChatBot";
 import Script from "next/script";
 import { AuthModalProvider } from "@/utils/AuthModelProvider";
 import SignupSuccessBanner from "./register/successModal";
+import ContactModal from "@/components/SubscribeModal";
+import ClientContactModalWrapper from '@/components/ClientModel'
 
 async function fetchLogoData() {
   try {
@@ -181,7 +183,9 @@ export default async function RootLayout({
           enableSystem={false}
         >
           <SignupSuccessBanner />
-          <AuthModalProvider>{children}</AuthModalProvider>
+          <AuthModalProvider>{children}
+            <ClientContactModalWrapper />
+          </AuthModalProvider>
         </ThemeProvider>
       </body>
       <GoogleAnalytics gaId="G-SF0F8Y7GZ6" />

@@ -1,21 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { useEffect, useState } from "react";
+import { Modal, Button, Form, InputGroup } from "react-bootstrap";
+import { GiPaperPlane } from "react-icons/gi";
+import { FiMail } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 export default function ContactModal() {
   const [show, setShow] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
-    const seenModal = localStorage.getItem('hasSeenContactModal');
-    if (!seenModal) {
-      setShow(true);
-      localStorage.setItem('hasSeenContactModal', 'true');
+    const seen = sessionStorage.getItem("hasSeenContactModal");
+    if (!seen) {
+      const timer = setTimeout(() => {
+        setShow(true);
+        sessionStorage.setItem("hasSeenContactModal", "true");
+      }, 7000);
+      return () => clearTimeout(timer);
     }
   }, []);
 
@@ -23,83 +26,85 @@ export default function ContactModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validation
-    if (!name.trim() || !email.trim() || !phone.trim()) {
-      alert('Please fill in all fields.');
+    if (!email.trim()) {
+      toast.error("Please enter your email.");
       return;
     }
 
     setIsSubmitting(true);
-
     try {
-      const response = await fetch('/api/admin/subscriber', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, phone }),
+      const res = await fetch("/api/admin/subscriber", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
       });
 
-      if (response.ok) {
-        alert('Form submitted successfully!');
+      if (res.status === 409) {
+        toast.warn("This email is already subscribed.");
+      } else if (res.ok) {
+        toast.success("Thanks for subscribing! 🚀");
         handleClose();
       } else {
-        alert('Failed to submit form.');
+        toast.error("Submission failed. Please try again.");
       }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('Something went wrong.');
+    } catch (err) {
+      console.error(err);
+      toast.error("An error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <Modal show={show} onHide={handleClose} backdrop="static"  size="sm" keyboard={false} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>Let’s Stay Connected</Modal.Title>
+    <Modal
+      show={show}
+      onHide={handleClose}
+      backdrop="static"
+      keyboard={false}
+      size="sm"
+      centered
+      contentClassName="border-0 shadow-lg"
+    >
+      <Modal.Header closeButton className="bg-primary text-white">
+        <Modal.Title>Stay in the Loop!</Modal.Title>
       </Modal.Header>
+
       <Form onSubmit={handleSubmit}>
         <Modal.Body>
-          <Form.Group className="mb-3">
-            <Form.Label>Name</Form.Label>
-            <Form.Control
-              type="text"
-              required
-              placeholder="Enter your name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-          </Form.Group>
+          <p className="text-center text-muted mb-3">
+            Subscribe with your email to get the latest updates.
+          </p>
 
-          <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              required
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Phone Number</Form.Label>
-            <Form.Control
-              type="tel"
-              required
-              placeholder="Enter your phone number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+          <Form.Group controlId="contactEmail">
+            <InputGroup>
+              <InputGroup.Text className="bg-white border-end-0">
+                <FiMail color="#0d6efd" />
+              </InputGroup.Text>
+              <Form.Control
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="border-start-0"
+              />
+            </InputGroup>
           </Form.Group>
         </Modal.Body>
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+        <Modal.Footer className="justify-content-between">
+          <Button variant="outline-secondary" size="sm" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Submit'}
+          <Button
+            variant="success"
+            type="submit"
+            size="sm"
+            disabled={isSubmitting}
+            className="d-flex align-items-center gap-1"
+          >
+            {isSubmitting ? "Sending..." : "Send"}
+            <GiPaperPlane />
           </Button>
         </Modal.Footer>
       </Form>

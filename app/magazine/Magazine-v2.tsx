@@ -204,7 +204,6 @@ const Magazine_v2 = () => {
                           />
                         </div>
                       </Link>
-                      
                     </Card>
                   </div>
                 </SwiperSlide>
@@ -274,39 +273,36 @@ const Magazine_v2 = () => {
         </div>
       </div>
       <div className="container my-3">
-        <div
-          className="row justify-content-center text-white "
-          style={{
-            backgroundImage: "url('/images/category banner.jpg')",
-            backgroundSize: "cover",
-            height: 200,
-          }}
-        >
-          <h1 className="m-0 mt-3 text-center">CATEGORIES</h1>
-          <div className="col-6 col-md-3 col-lg-2 text-center">
-            <button
-              className={`btn ${styles.button_category} ${
-                selectedCategory === 0 ? "btn-warning" : "btn-light"
-              }`}
-              onClick={() => setSelectedCatgeory(0)}
-            >
-              All Magazines
-            </button>
-          </div>
+       <h2 className="text-center mb-4 fw-bold">Browse by Category</h2>
 
-          {category.map((item: any) => (
-            <div className="col-6 col-md-3 col-lg-2 text-center" key={item.id}>
-              <button
-                className={`btn ${styles.button_category} ${
-                  selectedCategory === item.id ? "btn-warning" : "btn-light"
-                }`}
-                onClick={() => setSelectedCatgeory(item.id)}
-              >
-                {item.title}
-              </button>
-            </div>
-          ))}
-        </div>
+  <div className="d-flex justify-content-center">
+    <div className={`btn-group flex-wrap gap-2 ${styles.categoryButtonGroup}`} role="group" aria-label="Magazine categories">
+      <button
+        type="button"
+        className={`${styles.categoryButton} btn ${
+          selectedCategory === 0 ? "btn-primary" : "btn-outline-primary"
+        }`}
+        onClick={() => setSelectedCatgeory(0)}
+      >
+        All Magazines
+      </button>
+
+      {category.map((item: any) => (
+        <button
+          key={item.id}
+          type="button"
+          className={`${styles.categoryButton} btn ${
+            selectedCategory === item.id ? "btn-primary" : "btn-outline-primary"
+          }`}
+          onClick={() => setSelectedCatgeory(item.id)}
+        >
+          {item.title}
+        </button>
+      ))}
+    </div>
+
+
+  </div>
         <div className="row my-5">
           {isloading && (
             <>

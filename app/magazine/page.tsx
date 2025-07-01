@@ -8,19 +8,20 @@ import Footer from "@/components/Footer/Footer";
 import MobileNavNew from "@/components/MobileNavbarNew/MobileNavNew";
 import GreenBar from "@/components/GreenBar/MagazineBar";
 import PageViewTracker from "../pageTracker";
+import Navbar_V2 from "@/components/Navbar/Navbar_v2";
 
 const page = () => {
   return (
     <>
       <PageViewTracker page="magazine" />
       <BreakingNews />
-      <Navbar />
+      <Navbar_V2 />
       <MobileNavNew />
       <div className="main_content__position">
         <Magazine_v2 />
       </div>
       <Footer />
-      <GreenBar />
+      {/* <GreenBar /> */}
     </>
   );
 };

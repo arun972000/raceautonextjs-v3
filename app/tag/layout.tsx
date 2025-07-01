@@ -16,7 +16,7 @@ export default function CategoryLayout({
       <MobileNavNew/>
       <div className="main_content__position">{children}</div>
       <Footer />
-      <GreenBar/>
+      {/* <GreenBar/> */}
     </>
   );
 }

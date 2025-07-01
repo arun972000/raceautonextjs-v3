@@ -182,75 +182,100 @@ const MobileNavNew = () => {
               style={{ cursor: "pointer" }}
             />
           </div>
-          <div className={menuStyles.navMenuContainer}>
-            <button
-              className={menuStyles.menuSelector}
-              onClick={() => toggleMenu(100)}
+          {/* News with All, Market, and Main Categories */}
+<div className={menuStyles.navMenuContainer}>
+  <button
+    className={menuStyles.menuSelector}
+    onClick={() => toggleMenu(999)}
+  >
+    <span className={menuStyles.menuText}>News</span>
+    <FaChevronDown className={menuStyles.marketIcon} />
+  </button>
+
+  <ul
+    className={`${menuStyles.marketList} ${
+      openMenus[999] ? menuStyles.show : menuStyles.hide
+    }`}
+  >
+    {/* --- All Categories Link --- */}
+    <li
+      className={menuStyles.marketItem}
+      onClick={() => {
+        router.push("/categories");
+        setMenuVisible(false);
+      }}
+    >
+      All
+      <hr />
+    </li>
+
+    {/* --- Market Nested Under News --- */}
+    <li>
+      <button
+        className={`${menuStyles.submenuItem} d-flex justify-content-between w-100`}
+        onClick={() => toggleMenu(100)}
+      >
+        Market
+        <FaChevronDown className="ms-auto" />
+      </button>
+      <ul
+        className={`${menuStyles.subSubList} ${
+          openMenus[100] ? menuStyles.show : menuStyles.hide
+        }`}
+      >
+        {market.length > 0 ? (
+          market.map((sub: any, i) => (
+            <li
+              key={sub.id}
+              className={menuStyles.marketItem}
+              onClick={() => {
+                router.push(`/market/${sub.title_slug.toLowerCase()}`);
+                setMenuVisible(false);
+              }}
             >
-              <span className={menuStyles.menuText}>Market</span>
-              <FaChevronDown className={menuStyles.marketIcon} />
-            </button>
+              {sub.title}
+              {i !== market.length - 1 && <hr />}
+            </li>
+          ))
+        ) : (
+          <li className={menuStyles.marketItem}>Loading...</li>
+        )}
+      </ul>
+    </li>
 
-            <ul
-              className={`${menuStyles.marketList} ${
-                openMenus[100] ? menuStyles.show : menuStyles.hide
-              }`}
+    {/* --- Main Categories Nested --- */}
+    {mainCategory.map((mainItem) => (
+      <li key={mainItem.id}>
+        <button
+          className={`${menuStyles.submenuItem} d-flex justify-content-between w-100`}
+          onClick={() => toggleMenu(mainItem.id)}
+        >
+          {mainItem.name}
+          <FaChevronDown className="ms-auto" />
+        </button>
+
+        <ul
+          className={`${menuStyles.subSubList} ${
+            openMenus[mainItem.id] ? menuStyles.show : menuStyles.hide
+          }`}
+        >
+          {subCategories[mainItem.id]?.map((sub, i) => (
+            <li
+              key={sub.id}
+              className={menuStyles.marketItem}
+              onClick={() =>
+                handleSubcategoryClick(mainItem.name_slug, sub.name_slug)
+              }
             >
-              {market.length > 0 ? (
-                market.map((sub: any, i) => (
-                  <li
-                    key={sub.id}
-                    className={menuStyles.marketItem}
-                    onClick={() => {
-                      router.push(`/market/${sub.title_slug.toLowerCase()}`);
-                      setMenuVisible(false);
-                    }}
-                  >
-                    {sub.title}
-                    {i !== market.length - 1 && <hr />}
-                  </li>
-                ))
-              ) : (
-                <li className={menuStyles.marketItem}>Loading...</li>
-              )}
-            </ul>
-          </div>
-
-          {/* Main Categories with Subcategories */}
-          {mainCategory.map((item) => (
-            <div className={menuStyles.navMenuContainer} key={item.id}>
-              <button
-                className={menuStyles.menuSelector}
-                onClick={() => toggleMenu(item.id)}
-              >
-                <span className={menuStyles.menuText}>{item.name}</span>
-                <FaChevronDown className={menuStyles.marketIcon} />
-              </button>
-
-              <ul
-                className={`${menuStyles.marketList} ${
-                  openMenus[item.id] ? menuStyles.show : menuStyles.hide
-                }`}
-              >
-                {subCategories[item.id]?.length > 0 ? (
-                  subCategories[item.id].map((sub, i) => (
-                    <li
-                      key={sub.id}
-                      className={menuStyles.marketItem}
-                      onClick={() =>
-                        handleSubcategoryClick(item.name_slug, sub.name_slug)
-                      }
-                    >
-                      {sub.name}
-                      {i !== subCategories[item.id]?.length - 1 && <hr />}
-                    </li>
-                  ))
-                ) : (
-                  <li className={menuStyles.marketItem}>Loading...</li>
-                )}
-              </ul>
-            </div>
+              {sub.name}
+              {i !== subCategories[mainItem.id].length - 1 && <hr />}
+            </li>
           ))}
+        </ul>
+      </li>
+    ))}
+  </ul>
+</div>
 
           {/* More Pages */}
           <div className={menuStyles.navMenuContainer}>

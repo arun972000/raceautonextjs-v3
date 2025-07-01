@@ -26,11 +26,11 @@ export async function PUT(req: NextRequest) {
       payload.gold,
       payload.silver,
       payload.bronze,
+      payload.description,
       id,
     ];
     await db.execute(
-      `UPDATE subscription_plan SET plan = ?, platinum = ?, gold = ?, silver = ?, bronze = ? WHERE id = ?`,
-      query
+      `UPDATE subscription_plan SET plan = ?, platinum = ?, gold = ?, silver = ?, bronze = ?, description = ? WHERE id = ?`, query
     );
     return NextResponse.json("updated plan");
   } catch (err) {

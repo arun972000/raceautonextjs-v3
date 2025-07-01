@@ -21,15 +21,17 @@ export default function PricingCarousel() {
     const features = planData.filter(r => !pricingKeys.includes(r.plan.toLowerCase()));
     const monthly = planData.find(r => r.plan.toLowerCase() === "monthly price") || {};
     const annual = planData.find(r => r.plan.toLowerCase() === "annual price") || {};
+    const multiplied = planData.find(r => r.plan.toLowerCase() === "multiplied_price") || {};
+
     const usdValueArray = planData.filter((item) => item.plan === "usd");
     // Use a common conversion rate from the usdValueArray (for example, platinum rate conversion)
     const usdValue = usdValueArray[0]?.platinum || 1;
 
-    const makePlan = (tier) => {
-        const basePrice = isYear ? annual[tier] : monthly[tier];
+    const makePlan = (tier, priceSource = isYear ? annual : monthly) => {
+        const basePrice = priceSource[tier];
 
         const convertedPrice = currency === "USD"
-            ? Math.round((basePrice / usdValue) * 100) / 100  // rounded to 2 decimals
+            ? Math.round((basePrice / usdValue) * 100) / 100
             : basePrice;
 
         return {
@@ -39,17 +41,20 @@ export default function PricingCarousel() {
                     tier === "gold" ? "For Expanding Enterprises" :
                         "For Large Corporations",
             price: convertedPrice,
+            multipliedPrice: multiplied[tier],  // include raw multiplied price
             features: features.map(f => ({
                 plan: f.plan,
-                available: f[tier] === 1
+                available: f[tier],
+                description: f.description || ""
             })),
         };
     };
 
 
+
     const plans = [
         { ...makePlan("silver"), color: "#f4f4f4", icon: <BiShield />, currency, isYear },
-        { ...makePlan("gold"), color: "#f3d89e", icon: <PiStarFill />, currency, isYear },
+        { ...makePlan("gold"), color: "#e4e4e4", icon: <PiStarFill />, currency, isYear },
         { ...makePlan("platinum"), color: "#d3d3d3", icon: <BiDiamond />, isPopular: true, currency, isYear }
     ];
 
@@ -89,7 +94,6 @@ export default function PricingCarousel() {
                             style={{ borderRadius: "50px", padding: "0.5rem 1.2rem" }}
                             className={`btn ${!isYear ? "btn-dark active" : "btn-light"}`}
                             onClick={() => setIsYear(false)}
-                          
                         >
                             Month
                         </button>
@@ -104,7 +108,6 @@ export default function PricingCarousel() {
                     </div>
                 </div>
             </div>
-
 
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }}>
                 {plans.map((p, i) => (

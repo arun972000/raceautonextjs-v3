@@ -23,6 +23,7 @@ import Script from "next/script";
 import ContactModal from "@/components/SubscribeModal";
 import LatestNewsDesktop from "@/components/Latest-news-Desktop/LatestDesktop";
 import HomeVideo from '@/components/Home-video/homeVideo'
+import Navbar_V2 from "@/components/Navbar/Navbar_v2";
 
 const Home = async () => {
   const sliderRes = await fetch(
@@ -35,13 +36,13 @@ const Home = async () => {
   return (
     <>
       {/* This component will check for "verified" query param and reload if present */}
-      <ContactModal />
+      
       <PageViewTracker page="home" />
       <RefreshOnVerified />
       <MobileNavNew />
       <div className="container-fluid m-0 p-0">
         <BreakingNews />
-        <Navbar />
+        <Navbar_V2 />
 
         <div className="main_content__position px-4">
           <div className="container-fluid">
@@ -87,7 +88,7 @@ const Home = async () => {
 
         {/* <ChatPopup /> */}
         <Footer />
-        <GreenBar />
+        {/* <GreenBar /> */}
       </div>
     </>
   );
