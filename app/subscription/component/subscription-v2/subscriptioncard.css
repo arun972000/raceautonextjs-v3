@@ -88,9 +88,13 @@
 }
 
 .react-tooltip {
-font-size: 0.7rem !important;
+font-size: 0.8rem !important;
 padding-bottom: 0px !important;
 margin-bottom: 0px !important;
 margin-left: 0px !important;
+}
+
+.custom-tooltip p{
+  margin-bottom: 3px !important;
 }
 
