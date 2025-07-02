@@ -83,7 +83,7 @@ export default function PricingPlans({ hide }) {
 
     return (
         <div className="container pb-5 pt-2 mb-5">
-            <div className="position-relative" style={{ left: '92%' }}>
+            <div className="" >
                 {!selectedPlan ? (
                     <IoMdCloseCircle size={30} onClick={hide} color="black" />
                 ) : (
@@ -179,9 +179,16 @@ export default function PricingPlans({ hide }) {
                                         </div>
 
                                         <h3 className="card-text fw-bold" style={{ color: 'black' }}>
-                                            {currency === 'USD' ? `$${plan.price}` : `₹${plan.price}`}
-                                            <small className="text-muted">/{billing === 'Monthly' ? 'mo' : 'yr'}</small>
+                                            {plan.title.toLowerCase() === 'silver'
+                                                ? 'Free'
+                                                : currency === 'USD'
+                                                    ? `$${plan.price}`
+                                                    : `₹${plan.price}`}
+                                            {plan.title.toLowerCase() !== 'silver' && (
+                                                <small className="text-muted">/{billing === 'Monthly' ? 'mo' : 'yr'}</small>
+                                            )}
                                         </h3>
+
 
                                         <div className="d-flex justify-content-between align-items-center">
                                             <p style={{ color: 'black' }}>{plan.subtitle}</p>

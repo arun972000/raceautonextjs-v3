@@ -40,10 +40,13 @@ function ProfileDashboard({ token }: { token: string }) {
     }
   };
 
-  const currentPlan =
-    subscriptionPack.length === 0 || subscriptionPack[0]?.status === "expired"
-      ? "bronze"
+  const effectivePlan =
+    subscriptionPack.length === 0 ||
+    subscriptionPack[0]?.status === "expired" ||
+    subscriptionPack[0]?.plan_name === "bronze"
+      ? "silver"
       : subscriptionPack[0]?.plan_name;
+
   const isActive = subscriptionPack[0]?.status === "Active";
   const isExpired = subscriptionPack[0]?.status === "expired";
 
@@ -91,19 +94,23 @@ function ProfileDashboard({ token }: { token: string }) {
     packApi();
   }, []);
 
+  // Update the useEffect that sets filtered plan:
   useEffect(() => {
     if (subscription.length !== 0) {
       const planName =
         subscriptionPack.length === 0 ||
-        subscriptionPack[0]?.status === "expired"
-          ? "bronze"
+        subscriptionPack[0]?.status === "expired" ||
+        subscriptionPack[0]?.plan_name === "bronze"
+          ? "silver"
           : subscriptionPack[0]?.plan_name;
+
       const filteredPlan = subscription.filter(
         (item: any) => item[planName] === 1
       );
       setPlan(filteredPlan);
     }
   }, [subscriptionPack, subscription]);
+
   return (
     <Row className="">
       {/* Subscription Card */}
@@ -111,36 +118,30 @@ function ProfileDashboard({ token }: { token: string }) {
         <Card className="p-3 shadow-sm rounded-3">
           <Card.Body>
             <Card.Title className="text-center">Subscription</Card.Title>
-            {isExpired || currentPlan === "bronze" ? (
-              <Card.Text className="text-danger">
-                {isExpired
-                  ? "Your plan has expired. Showing Bronze plan details."
-                  : "You are currently on the Bronze plan now."}
-              </Card.Text>
-            ) : (
+           
+            <Card.Text>
+              You are currently on the{" "}
+              <span className={planClass(effectivePlan)}>{effectivePlan}</span>{" "}
+              plan now.
+            </Card.Text>
+            {effectivePlan !== "silver" && isActive && (
               <>
-                <div className="text-center mb-2">
-                  <Card.Text>
-                    You are currently on the{" "}
-                    <span className={planClass(currentPlan)}>
-                      {currentPlan}
-                    </span>{" "}
-                    plan now.
-                  </Card.Text>
-                  <Card.Title className="text-center mt-3">Validity</Card.Title>
-                  <Card.Text>
-                    Start Date: {formatDate(subscriptionPack[0]?.start_date)}
-                  </Card.Text>
-                  <Card.Text>
-                    End Date: {formatDate(subscriptionPack[0]?.end_date)}
-                  </Card.Text>
-                </div>
+                <Card.Title className="text-center mt-3">Validity</Card.Title>
+                <Card.Text>
+                  Start Date: {formatDate(subscriptionPack[0]?.start_date)}
+                </Card.Text>
+                <Card.Text>
+                  End Date: {formatDate(subscriptionPack[0]?.end_date)}
+                </Card.Text>
               </>
             )}
             <Link href="/subscription">
-            <div className="d-flex justify-content-center">
-            <button className="btn btn-dark text-center">Upgarde Now</button></div>
-          </Link>
+              <div className="d-flex justify-content-center">
+                <button className="btn btn-dark text-center">
+                  Upgarde Now
+                </button>
+              </div>
+            </Link>
           </Card.Body>
         </Card>
       </Col>
@@ -157,11 +158,8 @@ function ProfileDashboard({ token }: { token: string }) {
                   {item.plan}
                 </li>
               ))}
-              
           </Card.Body>
-
         </Card>
-         
       </Col>
 
       {/* Profile Card */}
