@@ -1,8 +1,8 @@
 'use client'
 import React, { useRef } from 'react'
-import FlashReportLineChart from './charts/LineCharts'
+import FlashReportLineChart from './dynamic-charts/LineCharts'
 import './styles/chart.css'
-import CustomizedChart from './charts/customizechart'
+import CustomizedChart from './dynamic-charts/customizechart'
 import { useReactToPrint } from "react-to-print";
 import Contents from './contents'
 import Highlights from './Header/Highlights'

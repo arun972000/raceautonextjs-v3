@@ -42,7 +42,7 @@ export default function PricingPlans({ hide }) {
             .catch(console.error);
     }, []);
 
-    const pricingKeys = ['monthly price', 'annual price', 'usd'];
+    const pricingKeys = ['monthly price', 'annual price', 'usd', "multiplied_price"];
     const features = planData.filter(item => !pricingKeys.includes(item.plan.toLowerCase()));
     const monthly = planData.find(item => item.plan.toLowerCase() === 'monthly price') || {};
     const annual = planData.find(item => item.plan.toLowerCase() === 'annual price') || {};

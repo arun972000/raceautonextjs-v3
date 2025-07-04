@@ -17,7 +17,7 @@ export default function PricingCarousel() {
     }, []);
 
     // split into features vs pricing
-    const pricingKeys = ["monthly price", "annual price", "usd"];
+    const pricingKeys = ["monthly price", "annual price", "usd", "multiplied_price"];
     const features = planData.filter(r => !pricingKeys.includes(r.plan.toLowerCase()));
     const monthly = planData.find(r => r.plan.toLowerCase() === "monthly price") || {};
     const annual = planData.find(r => r.plan.toLowerCase() === "annual price") || {};
