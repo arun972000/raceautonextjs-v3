@@ -117,6 +117,14 @@ const MobileNavbar = ({
               <li className={`${styles.nav_item} nav-item`}>
                 <Link
                   className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
+                  href="/insights"
+                >
+                  <span>INSIGHTS</span>
+                </Link>
+              </li>
+              <li className={`${styles.nav_item} nav-item`}>
+                <Link
+                  className={`${styles.nav_home_btn} ${styles.nav_link} nav-link mx-2`}
                   href="/magazine"
                 >
                   <span>E-MAGAZINE</span>
