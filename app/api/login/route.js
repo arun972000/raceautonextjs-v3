@@ -43,6 +43,7 @@ export async function POST(req) {
         id: verifyEmail[0].id,
         email: verifyEmail[0].email,
         role: verifyEmail[0].role,
+        username:verifyEmail[0].username
       },
       process.env.JWT_KEY,
       { expiresIn: "7d" }

@@ -8,14 +8,11 @@ export async function GET(req) {
   const code = searchParams.get("code");
 
   if (!code) {
-    return NextResponse.json(
-      { error: "Authorization code is missing" },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: "Authorization code is missing" }, { status: 400 });
   }
 
   try {
-    // Exchange code for access token
+    // 1. Exchange code for access token
     const { data } = await axios.post(
       "https://oauth2.googleapis.com/token",
       null,
@@ -25,15 +22,14 @@ export async function GET(req) {
           client_secret: process.env.GOOGLE_CLIENT_SECRET,
           code,
           grant_type: "authorization_code",
-          redirect_uri:
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/auth/google/callback`,
+          redirect_uri: `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/auth/google/callback`,
         },
       }
     );
 
     const { access_token } = data;
 
-    // Get user info from Google
+    // 2. Get user info
     const { data: userInfo } = await axios.get(
       "https://www.googleapis.com/oauth2/v3/userinfo",
       {
@@ -47,14 +43,14 @@ export async function GET(req) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    // Check if the user exists
+    // 3. Check if the user exists
     const [result] = await db.execute("SELECT * FROM users WHERE email = ?", [
       userInfo.email,
     ]);
 
     let token;
     if (result.length === 0) {
-      // New user: Insert into DB
+      // Insert new user
       await db.execute(
         "INSERT INTO users (username, slug, email, google_id) VALUES (?, ?, ?, ?)",
         [
@@ -65,12 +61,8 @@ export async function GET(req) {
         ]
       );
 
-      const [newUser] = await db.execute(
-        "SELECT * FROM users WHERE email = ?",
-        [userInfo.email]
-      );
+      const [newUser] = await db.execute("SELECT * FROM users WHERE email = ?", [userInfo.email]);
 
-      // Generate JWT token for the new user
       token = jwt.sign(
         {
           id: newUser[0].id,
@@ -81,38 +73,38 @@ export async function GET(req) {
         { expiresIn: "7d" }
       );
     } else {
-      // Existing user: Generate JWT token
       token = jwt.sign(
         {
           id: result[0].id,
           email: result[0].email,
           role: result[0].role,
+          username:result[0].username
         },
         process.env.JWT_KEY,
         { expiresIn: "7d" }
       );
     }
 
-    // Create a redirect URL with a timestamp query parameter to force a full reload.
     const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_BACKEND_URL}subscription?verified=true`, req.url);
-
     const response = NextResponse.redirect(redirectUrl);
 
-    // Set cache control headers to ensure a fresh reload
-    response.headers.set(
-      "Cache-Control",
-      "no-cache, no-store, must-revalidate"
-    );
-
+    // 🔐 Set cookies
     response.cookies.set("authToken", token, {
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60, // 7 days
+      maxAge: 7 * 24 * 60 * 60,
+      path: "/",
+    });
+
+    // 🖼️ Set Google profile picture in a cookie
+    response.cookies.set("profilePic", userInfo.picture, {
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60,
       path: "/",
     });
 
     return response;
   } catch (error) {
     console.error("Error authenticating:", error);
-    return NextResponse.redirect(new URL("/login", req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 }

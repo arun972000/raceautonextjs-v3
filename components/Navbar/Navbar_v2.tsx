@@ -117,29 +117,11 @@ const Navbar_V2 = async () => {
               </li>
 
               {/* INSIGHTS Main Menu */}
-              {insightsCategory && (
-                <li className="nav-item">
-                  <Menu
-                    menuButton={
-                      <MenuButton
-                        className="btn d-flex align-items-center gap-1"
-                        style={{
-                          fontWeight: 800,
-                          fontSize: 14,
-                          color: "#5f5952",
-                        }}
-                      >
-                        INSIGHTS <FaChevronDown />
-                      </MenuButton>
-                    }
-                    transition
-                    transitionTimeout={100}
-                  >
-                    <Subcategory id={insightsCategory.id} main={"insights"} />
-                  </Menu>
-                </li>
-              )}
-
+             <li className="nav-item" style={{ fontWeight: 800 }}>
+                <Link className="nav-link mx-2" href="/insights">
+                  INSIGHTS
+                </Link>
+              </li>
               {/* EVENT Menu (formerly MORE) */}
 
               <li className="nav-item" style={{ fontWeight: 800 }}>

@@ -190,6 +190,17 @@ const AdminSidebar = async () => {
               </li>
               <li>
                 <Link
+                  href="/admin/subscription/website-subscribers"
+                  className="nav-link px-0"
+                >
+                  <FaSitemap className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary">
+                    Website Subscribers
+                  </span>
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/admin/subscription/payment/upi-payment"
                   className="nav-link px-0"
                 >
@@ -264,10 +275,22 @@ const AdminSidebar = async () => {
               </li>
             </ul>
           </li>
-          <li>
+          {/* <li>
             <Link href="/admin/reports" className="nav-link px-0 align-middle">
               <TbReportAnalytics />{" "}
               <span className="ms-1 d-none d-sm-inline">Reports</span>
+            </Link>
+          </li> */}
+          <li>
+            <Link href="/admin/insights" className="nav-link px-0 align-middle">
+              <TbReportAnalytics />{" "}
+              <span className="ms-1 d-none d-sm-inline">Insights</span>
+            </Link>
+          </li>
+          <li>
+            <Link href="/admin/insights/comment-group" className="nav-link px-0 align-middle">
+              <TbReportAnalytics />{" "}
+              <span className="ms-1 d-none d-sm-inline">Insights Comments</span>
             </Link>
           </li>
           <li style={{ width: "100%" }}>

@@ -136,31 +136,7 @@ const Post = async ({
           <hr />
         </div>
         <PostSlider images={post.images} title={post.title} />
-        <span
-                style={{ borderBottom:'1px solid black'  }}
-                className="m-0 mb-2 p-0 text-center"
-              >
-                Advertisement
-
-              </span>
-
-        {/* Desktop Banner (3.56:1) */}
-        <div
-          className="position-relative my-2 d-none d-md-block"
-          style={{ width: "100%", aspectRatio: "3.56/1" }}
-        >
-          <Link href="/subscription" passHref>
-            <Image
-              src="/images/SUBCRIBE BANNER.jpg"
-              alt="Subscribe – desktop"
-              fill
-              style={{ objectFit: "cover" }}
-              sizes="(min-width: 768px) 100vw"
-              quality={75}
-              priority
-            />
-          </Link>
-        </div>
+       
 
         {/* Mobile Banner (1:1) */}
         <div
@@ -183,6 +159,7 @@ const Post = async ({
           content={post.content}
           token={token?.value}
           is_recommended={is_recommended}
+          postId={post.id}
         />
         {post.tag.map((item) => (
           <Link href={`/tag/${item.tag_slug}`} key={item.id}>
