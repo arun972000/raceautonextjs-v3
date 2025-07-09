@@ -12,7 +12,6 @@ import { AuthModalProvider } from "@/utils/AuthModelProvider";
 import SignupSuccessBanner from "./register/successModal";
 import ContactModal from "@/components/SubscribeModal";
 import ClientContactModalWrapper from '@/components/ClientModel'
-import Acceptcookies from '@/components/cookie-policy/cookies'
 
 async function fetchLogoData() {
   try {
@@ -184,8 +183,7 @@ export default async function RootLayout({
           enableSystem={false}
         >
           <SignupSuccessBanner />
-          <AuthModalProvider>
-  {children}
+          <AuthModalProvider>{children}
             <ClientContactModalWrapper />
           </AuthModalProvider>
         </ThemeProvider>
