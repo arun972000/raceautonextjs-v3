@@ -67,11 +67,11 @@ export default function AdminInsightForm() {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files || []);
-    const newValidFiles= [];
+    const newValidFiles = [];
     const newPreviews = [];
 
     for (let file of files) {
-      if (file.size <= 5000 * 1024) {
+      if (file.size <= 4000 * 1024) {
         newValidFiles.push(file);
         newPreviews.push(URL.createObjectURL(file));
       } else {
@@ -212,7 +212,9 @@ export default function AdminInsightForm() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>Upload Images (Max 300KB each)</Form.Label>
+          <Form.Label>
+            Upload Media (Images or Videos, <strong>Max 4MB</strong>, <strong>16:9 aspect ratio</strong>)
+          </Form.Label>
           <Form.Control type="file" accept="image/*" multiple onChange={handleImageUpload} />
           <div className="mt-2 d-flex flex-wrap gap-2">
             {imagePreviews.map((url, i) => (

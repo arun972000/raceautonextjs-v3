@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 
 export async function POST() {
-  const response = NextResponse.json({ message: "Cookie removed successfully" });
-  
-  // Clear the 'authtoken' cookie by setting it with an expired date
-  response.cookies.delete('authToken')
+  const response = NextResponse.json({ message: "Cookies removed successfully" });
+
+  // Clear both cookies
+  response.cookies.delete('authToken');
+  response.cookies.delete('profilePic');
 
   return response;
 }

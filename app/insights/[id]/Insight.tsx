@@ -288,9 +288,7 @@ export default function InsightDetailPage() {
 
           {insight.charts?.map((chart: any, idx: number) => (
             <div key={idx} className="p-3 border rounded bg-light mb-4">
-              <strong className="d-block mb-2">
-                Chart {idx + 1} ({chart.type})
-              </strong>
+             
               {chart.heading && <h5 className="mb-2">{chart.heading}</h5>}
               {renderGraph(chart)}
             </div>
@@ -304,7 +302,7 @@ export default function InsightDetailPage() {
           )}
           {insight.notes && (
             <div>
-              <h5>Final Notes</h5>
+             
               <div dangerouslySetInnerHTML={{ __html: insight.notes }} />
             </div>
           )}
