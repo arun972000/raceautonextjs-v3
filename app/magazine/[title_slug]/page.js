@@ -260,7 +260,7 @@ export default function FlipBookMagazine() {
 
   return (
     <>
-      <div className="container-fluid mt-4">
+      <div className="container-fluid mt-4 pdf-container">
         <div className="d-flex flex-column flex-md-row" style={{ gap: "20px", alignItems: "flex-start" }}>
           <div style={{ flex: 1 }}>
             <div className="flipbook-wrapper" style={{ width: containerWidth }}>

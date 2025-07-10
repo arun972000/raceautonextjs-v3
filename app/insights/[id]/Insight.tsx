@@ -5,15 +5,20 @@ import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { useParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
-import {
-  Container, Row, Col, Button
-} from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import {
   ResponsiveContainer,
-  BarChart, Bar,
-  LineChart, Line,
-  PieChart, Pie, Cell,
-  XAxis, YAxis, Tooltip, Legend
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
 } from "recharts";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -21,7 +26,33 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00c49f"];
-const badWords = ["fuck", "shit", "bitch", "asshole", "bastard", "dick", "piss", "cunt", "damn", "hell", "crap", "slut", "fag", "retard", "idiot", "moron", "suck", "whore", "nigger", "bloody", "bollocks", "bugger", "arse", "wanker", "twat"];
+const badWords = [
+  "fuck",
+  "shit",
+  "bitch",
+  "asshole",
+  "bastard",
+  "dick",
+  "piss",
+  "cunt",
+  "damn",
+  "hell",
+  "crap",
+  "slut",
+  "fag",
+  "retard",
+  "idiot",
+  "moron",
+  "suck",
+  "whore",
+  "nigger",
+  "bloody",
+  "bollocks",
+  "bugger",
+  "arse",
+  "wanker",
+  "twat",
+];
 const sanitize = (text: string) => {
   const regex = new RegExp(`\\b(${badWords.join("|")})\\b`, "gi");
   return text.replace(regex, "***");
@@ -85,8 +116,10 @@ export default function InsightDetailPage() {
     if (!file) return;
     const isImage = file.type.startsWith("image/");
     const isVideo = file.type.startsWith("video/");
-    if (isImage && file.size > 300 * 1024) return alert("Image must be under 300KB");
-    if (isVideo && file.size > 5 * 1024 * 1024) return alert("Video must be under 5MB");
+    if (isImage && file.size > 300 * 1024)
+      return alert("Image must be under 300KB");
+    if (isVideo && file.size > 5 * 1024 * 1024)
+      return alert("Video must be under 5MB");
     setUploadMedia(file);
   };
 
@@ -144,7 +177,10 @@ export default function InsightDetailPage() {
         return (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chart.data}>
-              <XAxis dataKey="name" /><YAxis /><Tooltip /><Legend />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
               <Bar dataKey="value" fill="#8884d8" />
             </BarChart>
           </ResponsiveContainer>
@@ -153,7 +189,10 @@ export default function InsightDetailPage() {
         return (
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chart.data}>
-              <XAxis dataKey="name" /><YAxis /><Tooltip /><Legend />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
               <Line type="monotone" dataKey="value" stroke="#8884d8" />
             </LineChart>
           </ResponsiveContainer>
@@ -162,7 +201,13 @@ export default function InsightDetailPage() {
         return (
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie data={chart.data} dataKey="value" nameKey="name" outerRadius={100} label>
+              <Pie
+                data={chart.data}
+                dataKey="value"
+                nameKey="name"
+                outerRadius={100}
+                label
+              >
                 {chart.data.map((entry: any, i: number) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
@@ -171,12 +216,14 @@ export default function InsightDetailPage() {
             </PieChart>
           </ResponsiveContainer>
         );
-      default: return null;
+      default:
+        return null;
     }
   };
 
-  const parentThoughts = thoughts.filter(c => !c.parent_id);
-  const getReplies = (parentId: number) => thoughts.filter(c => c.parent_id === parentId);
+  const parentThoughts = thoughts.filter((c) => !c.parent_id);
+  const getReplies = (parentId: number) =>
+    thoughts.filter((c) => c.parent_id === parentId);
 
   if (!insight) return <div>Loading...</div>;
 
@@ -186,38 +233,80 @@ export default function InsightDetailPage() {
         <Col md={8}>
           <h3 dangerouslySetInnerHTML={{ __html: insight.title }} />
           {insight.images?.length > 0 && (
-            <div className="mb-4" style={{ maxHeight: "300px", overflow: "hidden", borderRadius: "10px" }}>
-              <Swiper modules={[Autoplay, Pagination]} autoplay={{ delay: 5000 }} pagination={{ clickable: true }} loop>
+            <div
+              className="mb-4"
+              style={{ borderRadius: "10px", overflow: "hidden" }}
+            >
+              <Swiper
+                modules={[Autoplay, Pagination]}
+                autoplay={{ delay: 5000 }}
+                pagination={{ clickable: true }}
+                loop
+              >
                 {insight.images.map((file: string, i: number) => (
                   <SwiperSlide key={i}>
-                    {file.endsWith(".mp4") ? (
-                      <video controls style={{ width: "100%", height: "300px", objectFit: "cover" }}>
-                        <source src={`${imageBase}${file}`} />
-                      </video>
-                    ) : (
-                      <img src={`${imageBase}${file}`} alt="media" style={{ width: "100%", height: "300px", objectFit: "cover" }} />
-                    )}
+                    <div
+                      style={{
+                        width: "100%",
+                        aspectRatio: "16 / 9",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {file.endsWith(".mp4") ? (
+                        <video
+                          controls
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        >
+                          <source src={`${imageBase}${file}`} />
+                        </video>
+                      ) : (
+                        <img
+                          src={`${imageBase}${file}`}
+                          alt="media"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                        />
+                      )}
+                    </div>
                   </SwiperSlide>
                 ))}
               </Swiper>
             </div>
           )}
 
-          <div dangerouslySetInnerHTML={{ __html: insight.content }} className="mb-4" />
+          <div
+            dangerouslySetInnerHTML={{ __html: insight.content }}
+            className="mb-4"
+          />
 
           {insight.charts?.map((chart: any, idx: number) => (
             <div key={idx} className="p-3 border rounded bg-light mb-4">
-              <strong className="d-block mb-2">Chart {idx + 1} ({chart.type})</strong>
+              <strong className="d-block mb-2">
+                Chart {idx + 1} ({chart.type})
+              </strong>
               {chart.heading && <h5 className="mb-2">{chart.heading}</h5>}
               {renderGraph(chart)}
             </div>
           ))}
 
           {insight.quotes && (
-            <blockquote className="blockquote px-4 py-3 border-start border-4 border-primary mb-4" dangerouslySetInnerHTML={{ __html: insight.quotes }} />
+            <blockquote
+              className="blockquote px-4 py-3 border-start border-4 border-primary mb-4"
+              dangerouslySetInnerHTML={{ __html: insight.quotes }}
+            />
           )}
           {insight.notes && (
-            <div><h5>Final Notes</h5><div dangerouslySetInnerHTML={{ __html: insight.notes }} /></div>
+            <div>
+              <h5>Final Notes</h5>
+              <div dangerouslySetInnerHTML={{ __html: insight.notes }} />
+            </div>
           )}
         </Col>
 
@@ -226,14 +315,24 @@ export default function InsightDetailPage() {
             <h5 className="mb-0">Top Threads</h5>
           </div>
           <div className="border rounded bg-light shadow-sm">
-            {(showAllThreads ? allInsights : allInsights.slice(0, 10)).map(ins => (
-              <div key={ins.id} className="px-3 py-2 border-bottom">
-                <a href={`/insights/${ins.id}`} className="text-decoration-none text-dark fw-semibold d-block" dangerouslySetInnerHTML={{ __html: ins.title }} />
-              </div>
-            ))}
+            {(showAllThreads ? allInsights : allInsights.slice(0, 10)).map(
+              (ins) => (
+                <div key={ins.id} className="px-3 py-2 border-bottom">
+                  <a
+                    href={`/insights/${ins.id}`}
+                    className="text-decoration-none text-dark fw-semibold d-block"
+                    dangerouslySetInnerHTML={{ __html: ins.title }}
+                  />
+                </div>
+              )
+            )}
             {allInsights.length > 10 && !showAllThreads && (
               <div className="text-center py-2">
-                <Button variant="outline-secondary" size="sm" onClick={() => setShowAllThreads(true)}>
+                <Button
+                  variant="outline-secondary"
+                  size="sm"
+                  onClick={() => setShowAllThreads(true)}
+                >
                   View more threads
                 </Button>
               </div>
@@ -247,14 +346,36 @@ export default function InsightDetailPage() {
           <div className="mb-3 pb-1 border-bottom">
             <h5 className="mb-0">Share Your Thoughts</h5>
           </div>
-          <div className="p-4 rounded border shadow-sm mb-5" style={{ backgroundColor: "#f8f9fa" }}>
+          <div
+            className="p-4 rounded border shadow-sm mb-5"
+            style={{ backgroundColor: "#f8f9fa" }}
+          >
             {!userEmail && !guestEmail && (
-              <input type="email" className="form-control mb-2" placeholder="Enter your email" value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)} />
+              <input
+                type="email"
+                className="form-control mb-2"
+                placeholder="Enter your email"
+                value={guestEmail}
+                onChange={(e) => setGuestEmail(e.target.value)}
+              />
             )}
             <form onSubmit={submitThought}>
-              <textarea className="form-control mb-2" rows={3} placeholder="Write your thoughts..." value={newThought} onChange={(e) => setNewThought(e.target.value)} />
-              <input type="file" className="form-control mb-2" accept="image/*,video/mp4" onChange={handleMediaUpload} />
-              <Button type="submit" variant="primary">Post</Button>
+              <textarea
+                className="form-control mb-2"
+                rows={3}
+                placeholder="Write your thoughts..."
+                value={newThought}
+                onChange={(e) => setNewThought(e.target.value)}
+              />
+              <input
+                type="file"
+                className="form-control mb-2"
+                accept="image/*,video/mp4"
+                onChange={handleMediaUpload}
+              />
+              <Button type="submit" variant="primary">
+                Post
+              </Button>
             </form>
           </div>
 
@@ -266,26 +387,63 @@ export default function InsightDetailPage() {
             <div key={i} className="mb-4 bg-light p-3 rounded border shadow-sm">
               <strong className="text-primary">{t.user_email}</strong>
               <p className="mt-2">{t.comment}</p>
-              {t.image_url && (
-                t.image_url.endsWith(".mp4") ? (
-                  <video controls className="mb-2" style={{ width: "100%", maxWidth: "400px", borderRadius: "6px" }}>
+              {t.image_url &&
+                (t.image_url.endsWith(".mp4") ? (
+                  <video
+                    controls
+                    className="mb-2"
+                    style={{
+                      width: "100%",
+                      maxWidth: "400px",
+                      borderRadius: "6px",
+                    }}
+                  >
                     <source src={`${imageBase}${t.image_url}`} />
                   </video>
                 ) : (
-                  <img src={`${imageBase}${t.image_url}`} alt="reply" className="mb-2" style={{ width: "100%", maxWidth: "400px", borderRadius: "6px" }} />
-                )
-              )}
+                  <img
+                    src={`${imageBase}${t.image_url}`}
+                    alt="reply"
+                    className="mb-2"
+                    style={{
+                      width: "100%",
+                      maxWidth: "400px",
+                      borderRadius: "6px",
+                    }}
+                  />
+                ))}
               <div className="mt-2">
-                <Button variant="link" size="sm" onClick={() => setReplyingTo(t.id)}>Reply</Button>
+                <Button
+                  variant="link"
+                  size="sm"
+                  onClick={() => setReplyingTo(t.id)}
+                >
+                  Reply
+                </Button>
                 {replyingTo === t.id && (
                   <div className="mt-2">
-                    <textarea className="form-control mb-2" rows={2} placeholder="Write a reply..." value={replyText} onChange={(e) => setReplyText(e.target.value)} />
-                    <Button size="sm" variant="outline-primary" onClick={() => submitReply(t.id)}>Post Reply</Button>
+                    <textarea
+                      className="form-control mb-2"
+                      rows={2}
+                      placeholder="Write a reply..."
+                      value={replyText}
+                      onChange={(e) => setReplyText(e.target.value)}
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline-primary"
+                      onClick={() => submitReply(t.id)}
+                    >
+                      Post Reply
+                    </Button>
                   </div>
                 )}
               </div>
               {getReplies(t.id).map((r, ri) => (
-                <div key={ri} className="ms-3 mt-3 ps-3 border-start border-3 border-primary">
+                <div
+                  key={ri}
+                  className="ms-3 mt-3 ps-3 border-start border-3 border-primary"
+                >
                   <strong>{r.user_email}</strong>
                   <p className="mb-1">{r.comment}</p>
                 </div>
@@ -295,7 +453,11 @@ export default function InsightDetailPage() {
 
           {parentThoughts.length > visibleThoughts && (
             <div className="text-center">
-              <Button variant="outline-secondary" size="sm" onClick={() => setVisibleThoughts(prev => prev + 5)}>
+              <Button
+                variant="outline-secondary"
+                size="sm"
+                onClick={() => setVisibleThoughts((prev) => prev + 5)}
+              >
                 View more discussions
               </Button>
             </div>

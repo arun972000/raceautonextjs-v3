@@ -1,10 +1,8 @@
-* {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-body{
+
+.pdf-container{
   background-color: black;
 }
+
 @media screen and (max-width: 480px) {
   .react-pdf__Page {
     width: 360px;
