@@ -308,11 +308,20 @@ const MobileNavNew = () => {
           <div className={menuStyles.navMenuContainer}>
             <button
               className={menuStyles.menuSelector}
+              onClick={() => handleMorePageClick("/insights")}
+            >
+              <span className={menuStyles.menuText}>Insights</span>
+            </button>
+          </div>
+          <div className={menuStyles.navMenuContainer}>
+            <button
+              className={menuStyles.menuSelector}
               onClick={() => handleMorePageClick("/magazine")}
             >
               <span className={menuStyles.menuText}>E-Magazine</span>
             </button>
           </div>
+          
           <div style={{ textAlign: "center", background: "white" }}>
             <div
               style={{

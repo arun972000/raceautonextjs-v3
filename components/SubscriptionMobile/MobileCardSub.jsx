@@ -133,7 +133,7 @@ export default function PricingPlans({ hide }) {
                     <div className="row">
                         {plans.map(plan => {
                             const userPlan = subcriptionData.length > 0 ? subcriptionData[0].plan_name : null;
-                            const isUserSubscribed = subcriptionData.length !== 0 && subcriptionData[0].status === 'Active';
+                            const isUserSubscribed = subcriptionData.length !== 0 && new Date(subcriptionData[0].end_date) > new Date();
                             const isThisUserPlan = isUserSubscribed && userPlan === plan.title.toLowerCase();
                             const isSilverPlan = plan.title.toLowerCase() === 'silver';
                             const showYourPlanBadge = isThisUserPlan || (!token && isSilverPlan);

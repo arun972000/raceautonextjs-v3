@@ -45,7 +45,7 @@ export default function MobilePricingCard({
   }, [email]);
 
   const userPlan = subcriptionData.length > 0 ? subcriptionData[0].plan_name : null;
-  const isUserSubscribed = subcriptionData.length !== 0 && subcriptionData[0].status === "Active";
+  const isUserSubscribed = subcriptionData.length !== 0 && new Date(subcriptionData[0].end_date) > new Date();
   const isThisUserPlan = isUserSubscribed && userPlan === title.toLowerCase();
   const isSilverPlan = title.toLowerCase() === "silver";
 

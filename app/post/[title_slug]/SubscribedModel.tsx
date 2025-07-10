@@ -47,7 +47,7 @@ const ContentComponent = ({
   if (
     is_recommended == 1 &&
     (decoded.role == "user" ||
-      (subcriptionData.length !== 0 && subcriptionData[0].status !== "Active"))
+      (subcriptionData.length !== 0 && new Date(subcriptionData[0].end_date) > new Date()))
   ) {
     return (
       <div>

@@ -51,7 +51,7 @@ function TestMobile({ token, pdfData }) {
   // Grant access if user role is admin, ad team, or moderator OR subscription status is Active.
   const showActionButtons =
     ["admin", "ad team", "moderator"].includes(decoded.role) ||
-    (subcriptionData.length !== 0 && subcriptionData[0]?.status === "Active");
+    (subcriptionData.length !== 0 && new Date(subcriptionData[0].end_date) > new Date());
 
   // const pdfData = async () => {
   //   try {

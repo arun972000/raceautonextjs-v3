@@ -56,7 +56,7 @@ function Test({ token, pdfData }) {
   // Buttons will be visible if user is admin OR if the subscription exists and its status is 'Active'.
   const showActionButtons =
     ["admin", "ad team", "moderator"].includes(decoded.role) ||
-    (subcriptionData.length !== 0 && subcriptionData[0]?.status === "Active");
+    (subcriptionData.length !== 0 && new Date(subcriptionData[0].end_date) > new Date());
 
   // const pdfData = async () => {
   //   try {

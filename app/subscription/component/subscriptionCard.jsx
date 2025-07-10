@@ -577,7 +577,7 @@ const SubscriptionCard = ({ data, token }) => {
           <div className="card text-center card-shadow on-hover border-0 mb-4">
             <div className="card-body font-14">
               {subcriptionData[0]?.plan_name === "bronze" &&
-                subcriptionData[0]?.status === "Active" && (
+                new Date(subcriptionData[0].end_date) > new Date() && (
                   <span className="badge bg-info">Current plan</span>
                 )}
               <h5 className="mt-3 mb-1 font-weight-medium">BRONZE</h5>
