@@ -238,34 +238,63 @@ function Test({ token, pdfData }) {
       <div className="magazine-slider ms-4">
         <MagazineSlider />
       </div>
-      <Document
-        file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`}
-        style={{ width: "100%", aspectRatio: "1.4/1" }}
-        onLoadSuccess={handleLoadSuccess}
-        onLoadProgress={handleLoadProgress}
-        onLoadError={(error) => {
-          console.error("Error loading PDF: ", error);
-          setPdfloading(false);
-        }}
-      >
-        <HTMLFlipBook
-          width={460}
-          height={660}
-          ref={book}
-          showCover={true}
-          onFlip={onFlip}
-          flippingTime={500}
-          disableFlipByClick={!isMobile}
-          swipeDistance={20}
-          clickEventForward={false}
-          showPageCorners={false}
-          style={{ overflow: "hidden" }}
+      <div style={{ position: "relative" }}>
+        <Document
+          file={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`}
+          onLoadSuccess={handleLoadSuccess}
+          onLoadProgress={handleLoadProgress}
+          onLoadError={(error) => {
+            console.error("Error loading PDF: ", error);
+            setPdfloading(false);
+          }}
         >
-          {pagesMap.map((item, i) => (
-            <Page key={i} pageNumber={i + 1} scale={2.0} />
-          ))}
-        </HTMLFlipBook>
-      </Document>
+          <HTMLFlipBook
+            width={460}
+            height={660}
+            ref={book}
+            showCover={true}
+            onFlip={onFlip}
+            flippingTime={500}
+            disableFlipByClick={!isMobile}
+            swipeDistance={20}
+            clickEventForward={false}
+            showPageCorners={false}
+            style={{ overflow: "hidden" }}
+          >
+            {pagesMap.map((item, i) => (
+              <Page key={i} pageNumber={i + 1} scale={2.0} />
+            ))}
+          </HTMLFlipBook>
+        </Document>
+
+        {/* Prev Button */}
+        <GrFormPrevious
+          title="Previous"
+          onClick={() => {
+            book.current.pageFlip().flipPrev("top");
+            if (currentPage !== 1) {
+              setCurrentPage((pre) => pre - 1);
+            }
+          }}
+          className="flipbook-arrow flipbook-prev"
+          color="white"
+          size={45}
+        />
+
+        {/* Next Button */}
+        <GrFormNext
+          title="Next"
+          onClick={() => {
+            book.current.pageFlip().flipNext("top");
+            if (currentPage !== totalPage / 2) {
+              setCurrentPage((pre) => pre + 1);
+            }
+          }}
+          className="flipbook-arrow flipbook-next"
+          color="white"
+          size={45}
+        />
+      </div>
 
       {!pdfloading && (
         <div className="row justify-content-center align-items-center">
@@ -283,7 +312,7 @@ function Test({ token, pdfData }) {
               padding: "10px 20px" // optional padding
             }}
           >
-            <GrFormPrevious
+            {/* <GrFormPrevious
               title="Previous"
               onClick={() => {
                 book.current.pageFlip().flipPrev("top");
@@ -299,7 +328,7 @@ function Test({ token, pdfData }) {
               className="mx-2"
               color="white"
               size={28}
-            />
+            /> */}
 
             <div>
               <input
@@ -354,7 +383,7 @@ function Test({ token, pdfData }) {
                 <b>{totalPage}</b>
               </p>
             )}
-            <GrFormNext
+            {/* <GrFormNext
               title="Next"
               onClick={() => {
                 book.current.pageFlip().flipNext("top");
@@ -370,7 +399,7 @@ function Test({ token, pdfData }) {
               }}
               className="mx-2"
               size={28}
-            />
+            /> */}
             {showActionButtons && (
               <div onClick={toggleAutoplay}>
                 {isAutoplay ? (

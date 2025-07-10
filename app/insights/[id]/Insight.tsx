@@ -71,6 +71,10 @@ export default function InsightDetailPage() {
   const [replyText, setReplyText] = useState("");
   const [visibleThoughts, setVisibleThoughts] = useState(5);
   const [showAllThreads, setShowAllThreads] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editText, setEditText] = useState("");
+  const [editImage, setEditImage] = useState<File | null>(null);
+  const [emailConfirmed, setEmailConfirmed] = useState(false);
   const imageBase = process.env.NEXT_PUBLIC_S3_BUCKET_URL;
 
   useEffect(() => {
@@ -83,6 +87,7 @@ export default function InsightDetailPage() {
     const storedGuestEmail = sessionStorage.getItem("guestEmail");
     if (!token && storedGuestEmail) {
       setGuestEmail(storedGuestEmail);
+      setEmailConfirmed(true);
     }
 
     if (id) {
@@ -130,8 +135,11 @@ export default function InsightDetailPage() {
     if (!newThought.trim()) return;
 
     if (!userEmail) {
-      sessionStorage.setItem("guestEmail", finalEmail);
-      setGuestEmail(finalEmail);
+      if (!guestEmail.trim()) {
+        return alert("Enter your email first.");
+      }
+      sessionStorage.setItem("guestEmail", guestEmail.trim());
+      setEmailConfirmed(true);
     }
 
     const formData = new FormData();
@@ -168,6 +176,38 @@ export default function InsightDetailPage() {
 
     setReplyText("");
     setReplyingTo(null);
+    fetchThoughts();
+  };
+
+  const handleEditSubmit = async (commentId: number) => {
+    const formData = new FormData();
+    formData.append("id", commentId.toString());
+    formData.append("comment", sanitize(editText));
+    if (editImage) formData.append("image", editImage);
+
+    await fetch("/api/admin/insights/comments", {
+      method: "PUT",
+      body: formData,
+    });
+
+    setEditingId(null);
+    setEditText("");
+    setEditImage(null);
+    fetchThoughts();
+  };
+
+  const handleDelete = async (commentId: number) => {
+    const confirmed = confirm("Are you sure you want to delete this?");
+    if (!confirmed) return;
+
+    await fetch("/api/admin/insights/comments", {
+      method: "DELETE",
+      body: JSON.stringify({ id: commentId }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     fetchThoughts();
   };
 
@@ -288,7 +328,6 @@ export default function InsightDetailPage() {
 
           {insight.charts?.map((chart: any, idx: number) => (
             <div key={idx} className="p-3 border rounded bg-light mb-4">
-             
               {chart.heading && <h5 className="mb-2">{chart.heading}</h5>}
               {renderGraph(chart)}
             </div>
@@ -302,7 +341,6 @@ export default function InsightDetailPage() {
           )}
           {insight.notes && (
             <div>
-             
               <div dangerouslySetInnerHTML={{ __html: insight.notes }} />
             </div>
           )}
@@ -348,7 +386,7 @@ export default function InsightDetailPage() {
             className="p-4 rounded border shadow-sm mb-5"
             style={{ backgroundColor: "#f8f9fa" }}
           >
-            {!userEmail && !guestEmail && (
+            {!userEmail && !emailConfirmed && (
               <input
                 type="email"
                 className="form-control mb-2"
@@ -443,7 +481,105 @@ export default function InsightDetailPage() {
                   className="ms-3 mt-3 ps-3 border-start border-3 border-primary"
                 >
                   <strong>{r.user_email}</strong>
-                  <p className="mb-1">{r.comment}</p>
+                  {editingId === t.id ? (
+                    <>
+                      <textarea
+                        className="form-control mb-2"
+                        rows={2}
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                      />
+                      <input
+                        type="file"
+                        className="form-control mb-2"
+                        accept="image/*"
+                        onChange={(e) =>
+                          setEditImage(e.target.files?.[0] || null)
+                        }
+                      />
+                      <div>
+                        <Button
+                          variant="success"
+                          size="sm"
+                          onClick={() => handleEditSubmit(t.id)}
+                          className="me-2"
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setEditingId(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className="mt-2">{t.comment}</p>
+                      {t.image_url &&
+                        (t.image_url.endsWith(".mp4") ? (
+                          <video
+                            controls
+                            className="mb-2"
+                            style={{
+                              width: "100%",
+                              maxWidth: "400px",
+                              borderRadius: "6px",
+                            }}
+                          >
+                            <source src={`${imageBase}${t.image_url}`} />
+                          </video>
+                        ) : (
+                          <img
+                            src={`${imageBase}${t.image_url}`}
+                            alt="reply"
+                            className="mb-2"
+                            style={{
+                              width: "100%",
+                              maxWidth: "400px",
+                              borderRadius: "6px",
+                            }}
+                          />
+                        ))}
+                      <div className="mt-2">
+                        <Button
+                          variant="link"
+                          size="sm"
+                          onClick={() => setReplyingTo(t.id)}
+                        >
+                          Reply
+                        </Button>
+
+                        {/* Show Edit/Delete only to comment owner */}
+                        {(userEmail === t.user_email ||
+                          guestEmail === t.user_email) && (
+                          <>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="text-warning"
+                              onClick={() => {
+                                setEditingId(t.id);
+                                setEditText(t.comment);
+                              }}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="text-danger"
+                              onClick={() => handleDelete(t.id)}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
