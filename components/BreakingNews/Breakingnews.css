@@ -6,6 +6,8 @@
     color: white !important;
     z-index: 2;
     position: absolute;
+    margin-right: 30px;
+    padding-left: 30px;
   }
   
 
