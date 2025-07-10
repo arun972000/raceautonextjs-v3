@@ -37,8 +37,11 @@ export async function POST(req: NextRequest) {
       [id]
     );
 
-    const durationDays = duration === "annual" ? 365 : 30;
-    const expireTime = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000);
+    // const durationDays = duration === "annual" ? 365 : 30;
+    // const expireTime = new Date(Date.now() + durationDays * 24 * 60 * 60 * 1000);
+
+    const durationDays = 0; // override to 0 for DB, so end_date = NOW() + INTERVAL 0 DAY
+    const expireTime = new Date(Date.now() + 1 * 60 * 1000); // 1 minute in milliseconds
 
     const subscription =
       plan == "silver" ? 1 : plan == "gold" ? 2 : plan == "platinum" ? 3 : 0;
