@@ -9,7 +9,7 @@ const PostListCard = ({ item }: { item: CateoryPostType }) => {
   return (
     <div className="card shadow-sm border-0 h-100">
       <Link href={`/post/${item.title_slug}`} className="link-style text-decoration-none text-dark">
-        <div className={styles.postList_image_container} style={{ position: "relative", height: "200px" }}>
+        <div className={styles.postList_image_container} style={{ position: "relative", height: "250px" }}>
           <Image
             src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${item.image_mid}`}
             alt={item.title || "Post thumbnail"}

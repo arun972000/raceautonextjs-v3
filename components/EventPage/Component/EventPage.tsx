@@ -54,7 +54,7 @@ const EventPage = () => {
   };
 
   return (
-    <div className="container-fluid py-3 bg-dark">
+    <div className="container-fluid py-3 bg-dark" style={{color:'black'}}>
       <EventSwiper />
 
       {/* Mobile Dropdowns */}

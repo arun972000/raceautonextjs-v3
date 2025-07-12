@@ -5,13 +5,13 @@
 
 @media screen and (max-width: 480px) {
   .react-pdf__Page {
-    width: 360px;
+    width: 180px;
     height: auto;
   }
 
   .react-pdf__Page__canvas {
     height: auto !important;
-    width: 360px !important;
+    width: 180px !important;
   }
 
   .react-pdf__Document {

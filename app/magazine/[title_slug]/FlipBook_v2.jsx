@@ -9,7 +9,7 @@ import HTMLFlipBook from "react-pageflip";
 import { pdfjs, Document, Page as ReactPdfPage } from "react-pdf";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { FaCheck, FaPrint } from "react-icons/fa";
+import { FaCheck, FaLock, FaPrint } from "react-icons/fa";
 import { useRouter, useParams } from "next/navigation";
 import "./flip_v2.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -21,7 +21,7 @@ import { jwtDecode } from "jwt-decode";
 import Image from "next/image";
 import MagazineAd from "@/components/GoogleAds/MagazineAd";
 import Link from "next/link";
-
+import { Carousel } from "react-bootstrap";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 const Page = forwardRef(({ pageNumber }, ref) => {
@@ -49,6 +49,8 @@ function Test({ token, pdfData }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isAutoplay, setIsAutoplay] = useState(false);
   const [subcriptionData, setSubcriptionData] = useState([]);
+  const [youtubeResults, setYoutubeResults] = useState([]);
+  const [articleResults, setArticleResults] = useState([]);
   const decoded = token ? jwtDecode(token) : { email: "", role: "user" };
   const autoplayRef = useRef(null);
 
@@ -119,14 +121,39 @@ function Test({ token, pdfData }) {
     }
   };
 
-  const onFlip = useCallback(() => {
+  const onFlip = useCallback(async (e) => {
+    const isFreeUser = !["admin", "ad team", "moderator"].includes(decoded.role) ||
+      (subcriptionData.length === 0 || new Date(subcriptionData[0].end_date) < new Date());
+
+    if (isFreeUser) return;
     const audio = new Audio("/turnpage-99756.mp3");
-    if (!volume) {
-      audio.play();
-    } else {
-      audio.pause();
+    if (!volume) audio.play();
+
+    try {
+      const pageIndex = e.data || currentPage - 1;
+      const pdfUrl = `${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`;
+      const loadingTask = pdfjs.getDocument(pdfUrl);
+      const pdfDoc = await loadingTask.promise;
+      const pageObj = await pdfDoc.getPage(pageIndex + 1);
+      const txtContent = await pageObj.getTextContent();
+      const text = txtContent.items.map((item) => item.str).join(" ");
+
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/search-youtube`,
+        { text }
+      );
+
+      const {
+        youtubeVideos = [],
+        postResults = [],
+      } = response.data;
+
+      setYoutubeResults(youtubeVideos);
+      setArticleResults(postResults);
+    } catch (err) {
+      console.error("Error extracting or sending content:", err);
     }
-  }, [volume]);
+  }, [volume, pdfData, currentPage]);
 
   const pagesMap = new Array(totalPage).fill(0);
 
@@ -198,27 +225,27 @@ function Test({ token, pdfData }) {
     }
   }, []);
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      // Block F12
-      if (e.key === "F12") {
-        e.preventDefault();
-      }
-      // Block Ctrl+Shift+I or Ctrl+Shift+J or Ctrl+U
-      if (
-        (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
-        (e.ctrlKey && e.key === "U")
-      ) {
-        e.preventDefault();
-      }
-    };
+  // useEffect(() => {
+  //   const handleKeyDown = (e) => {
+  //     // Block F12
+  //     if (e.key === "F12") {
+  //       e.preventDefault();
+  //     }
+  //     // Block Ctrl+Shift+I or Ctrl+Shift+J or Ctrl+U
+  //     if (
+  //       (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+  //       (e.ctrlKey && e.key === "U")
+  //     ) {
+  //       e.preventDefault();
+  //     }
+  //   };
 
-    document.addEventListener("keydown", handleKeyDown);
+  //   document.addEventListener("keydown", handleKeyDown);
 
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
+  //   return () => {
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //   };
+  // }, []);
 
   return (
     <div onContextMenu={(e) => e.preventDefault()}>
@@ -516,7 +543,7 @@ function Test({ token, pdfData }) {
           </div>
           <div className="magazine-ad">
             <div className="text-center pt-3 position-relative"><Image style={{ cursor: 'pointer' }} alt='race logo' src='/images/white logo.png' width={60} height={60} onClick={() => router.back()} /></div>
-
+            {/* 
             <div
               className="mt-1"
               style={{
@@ -528,7 +555,158 @@ function Test({ token, pdfData }) {
               }}
             >
               <MagazineAd />
-            </div>
+            </div> */}
+            {showActionButtons ? (
+              <>
+                {youtubeResults.length > 0 && (
+                  <div className="mt-4 px-4">
+                    <h3 style={{ color: "white", marginBottom: 8 }}>YouTube Previews</h3>
+                    <Carousel interval={4000} pause={false} key={youtubeResults.map(v => v.id).join("-")}>
+                      {youtubeResults.map((video) => (
+                        <Carousel.Item key={video.id}>
+                          <a
+                            href={`https://www.youtube.com/watch?v=${video.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <img
+                              src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
+                              alt={video.title}
+                              className="d-block w-100"
+                              style={{ borderRadius: "8px", objectFit: "cover" }}
+                            />
+                          </a>
+                          <Carousel.Caption>
+                            <p style={{ color: "white", backgroundColor: "rgba(0,0,0,0.6)", padding: "4px 8px", fontSize: "14px" }}>
+                              {video.title}
+                            </p>
+                          </Carousel.Caption>
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  </div>
+                )}
+
+                {articleResults.length > 0 && (
+                  <div className="mt-4 px-4">
+                    <h3 style={{ color: "white", marginBottom: 8 }}>Related Articles</h3>
+                    <Carousel interval={4000} pause={false} key={articleResults.map(a => a.id || a.title).join("-")}>
+                      {articleResults.map((article, idx) => (
+                        <Carousel.Item key={idx}>
+                          <div className="p-3 bg-dark rounded d-flex flex-column align-items-center">
+                            {article.image && (
+                              <img
+                                src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${article.image}`}
+                                alt={article.title}
+                                className="mb-3"
+                                style={{ maxHeight: 200, borderRadius: 6, objectFit: "cover" }}
+                              />
+                            )}
+                            <a
+                              href={article.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ color: "#32bea6", textDecoration: "none" }}
+                            >
+                              <h5 className="text-center" style={{ fontSize: "16px" }}>{article.title}</h5>
+                            </a>
+                            <p style={{ color: "white", marginTop: 4, textAlign: "center", fontSize: "14px" }}>
+                              {article.snippet}
+                            </p>
+                          </div>
+                        </Carousel.Item>
+                      ))}
+                    </Carousel>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="mt-4 px-3 position-relative">
+                {/* Blurred Placeholder */}
+                <div
+                  className="bg-dark rounded overflow-hidden"
+                  style={{
+                    filter: "blur(5px)",
+                    pointerEvents: "none",
+                    userSelect: "none",
+                    height: 200,
+                    position: "relative",
+                  }}
+                >
+                  <Carousel interval={4000} pause={false}>
+                    {[1, 2].map((_, idx) => (
+                      <Carousel.Item key={idx}>
+                        <div
+                          style={{
+                            height: 250,
+                            backgroundColor: "#1c1c1c",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#999",
+                            fontSize: "16px",
+                          }}
+                        >
+                          Preview Locked – Subscribe to Unlock
+                        </div>
+                      </Carousel.Item>
+                    ))}
+                  </Carousel>
+                </div>
+
+                {/* Lock Icon */}
+                {/* <div
+                  style={{
+                    position: "absolute",
+                    top: 12,
+                    right: 12,
+                    zIndex: 3,
+                    backgroundColor: "rgba(0,0,0,0.6)",
+                    borderRadius: "50%",
+                    padding: 8,
+                  }}
+                >
+                  <FaLock size={18} color="#fff" />
+                </div> */}
+
+                {/* Subscription Overlay Box */}
+                <div
+                  className="position-absolute top-50 start-50 translate-middle text-center px-3"
+                  style={{
+                    zIndex: 4,
+                    background: "rgba(0,0,0,0.85)",
+                    padding: "16px 20px",
+                    borderRadius: "10px",
+                    border: "1px solid #32bea6",
+                    maxWidth: 320,
+                    width: "90%",
+                  }}
+                >
+                  <h5 style={{ color: "#32bea6", fontWeight: "bold", fontSize: "18px" }}>
+                    Premium Content
+                  </h5>
+                  <p style={{ color: "#eee", fontSize: "14px", marginBottom: "12px" }}>
+                    YouTube previews and related articles are available only to subscribers.
+                  </p>
+                  <Link href="/subscription">
+                    <button
+                      className="btn"
+                      style={{
+                        backgroundColor: "#32bea6",
+                        color: "white",
+                        fontWeight: 600,
+                        padding: "6px 18px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      🔓 Unlock Now
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            )}
+
+
           </div>
         </div>
       )}

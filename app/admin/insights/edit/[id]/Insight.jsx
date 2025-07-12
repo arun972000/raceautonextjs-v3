@@ -28,7 +28,7 @@ const quillModules = {
     [{ header: [1, 2, false] }],
     ['bold', 'italic', 'underline', 'blockquote'],
     [{ list: 'ordered' }, { list: 'bullet' }],
-    ['link', 'image'],
+    ['link'],
     ['clean']
   ]
 };
@@ -45,15 +45,28 @@ export default function EditInsightForm() {
   const [charts, setCharts] = useState([]);
   const [useChart1, setUseChart1] = useState(false);
   const [useChart2, setUseChart2] = useState(false);
-
   const [existingImages, setExistingImages] = useState([]);
   const [imagesToDelete, setImagesToDelete] = useState([]);
-  const [newImages, setNewImages] = useState([]);
+  const [newImages, setNewImages] = useState([]); // array of { file, preview }
+  const [categories, setCategories] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [keywords, setKeywords] = useState('');
+
 
   useEffect(() => {
     if (!id) return;
     fetchInsight(id);
+    fetchCategories();
   }, [id]);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get('/api/admin/insights-categories');
+      if (res.data.success) setCategories(res.data.categories);
+    } catch (err) {
+      console.error('Error fetching categories', err);
+    }
+  };
 
   const fetchInsight = async (id) => {
     try {
@@ -64,7 +77,8 @@ export default function EditInsightForm() {
       setQuotes(insight.quotes);
       setNotes(insight.notes);
       setExistingImages(insight.images || []);
-
+      setSelectedCategories(insight.categories || []);
+      setKeywords(insight.keywords || '');
       const chartList = insight.charts || [];
       setCharts([
         chartList[0] || { type: 'bar', heading: '', data: [...defaultChartData] },
@@ -78,6 +92,12 @@ export default function EditInsightForm() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCategoryToggle = (catId) => {
+    setSelectedCategories((prev) =>
+      prev.includes(catId) ? prev.filter((id) => id !== catId) : [...prev, catId]
+    );
   };
 
   const handleChartChange = (index, key, value) => {
@@ -96,21 +116,6 @@ export default function EditInsightForm() {
     const updated = [...charts];
     updated[chartIndex].data.push({ name: '', value: 0 });
     setCharts(updated);
-  };
-
-  const toggleDeleteImage = (key) => {
-    setImagesToDelete(prev =>
-      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
-    );
-  };
-
-  const handleNewImageUpload = (e) => {
-    const files = Array.from(e.target.files || []);
-    const validFiles = files.filter(f => f.size < 5000 * 1024);
-    if (validFiles.length < files.length) {
-      alert("Some files exceeded 5mb and were ignored.");
-    }
-    setNewImages(prev => [...prev, ...validFiles]);
   };
 
   const renderChartDataInputs = (chartIndex) => (
@@ -140,6 +145,72 @@ export default function EditInsightForm() {
       </Button>
     </>
   );
+
+  const toggleDeleteImage = (key) => {
+    setImagesToDelete(prev =>
+      prev.includes(key) ? prev.filter(k => k !== key) : [...prev, key]
+    );
+  };
+
+  const handleNewImageUpload = (e) => {
+    const files = Array.from(e.target.files || []);
+    const validFiles = files.filter(f => f.size <= 4000 * 1024); // 300KB limit
+    if (validFiles.length < files.length) {
+      alert("Some files exceeded 4mb and were ignored.");
+    }
+
+    validFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewImages(prev => [...prev, { file, preview: reader.result }]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeNewImage = (indexToRemove) => {
+    setNewImages(prev => prev.filter((_, i) => i !== indexToRemove));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("quotes", quotes);
+    formData.append("notes", notes);
+    formData.append("keywords", keywords);
+    formData.append("charts", JSON.stringify([
+      ...(useChart1 ? [charts[0]] : []),
+      ...(useChart2 ? [charts[1]] : [])
+    ]));
+
+    selectedCategories.forEach(catId => {
+      formData.append('categories', catId);
+    });
+
+    imagesToDelete.forEach(img => {
+      formData.append("delete_images", img);
+    });
+
+    newImages.forEach(imgObj => {
+      formData.append("new_images", imgObj.file);
+    });
+
+    try {
+      const res = await axios.put(`/api/admin/insights/${id}`, formData);
+      if (res.data.success) {
+        toast.success("Insight updated!");
+        router.push("/admin/insights");
+      } else {
+        toast.error("Update failed");
+      }
+    } catch (err) {
+      console.error("Submit error:", err);
+      toast.error("Server error while updating");
+    }
+  };
 
   const renderGraph = (index) => {
     const chart = charts[index];
@@ -188,40 +259,28 @@ export default function EditInsightForm() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("content", content);
-    formData.append("quotes", quotes);
-    formData.append("notes", notes);
-    formData.append("charts", JSON.stringify([
-      ...(useChart1 ? [charts[0]] : []),
-      ...(useChart2 ? [charts[1]] : [])
-    ]));
-
-    imagesToDelete.forEach(img => {
-      formData.append("delete_images", img);
-    });
-
-    newImages.forEach(img => {
-      formData.append("new_images", img);
-    });
-
-    try {
-      const res = await axios.put(`/api/admin/insights/${id}`, formData);
-      if (res.data.success) {
-        toast.success("Insight updated!");
-        router.push("/admin/insights");
-      } else {
-        toast.error("Update failed");
-      }
-    } catch (err) {
-      console.error("Submit error:", err);
-      toast.error("Server error while updating");
-    }
-  };
+  const renderGraphEditor = (index) => (
+    <div className="border p-3 mb-3 rounded">
+      <h6>Chart {index + 1}</h6>
+      <Form.Select
+        className="mb-2"
+        value={charts[index].type}
+        onChange={(e) => handleChartChange(index, 'type', e.target.value)}
+      >
+        <option value="bar">Bar</option>
+        <option value="line">Line</option>
+        <option value="pie">Pie</option>
+      </Form.Select>
+      <Form.Control
+        className="mb-2"
+        placeholder="Chart heading"
+        value={charts[index].heading}
+        onChange={(e) => handleChartChange(index, 'heading', e.target.value)}
+      />
+      {renderChartDataInputs(index)}
+      <div className="mt-2">{renderGraph(index)}</div>
+    </div>
+  );
 
   if (loading) {
     return (
@@ -235,15 +294,46 @@ export default function EditInsightForm() {
     <Container className="mt-4">
       <h3>Edit Insight</h3>
       <form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3">
+          <Form.Label>Title</Form.Label>
+          <Form.Control
+            type="text"
+            value={title}
+            onChange={e => {
+              const val = e.target.value;
+              setTitle(val);
+            }}
+            placeholder="Enter title"
+          />
+        </Form.Group>
         <div className="mb-3">
-          <label className="form-label">Title</label>
-          <ReactQuill value={title} onChange={setTitle} theme="snow" modules={quillModules} />
+          <label className="form-label">Keywords (comma separated)</label>
+          <Form.Control
+            type="text"
+            value={keywords}
+            onChange={(e) => setKeywords(e.target.value)}
+            placeholder="e.g. EV, India, Growth"
+          />
         </div>
-
         <div className="mb-3">
           <label className="form-label">Content</label>
           <ReactQuill value={content} onChange={setContent} theme="snow" modules={quillModules} />
         </div>
+
+        <Form.Group className="mb-4">
+          <Form.Label>Categories</Form.Label>
+          <div className="d-flex flex-wrap gap-2">
+            {categories.map((cat) => (
+              <Form.Check
+                key={cat.id}
+                type="checkbox"
+                label={cat.name}
+                checked={selectedCategories.includes(cat.id)}
+                onChange={() => handleCategoryToggle(cat.id)}
+              />
+            ))}
+          </div>
+        </Form.Group>
 
         {/* Existing Images */}
         {existingImages.length > 0 && (
@@ -272,18 +362,35 @@ export default function EditInsightForm() {
           </div>
         )}
 
-        {/* New Image Upload */}
+        {/* New Image Upload with Preview */}
         <Form.Group className="mb-4">
-          <Form.Label>Upload New Images (Max 300KB each)</Form.Label>
+          <Form.Label>Upload New Images (Max 4MB each)</Form.Label>
           <Form.Control type="file" multiple onChange={handleNewImageUpload} />
-          {newImages.length > 0 && (
-            <ul className="mt-2" style={{ fontSize: "0.9rem" }}>
-              {newImages.map((f, i) => <li key={i}>{f.name}</li>)}
-            </ul>
-          )}
+          <Row className="mt-3">
+            {newImages.map((imgObj, index) => (
+              <Col xs={6} md={4} key={index} className="mb-3">
+                <div className="border p-2 position-relative">
+                  <img
+                    src={imgObj.preview}
+                    alt={`preview-${index}`}
+                    className="img-fluid rounded"
+                    style={{ maxHeight: '200px', objectFit: 'cover' }}
+                  />
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="position-absolute top-0 end-0 m-1"
+                    onClick={() => removeNewImage(index)}
+                  >
+                    &times;
+                  </Button>
+                </div>
+              </Col>
+            ))}
+          </Row>
         </Form.Group>
 
-        {/* Charts */}
+        {/* Chart Toggle */}
         <div className="mb-3 p-3 border rounded bg-light">
           <strong>Charts</strong>
           <Form.Check label="Use Chart 1" checked={useChart1} onChange={(e) => setUseChart1(e.target.checked)} />
@@ -291,12 +398,8 @@ export default function EditInsightForm() {
         </div>
 
         <Row>
-          {useChart1 && charts[0] && (
-            <Col md={6}>{renderGraphEditor(0)}</Col>
-          )}
-          {useChart2 && charts[1] && (
-            <Col md={6}>{renderGraphEditor(1)}</Col>
-          )}
+          {useChart1 && charts[0] && <Col md={6}>{renderGraphEditor(0)}</Col>}
+          {useChart2 && charts[1] && <Col md={6}>{renderGraphEditor(1)}</Col>}
         </Row>
 
         <div className="mb-3">
@@ -313,29 +416,4 @@ export default function EditInsightForm() {
       </form>
     </Container>
   );
-
-  function renderGraphEditor(index) {
-    return (
-      <div className="border p-3 mb-3 rounded">
-        <h6>Chart {index + 1}</h6>
-        <Form.Select
-          className="mb-2"
-          value={charts[index].type}
-          onChange={(e) => handleChartChange(index, 'type', e.target.value)}
-        >
-          <option value="bar">Bar</option>
-          <option value="line">Line</option>
-          <option value="pie">Pie</option>
-        </Form.Select>
-        <Form.Control
-          className="mb-2"
-          placeholder="Chart heading"
-          value={charts[index].heading}
-          onChange={(e) => handleChartChange(index, 'heading', e.target.value)}
-        />
-        {renderChartDataInputs(index)}
-        <div className="mt-2">{renderGraph(index)}</div>
-      </div>
-    );
-  }
 }

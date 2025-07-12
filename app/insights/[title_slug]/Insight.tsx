@@ -2,7 +2,7 @@
 "use client";
 
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -24,6 +24,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import "./insight.css";
+import { toast } from "react-toastify";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00c49f"];
 const badWords = [
@@ -59,7 +61,8 @@ const sanitize = (text: string) => {
 };
 
 export default function InsightDetailPage() {
-  const { id } = useParams();
+  const searchParams = useSearchParams();
+  const id:any = searchParams.get("id");
   const [insight, setInsight] = useState<any>(null);
   const [allInsights, setAllInsights] = useState<any[]>([]);
   const [thoughts, setThoughts] = useState<any[]>([]);
@@ -75,6 +78,9 @@ export default function InsightDetailPage() {
   const [editText, setEditText] = useState("");
   const [editImage, setEditImage] = useState<File | null>(null);
   const [emailConfirmed, setEmailConfirmed] = useState(false);
+  const [showChat, setShowChat] = useState(false);
+
+
   const imageBase = process.env.NEXT_PUBLIC_S3_BUCKET_URL;
 
   useEffect(() => {
@@ -131,13 +137,16 @@ export default function InsightDetailPage() {
   const submitThought = async (e: FormEvent) => {
     e.preventDefault();
     const finalEmail = userEmail || guestEmail.trim();
-    if (!finalEmail) return alert("Enter email first.");
-    if (!newThought.trim()) return;
+    if (!finalEmail) {
+      toast.error("Enter your email first.");
+      return;
+    }
+    if (!newThought.trim()) {
+      toast.error("Comment cannot be empty.");
+      return;
+    }
 
-    if (!userEmail) {
-      if (!guestEmail.trim()) {
-        return alert("Enter your email first.");
-      }
+    if (!userEmail && guestEmail.trim()) {
       sessionStorage.setItem("guestEmail", guestEmail.trim());
       setEmailConfirmed(true);
     }
@@ -156,6 +165,7 @@ export default function InsightDetailPage() {
     setNewThought("");
     setUploadMedia(null);
     fetchThoughts();
+    toast.success("Post submitted successfully!");
   };
 
   const submitReply = async (parentId: number) => {
@@ -269,6 +279,15 @@ export default function InsightDetailPage() {
 
   return (
     <Container fluid className="mt-4">
+      <div className="d-md-none">
+        <Button
+          variant="primary"
+          className="chat-floating-btn"
+          onClick={() => setShowChat(true)}
+        >
+          💬
+        </Button>
+      </div>
       <Row>
         <Col md={8}>
           <h3 dangerouslySetInnerHTML={{ __html: insight.title }} />
@@ -323,7 +342,7 @@ export default function InsightDetailPage() {
 
           <div
             dangerouslySetInnerHTML={{ __html: insight.content }}
-            className="mb-4"
+            className="quill-content mb-4"
           />
 
           {insight.charts?.map((chart: any, idx: number) => (
@@ -347,11 +366,7 @@ export default function InsightDetailPage() {
         </Col>
 
         <Col md={4}>
-          <div className="mb-3 pb-1 border-bottom">
-            <h5 className="mb-0">Top Threads</h5>
-          </div>
-          <div className="border rounded bg-light shadow-sm">
-            {(showAllThreads ? allInsights : allInsights.slice(0, 10)).map(
+          {/* {(showAllThreads ? allInsights : allInsights.slice(0, 10)).map(
               (ins) => (
                 <div key={ins.id} className="px-3 py-2 border-bottom">
                   <a
@@ -372,8 +387,214 @@ export default function InsightDetailPage() {
                   View more threads
                 </Button>
               </div>
-            )}
+            )} */}
+          <div className="mb-3 pb-1 border-bottom mt-4">
+            <h5 className="mb-0">All Discussions</h5>
           </div>
+          {parentThoughts.slice(0, visibleThoughts).map((t, i) => (
+            <div key={i} className="mb-4 bg-light p-3 rounded border shadow-sm">
+              <strong className="text-primary">{t.user_email}</strong>
+
+              {editingId === t.id ? (
+                <>
+                  <textarea
+                    className="form-control mb-2 mt-2"
+                    rows={2}
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+                  <input
+                    type="file"
+                    className="form-control mb-2"
+                    accept="image/*"
+                    onChange={(e) => setEditImage(e.target.files?.[0] || null)}
+                  />
+                  <div>
+                    <Button
+                      variant="success"
+                      size="sm"
+                      className="me-2"
+                      onClick={() => handleEditSubmit(t.id)}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => setEditingId(null)}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="mt-2">{t.comment}</p>
+                  {t.image_url &&
+                    (t.image_url.endsWith(".mp4") ? (
+                      <video
+                        controls
+                        className="mb-2"
+                        style={{
+                          width: "100%",
+                          maxWidth: "100%",
+                          borderRadius: "6px",
+                        }}
+                      >
+                        <source src={`${imageBase}${t.image_url}`} />
+                      </video>
+                    ) : (
+                      <img
+                        src={`${imageBase}${t.image_url}`}
+                        alt="reply"
+                        className="mb-2"
+                        style={{
+                          width: "100%",
+                          maxWidth: "100%",
+                          borderRadius: "6px",
+                        }}
+                      />
+                    ))}
+
+                  <div className="mt-2">
+                    {/* Show reply button only if NOT the comment owner */}
+                    {userEmail !== t.user_email &&
+                      guestEmail !== t.user_email && (
+                        <Button
+                          variant="link"
+                          size="sm"
+                          onClick={() => {
+                            if (!userEmail && !guestEmail) {
+                              const emailPrompt = prompt(
+                                "Enter your email to reply:"
+                              );
+                              if (!emailPrompt || !emailPrompt.trim()) return;
+                              sessionStorage.setItem(
+                                "guestEmail",
+                                emailPrompt.trim()
+                              );
+                              setGuestEmail(emailPrompt.trim());
+                              setEmailConfirmed(true);
+                            }
+                            setReplyingTo(t.id);
+                          }}
+                        >
+                          Reply
+                        </Button>
+                      )}
+
+                    {/* Allow edit/delete for both guest and logged-in users */}
+                    {(userEmail === t.user_email ||
+                      guestEmail === t.user_email) && (
+                      <>
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="text-warning"
+                          onClick={() => {
+                            setEditingId(t.id);
+                            setEditText(t.comment);
+                          }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="link"
+                          size="sm"
+                          className="text-danger"
+                          onClick={() => handleDelete(t.id)}
+                        >
+                          Delete
+                        </Button>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Reply input UI */}
+                  {replyingTo === t.id && (
+                    <div className="mt-2">
+                      <textarea
+                        className="form-control mb-2"
+                        rows={2}
+                        placeholder="Write a reply..."
+                        value={replyText}
+                        onChange={(e) => setReplyText(e.target.value)}
+                      />
+                      <Button
+                        size="sm"
+                        variant="outline-primary"
+                        onClick={() => submitReply(t.id)}
+                      >
+                        Post Reply
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* Replies */}
+              {getReplies(t.id).map((r, ri) => (
+                <div
+                  key={ri}
+                  className="ms-3 mt-3 ps-3 border-start border-3 border-primary"
+                >
+                  <strong>{r.user_email}</strong>
+                  <p className="mt-1 mb-2">{r.comment}</p>
+                  {r.image_url &&
+                    (r.image_url.endsWith(".mp4") ? (
+                      <video
+                        controls
+                        className="mb-2"
+                        style={{
+                          width: "100%",
+                          maxWidth: "100%",
+                          borderRadius: "6px",
+                        }}
+                      >
+                        <source src={`${imageBase}${r.image_url}`} />
+                      </video>
+                    ) : (
+                      <img
+                        src={`${imageBase}${r.image_url}`}
+                        alt="reply"
+                        className="mb-2"
+                        style={{
+                          width: "100%",
+                          maxWidth: "100%",
+                          borderRadius: "6px",
+                        }}
+                      />
+                    ))}
+
+                  {/* Edit/Delete reply if owner (guest or logged-in) */}
+                  {(userEmail === r.user_email ||
+                    guestEmail === r.user_email) && (
+                    <div className="mt-2">
+                      <Button
+                        variant="link"
+                        size="sm"
+                        className="text-warning"
+                        onClick={() => {
+                          setEditingId(r.id);
+                          setEditText(r.comment);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="link"
+                        size="sm"
+                        className="text-danger"
+                        onClick={() => handleDelete(r.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ))}
         </Col>
       </Row>
 
@@ -414,190 +635,67 @@ export default function InsightDetailPage() {
               </Button>
             </form>
           </div>
-
-          <div className="mb-3 pb-1 border-bottom">
-            <h5 className="mb-0">All Discussions</h5>
-          </div>
-
-          {parentThoughts.slice(0, visibleThoughts).map((t, i) => (
-            <div key={i} className="mb-4 bg-light p-3 rounded border shadow-sm">
-              <strong className="text-primary">{t.user_email}</strong>
-              <p className="mt-2">{t.comment}</p>
-              {t.image_url &&
-                (t.image_url.endsWith(".mp4") ? (
-                  <video
-                    controls
-                    className="mb-2"
-                    style={{
-                      width: "100%",
-                      maxWidth: "400px",
-                      borderRadius: "6px",
-                    }}
-                  >
-                    <source src={`${imageBase}${t.image_url}`} />
-                  </video>
-                ) : (
-                  <img
-                    src={`${imageBase}${t.image_url}`}
-                    alt="reply"
-                    className="mb-2"
-                    style={{
-                      width: "100%",
-                      maxWidth: "400px",
-                      borderRadius: "6px",
-                    }}
-                  />
-                ))}
-              <div className="mt-2">
-                <Button
-                  variant="link"
-                  size="sm"
-                  onClick={() => setReplyingTo(t.id)}
-                >
-                  Reply
-                </Button>
-                {replyingTo === t.id && (
-                  <div className="mt-2">
-                    <textarea
-                      className="form-control mb-2"
-                      rows={2}
-                      placeholder="Write a reply..."
-                      value={replyText}
-                      onChange={(e) => setReplyText(e.target.value)}
-                    />
-                    <Button
-                      size="sm"
-                      variant="outline-primary"
-                      onClick={() => submitReply(t.id)}
-                    >
-                      Post Reply
-                    </Button>
-                  </div>
-                )}
-              </div>
-              {getReplies(t.id).map((r, ri) => (
-                <div
-                  key={ri}
-                  className="ms-3 mt-3 ps-3 border-start border-3 border-primary"
-                >
-                  <strong>{r.user_email}</strong>
-                  {editingId === t.id ? (
-                    <>
-                      <textarea
-                        className="form-control mb-2"
-                        rows={2}
-                        value={editText}
-                        onChange={(e) => setEditText(e.target.value)}
-                      />
-                      <input
-                        type="file"
-                        className="form-control mb-2"
-                        accept="image/*"
-                        onChange={(e) =>
-                          setEditImage(e.target.files?.[0] || null)
-                        }
-                      />
-                      <div>
-                        <Button
-                          variant="success"
-                          size="sm"
-                          onClick={() => handleEditSubmit(t.id)}
-                          className="me-2"
-                        >
-                          Save
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          onClick={() => setEditingId(null)}
-                        >
-                          Cancel
-                        </Button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <p className="mt-2">{t.comment}</p>
-                      {t.image_url &&
-                        (t.image_url.endsWith(".mp4") ? (
-                          <video
-                            controls
-                            className="mb-2"
-                            style={{
-                              width: "100%",
-                              maxWidth: "400px",
-                              borderRadius: "6px",
-                            }}
-                          >
-                            <source src={`${imageBase}${t.image_url}`} />
-                          </video>
-                        ) : (
-                          <img
-                            src={`${imageBase}${t.image_url}`}
-                            alt="reply"
-                            className="mb-2"
-                            style={{
-                              width: "100%",
-                              maxWidth: "400px",
-                              borderRadius: "6px",
-                            }}
-                          />
-                        ))}
-                      <div className="mt-2">
-                        <Button
-                          variant="link"
-                          size="sm"
-                          onClick={() => setReplyingTo(t.id)}
-                        >
-                          Reply
-                        </Button>
-
-                        {/* Show Edit/Delete only to comment owner */}
-                        {(userEmail === t.user_email ||
-                          guestEmail === t.user_email) && (
-                          <>
-                            <Button
-                              variant="link"
-                              size="sm"
-                              className="text-warning"
-                              onClick={() => {
-                                setEditingId(t.id);
-                                setEditText(t.comment);
-                              }}
-                            >
-                              Edit
-                            </Button>
-                            <Button
-                              variant="link"
-                              size="sm"
-                              className="text-danger"
-                              onClick={() => handleDelete(t.id)}
-                            >
-                              Delete
-                            </Button>
-                          </>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          ))}
-
-          {parentThoughts.length > visibleThoughts && (
-            <div className="text-center">
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => setVisibleThoughts((prev) => prev + 5)}
-              >
-                View more discussions
-              </Button>
-            </div>
-          )}
         </Col>
       </Row>
+      {showChat && (
+  <div className="mobile-chat-overlay">
+    <div className="chat-header d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+      <h5 className="mb-0">Discussions</h5>
+      <Button size="sm" variant="danger" onClick={() => setShowChat(false)}>
+        Close
+      </Button>
+    </div>
+
+    <div className="chat-body p-3 overflow-auto" style={{ height: "70vh" }}>
+      {parentThoughts.map((t) => (
+        <div key={t.id} className="mb-3 bg-light p-2 rounded">
+          <strong>{t.user_email}</strong>
+          <p className="mb-1">{t.comment}</p>
+
+          {getReplies(t.id).map((r) => (
+            <div
+              key={r.id}
+              className="ms-3 mt-2 ps-2 border-start border-2 border-primary"
+            >
+              <strong>{r.user_email}</strong>
+              <p className="mb-1">{r.comment}</p>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <div className="chat-footer border-top p-3 bg-white">
+      {!userEmail && !emailConfirmed && (
+        <input
+          type="email"
+          className="form-control mb-2"
+          placeholder="Your Email"
+          value={guestEmail}
+          onChange={(e) => setGuestEmail(e.target.value)}
+        />
+      )}
+      <textarea
+        className="form-control mb-2"
+        rows={2}
+        placeholder="Write something..."
+        value={newThought}
+        onChange={(e) => setNewThought(e.target.value)}
+      />
+      <div className="d-flex justify-content-between align-items-center">
+        <input
+          type="file"
+          accept="image/*,video/mp4"
+          onChange={handleMediaUpload}
+          className="form-control me-2"
+        />
+        <Button variant="success" onClick={submitThought}>
+          Send
+        </Button>
+      </div>
+    </div>
+  </div>
+)}
     </Container>
   );
 }

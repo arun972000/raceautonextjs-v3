@@ -109,7 +109,7 @@ export default function PostsPage() {
     <div className="container mt-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h3 className="mb-0">{headingText()}</h3>
-        <Button variant="outline-primary" onClick={() => setShowFilters(true)}>
+        <Button variant="primary" onClick={() => setShowFilters(true)}>
           Show Filters
         </Button>
       </div>

@@ -1,10 +1,14 @@
 'use client';
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Container, Row, Col, Form } from 'react-bootstrap';
 import ReactQuill from 'react-quill';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-quill/dist/quill.snow.css';
+import ImageResize from 'quill-image-resize-module-react';
+import Quill from 'quill';
+
+Quill.register('modules/imageResize', ImageResize);
 
 import {
   ResponsiveContainer,
@@ -27,25 +31,59 @@ const quillModules = {
     [{ header: [1, 2, false] }],
     ['bold', 'italic', 'underline', 'blockquote'],
     [{ list: 'ordered' }, { list: 'bullet' }],
-    ['link', 'image'],
+    [{ align: [] }],
+    ['link'],
     ['clean']
-  ]
+  ],
+  imageResize: {
+    parchment: Quill.import('parchment')
+  }
+};
+
+const generateSlug = (text) => {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\s+/g, '_');
 };
 
 export default function AdminInsightForm() {
   const [title, setTitle] = useState('');
+  const [titleSlug, setTitleSlug] = useState('');
   const [content, setContent] = useState('');
   const [quotes, setQuotes] = useState('');
   const [notes, setNotes] = useState('');
+  const [keywords, setKeywords] = useState('');
   const [useChart1, setUseChart1] = useState(true);
   const [useChart2, setUseChart2] = useState(false);
   const [uploadedImages, setUploadedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
 
   const [charts, setCharts] = useState([
     { type: 'bar', heading: '', data: defaultChartData.map(d => ({ ...d })) },
     { type: 'line', heading: '', data: defaultChartData.map(d => ({ ...d })) }
   ]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get('/api/admin/insights-categories');
+        if (res.data.success) setCategories(res.data.categories);
+      } catch (err) {
+        console.error('Failed to load categories', err);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const toggleCategory = (id) => {
+    setSelectedCategoryIds(prev =>
+      prev.includes(id) ? prev.filter(cid => cid !== id) : [...prev, id]
+    );
+  };
 
   const handleChartChange = (index, key, value) => {
     const updated = [...charts];
@@ -67,15 +105,14 @@ export default function AdminInsightForm() {
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files || []);
-    const newValidFiles = [];
-    const newPreviews = [];
+    const newValidFiles = [], newPreviews = [];
 
     for (let file of files) {
       if (file.size <= 4000 * 1024) {
         newValidFiles.push(file);
         newPreviews.push(URL.createObjectURL(file));
       } else {
-        toast.warn(`File ${file.name} exceeds 5mb`);
+        toast.warn(`File ${file.name} exceeds 4MB`);
       }
     }
 
@@ -83,44 +120,44 @@ export default function AdminInsightForm() {
     setImagePreviews(prev => [...prev, ...newPreviews]);
   };
 
+  const removeImage = (index) => {
+    setUploadedImages(prev => prev.filter((_, i) => i !== index));
+    setImagePreviews(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const selectedCharts = [];
     if (useChart1) selectedCharts.push(charts[0]);
     if (useChart2) selectedCharts.push(charts[1]);
 
     const formData = new FormData();
     formData.append('title', title);
+    formData.append('title_slug', titleSlug);
     formData.append('content', content);
     formData.append('quotes', quotes);
     formData.append('notes', notes);
+    formData.append('keywords', keywords);
     formData.append('charts', JSON.stringify(selectedCharts));
-
-    for (const img of uploadedImages) {
-      formData.append('images', img);
-    }
+    formData.append('categories', JSON.stringify(selectedCategoryIds));
+    uploadedImages.forEach(img => formData.append('images', img));
 
     try {
       const res = await axios.post('/api/admin/insights', formData);
       if (res.data.success) {
-        toast.success('Insight submitted successfully!');
-        setTitle('');
-        setContent('');
-        setQuotes('');
-        setNotes('');
+        toast.success('Insight submitted!');
+        setTitle(''); setTitleSlug(''); setContent(''); setQuotes(''); setNotes(''); setKeywords('');
         setCharts([
           { type: 'bar', heading: '', data: defaultChartData.map(d => ({ ...d })) },
           { type: 'line', heading: '', data: defaultChartData.map(d => ({ ...d })) }
         ]);
-        setUploadedImages([]);
-        setImagePreviews([]);
+        setUploadedImages([]); setImagePreviews([]); setSelectedCategoryIds([]);
       } else {
-        toast.error('Submission failed.');
+        toast.error('Submission failed');
       }
     } catch (err) {
       console.error('Submission error:', err);
-      toast.error('Server error while submitting.');
+      toast.error('Server error while submitting');
     }
   };
 
@@ -133,7 +170,7 @@ export default function AdminInsightForm() {
               type="text"
               value={point.name}
               onChange={e => handleDataInput(chartIndex, idx, 'name', e.target.value)}
-              placeholder="Label (e.g. Jan)"
+              placeholder="Label"
             />
           </Col>
           <Col>
@@ -146,7 +183,9 @@ export default function AdminInsightForm() {
           </Col>
         </Row>
       ))}
-      <Button size="sm" variant="outline-primary" onClick={() => addRowToChart(chartIndex)}>+ Add Row</Button>
+      <Button size="sm" variant="outline-primary" onClick={() => addRowToChart(chartIndex)}>
+        + Add Row
+      </Button>
     </>
   );
 
@@ -156,42 +195,11 @@ export default function AdminInsightForm() {
 
     switch (type) {
       case 'bar':
-        return (
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={data}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="value" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
-        );
+        return <ResponsiveContainer width="100%" height={300}><BarChart data={data}><XAxis dataKey="name" /><YAxis /><Tooltip /><Legend /><Bar dataKey="value" fill="#8884d8" /></BarChart></ResponsiveContainer>;
       case 'line':
-        return (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="value" stroke="#8884d8" />
-            </LineChart>
-          </ResponsiveContainer>
-        );
+        return <ResponsiveContainer width="100%" height={300}><LineChart data={data}><XAxis dataKey="name" /><YAxis /><Tooltip /><Legend /><Line type="monotone" dataKey="value" stroke="#8884d8" /></LineChart></ResponsiveContainer>;
       case 'pie':
-        return (
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie data={data} dataKey="value" nameKey="name" outerRadius={100} label>
-                {data.map((entry, idx) => (
-                  <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        );
+        return <ResponsiveContainer width="100%" height={300}><PieChart><Pie data={data} dataKey="value" nameKey="name" outerRadius={100} label>{data.map((entry, idx) => (<Cell key={idx} fill={COLORS[idx % COLORS.length]} />))}</Pie><Tooltip /></PieChart></ResponsiveContainer>;
       default:
         return null;
     }
@@ -203,7 +211,31 @@ export default function AdminInsightForm() {
       <form onSubmit={handleSubmit}>
         <Form.Group className="mb-3">
           <Form.Label>Title</Form.Label>
-          <ReactQuill value={title} onChange={setTitle} theme="snow" modules={quillModules} />
+          <Form.Control
+            type="text"
+            value={title}
+            onChange={e => {
+              const val = e.target.value;
+              setTitle(val);
+              setTitleSlug(generateSlug(val));
+            }}
+            placeholder="Enter title"
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-2">
+          <Form.Label>Slug (auto-generated)</Form.Label>
+          <Form.Control type="text" value={titleSlug} readOnly plaintext />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Keywords</Form.Label>
+          <Form.Control
+            type="text"
+            value={keywords}
+            onChange={e => setKeywords(e.target.value)}
+            placeholder="e.g. EV, SUV, market"
+          />
         </Form.Group>
 
         <Form.Group className="mb-3">
@@ -212,13 +244,57 @@ export default function AdminInsightForm() {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label>
-            Upload Media (Images or Videos, <strong>Max 4MB</strong>, <strong>16:9 aspect ratio</strong>)
-          </Form.Label>
+          <Form.Label>Select Categories</Form.Label>
+          <div className="d-flex flex-wrap gap-2">
+            {categories.map(cat => (
+              <Form.Check
+                inline
+                key={cat.id}
+                label={cat.name}
+                type="checkbox"
+                id={`cat-${cat.id}`}
+                checked={selectedCategoryIds.includes(cat.id)}
+                onChange={() => toggleCategory(cat.id)}
+              />
+            ))}
+          </div>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Upload Media (Images/Videos, Max 4MB)</Form.Label>
           <Form.Control type="file" accept="image/*" multiple onChange={handleImageUpload} />
           <div className="mt-2 d-flex flex-wrap gap-2">
             {imagePreviews.map((url, i) => (
-              <img key={i} src={url} alt={`preview-${i}`} style={{ height: 80, borderRadius: 6 }} />
+              <div key={i} style={{ position: 'relative', display: 'inline-block' }}>
+                <img
+                  src={url}
+                  alt={`preview-${i}`}
+                  style={{ height: 80, borderRadius: 6, border: '1px solid #ccc' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => removeImage(i)}
+                  style={{
+                    position: 'absolute',
+                    top: -6,
+                    right: -6,
+                    background: '#dc3545',
+                    border: 'none',
+                    color: 'white',
+                    borderRadius: '50%',
+                    width: 20,
+                    height: 20,
+                    fontSize: 12,
+                    lineHeight: '20px',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}
+                  aria-label="Remove image"
+                  title="Remove image"
+                >
+                  ×
+                </button>
+              </div>
             ))}
           </div>
         </Form.Group>
@@ -263,7 +339,7 @@ export default function AdminInsightForm() {
         </Row>
 
         <Form.Group className="mb-3">
-          <Form.Label>Quotes (Optional)</Form.Label>
+          <Form.Label>Quotes</Form.Label>
           <ReactQuill value={quotes} onChange={setQuotes} theme="snow" modules={quillModules} />
         </Form.Group>
 

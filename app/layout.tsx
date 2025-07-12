@@ -12,6 +12,15 @@ import { AuthModalProvider } from "@/utils/AuthModelProvider";
 import SignupSuccessBanner from "./register/successModal";
 import ContactModal from "@/components/SubscribeModal";
 import ClientContactModalWrapper from '@/components/ClientModel'
+import { Bricolage_Grotesque } from 'next/font/google';
+import AcceptCookies from '@/components/Acceptcookies/Acceptcookies'
+
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'], // Choose weights as needed
+  variable: '--font-bricolage', // optional: CSS variable
+  display: 'swap',
+});
 
 async function fetchLogoData() {
   try {
@@ -106,7 +115,7 @@ export default async function RootLayout({
   const { faviconUrl, logoUrl } = await fetchLogoData(); // Fetch logo dynamically
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={bricolage.className}>
       <head>
         <meta name="google-adsense-account" content="ca-pub-5751151754746971" />
         <link rel="preconnect" href="https://cdn.raceautoindia.com" />
@@ -182,6 +191,7 @@ export default async function RootLayout({
           defaultTheme="light"
           enableSystem={false}
         >
+          <AcceptCookies/>
           <SignupSuccessBanner />
           <AuthModalProvider>{children}
             <ClientContactModalWrapper />
