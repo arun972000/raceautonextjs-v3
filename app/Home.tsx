@@ -24,6 +24,7 @@ import ContactModal from "@/components/SubscribeModal";
 import LatestNewsDesktop from "@/components/Latest-news-Desktop/LatestDesktop";
 import HomeVideo from '@/components/Home-video/homeVideo'
 import Navbar_V2 from "@/components/Navbar/Navbar_v2";
+import HeaderAdSwiper from "@/components/HeaderAd/HeaderAdsv-2";
 
 const Home = async () => {
   const sliderRes = await fetch(
@@ -47,7 +48,8 @@ const Home = async () => {
         <div className="main_content__position px-4">
           <div className="container-fluid">
             <div className={styles.ad_header}>
-              <HeaderAd />
+              {/* <HeaderAd /> */}
+              <HeaderAdSwiper/>
             </div>
             {sliderType == 1 ? (
               <HomeBanner />
