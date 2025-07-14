@@ -38,6 +38,8 @@ import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -59,10 +61,12 @@ export default function TestMobile({ token, pdfData }) {
   const [youtubeResults, setYoutubeResults] = useState([]);
   const [articleResults, setArticleResults] = useState([]);
   const autoplayRef = useRef(null);
+  const [subcriptionData, setSubcriptionData] = useState([]);
 
   const decoded = token ? jwtDecode(token) : { email: "", role: "user" };
   const showActionButtons =
-    ["admin", "ad team", "moderator"].includes(decoded.role);
+    ["admin", "ad team", "moderator"].includes(decoded.role) ||
+    (subcriptionData.length !== 0 && new Date(subcriptionData[0].end_date) > new Date());
 
   // Autoplay controls
   const startAutoplay = () => {
@@ -117,6 +121,17 @@ export default function TestMobile({ token, pdfData }) {
     }
   }, [volume, pdfData]);
 
+  const subscriptionApi = async () => {
+    try {
+      const res = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}api/subscription/purchase/${decoded.email}`
+      );
+      setSubcriptionData(res.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // PDF load handlers
   const handleLoadSuccess = ({ numPages }) => {
     setTotalPage(numPages);
@@ -138,6 +153,12 @@ export default function TestMobile({ token, pdfData }) {
   }, []);
 
   const pagesMap = new Array(totalPage).fill(0);
+
+    useEffect(() => {
+      if (decoded.email !== "") {
+        subscriptionApi();
+      }
+    }, []);
 
   return (
     <>
@@ -230,7 +251,7 @@ export default function TestMobile({ token, pdfData }) {
               </div>
             )}
 
-            {showActionButtons && (
+            {/* {showActionButtons && (
               <>
                 <IoMdAdd
                   title="Zoom In"
@@ -247,9 +268,9 @@ export default function TestMobile({ token, pdfData }) {
                   size={23}
                 />
               </>
-            )}
+            )} */}
 
-            {showActionButtons && (
+            {/* {showActionButtons && (
               <a
                 href={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${pdfData}`}
                 target="_blank"
@@ -257,9 +278,9 @@ export default function TestMobile({ token, pdfData }) {
                 className="mx-2 p-1"
                 style={{ cursor: "pointer", background: "#32bea6", borderRadius: 100 }}
               >
-                <IoMdDownload title="Download" size={23} color="white" />
+                <IoMdDownload title="Download" size={20} color="white" />
               </a>
-            )}
+            )} */}
 
             {showActionButtons && (
               <FaPrint
@@ -284,65 +305,118 @@ export default function TestMobile({ token, pdfData }) {
 
       {showActionButtons ? (
         <>
+          {/* YouTube Section */}
           {youtubeResults.length > 0 && (
             <div className="mt-4 px-4">
-              <h3 style={{ color: "white", marginBottom: 8 }}>YouTube Previews</h3>
-              <Carousel interval={4000} pause={false} key={youtubeResults.map(v => v.id).join("-")}>
+              <h3 style={{ color: 'white', marginBottom: 8 }}>Related Videos</h3>
+              <Swiper
+                modules={[Autoplay]}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
+                dir="ltr"
+                loop
+                spaceBetween={20}
+                slidesPerView={1}
+              >
                 {youtubeResults.map((video) => (
-                  <Carousel.Item key={video.id}>
+                  <SwiperSlide key={video.id}>
                     <a
                       href={`https://www.youtube.com/watch?v=${video.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
+                      style={{
+                        display: 'block',
+                        position: 'relative',
+                        aspectRatio: '16 / 9',
+                        overflow: 'hidden',
+                        borderRadius: 8,
+                      }}
                     >
                       <img
                         src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
                         alt={video.title}
-                        className="d-block w-100"
-                        style={{ borderRadius: "8px", objectFit: "cover" }}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: 8,
+                        }}
                       />
-                    </a>
-                    <Carousel.Caption>
-                      <p style={{ color: "white", backgroundColor: "rgba(0,0,0,0.6)", padding: "4px 8px", fontSize: "14px" }}>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: 8,
+                          left: 8,
+                          right: 8,
+                          backgroundColor: 'rgba(0,0,0,0.5)',
+                          padding: '6px 10px',
+                          fontSize: '13px',
+                          color: 'white',
+                          borderRadius: 4,
+                          textAlign: 'center',
+                        }}
+                      >
                         {video.title}
-                      </p>
-                    </Carousel.Caption>
-                  </Carousel.Item>
+                      </div>
+                    </a>
+                  </SwiperSlide>
                 ))}
-              </Carousel>
+              </Swiper>
             </div>
           )}
 
+          {/* Article Section */}
           {articleResults.length > 0 && (
             <div className="mt-4 px-4">
-              <h3 style={{ color: "white", marginBottom: 8 }}>Related Articles</h3>
-              <Carousel interval={4000} pause={false} key={articleResults.map(a => a.id || a.title).join("-")}>
+              <h3 style={{ color: 'white', marginBottom: 8 }}>Related Articles</h3>
+              <Swiper
+                modules={[Autoplay]}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
+                dir="rtl"
+                loop
+                spaceBetween={20}
+                slidesPerView={1}
+              >
                 {articleResults.map((article, idx) => (
-                  <Carousel.Item key={idx}>
-                    <div className="p-3 bg-dark rounded d-flex flex-column align-items-center">
-                      {article.image && (
-                        <img
-                          src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${article.image}`}
-                          alt={article.title}
-                          className="mb-3"
-                          style={{ maxHeight: 200, borderRadius: 6, objectFit: "cover" }}
-                        />
-                      )}
-                      <a
-                        href={article.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "#32bea6", textDecoration: "none" }}
+                  <SwiperSlide key={idx}>
+                    <Link href={`/post/${article.title_slug}`}
+                      style={{
+                        display: 'block',
+                        position: 'relative',
+                        aspectRatio: '16 / 9',
+                        overflow: 'hidden',
+                        borderRadius: 8,
+                      }}
+                    >
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${article.image}`}
+                        alt={article.title}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          borderRadius: 8,
+                        }}
+                      />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: 8,
+                          left: 8,
+                          right: 8,
+                          backgroundColor: 'rgba(0,0,0,0.5)',
+                          padding: '6px 10px',
+                          fontSize: '13px',
+                          color: 'white',
+                          borderRadius: 4,
+                          textAlign: 'center',
+                        }}
                       >
-                        <h5 className="text-center" style={{ fontSize: "16px" }}>{article.title}</h5>
-                      </a>
-                      <p style={{ color: "white", marginTop: 4, textAlign: "center", fontSize: "14px" }}>
-                        {article.snippet}
-                      </p>
-                    </div>
-                  </Carousel.Item>
+                        {article.title}
+                      </div>
+                    </Link>
+                  </SwiperSlide>
                 ))}
-              </Carousel>
+              </Swiper>
             </div>
           )}
         </>

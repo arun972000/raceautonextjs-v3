@@ -23,6 +23,9 @@ import MagazineAd from "@/components/GoogleAds/MagazineAd";
 import Link from "next/link";
 import { Carousel } from "react-bootstrap";
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay } from 'swiper/modules';
+import 'swiper/css';
 
 const Page = forwardRef(({ pageNumber }, ref) => {
   return (
@@ -558,65 +561,118 @@ function Test({ token, pdfData }) {
             </div> */}
             {showActionButtons ? (
               <>
+                {/* YouTube Section */}
                 {youtubeResults.length > 0 && (
                   <div className="mt-4 px-4">
-                    <h3 style={{ color: "white", marginBottom: 8 }}>YouTube Previews</h3>
-                    <Carousel interval={4000} pause={false} key={youtubeResults.map(v => v.id).join("-")}>
+                    <h3 style={{ color: 'white', marginBottom: 8 }}>Related Videos</h3>
+                    <Swiper
+                      modules={[Autoplay]}
+                      autoplay={{ delay: 4000, disableOnInteraction: false }}
+                      dir="ltr"
+                      loop
+                      spaceBetween={20}
+                      slidesPerView={1}
+                    >
                       {youtubeResults.map((video) => (
-                        <Carousel.Item key={video.id}>
+                        <SwiperSlide key={video.id}>
                           <a
                             href={`https://www.youtube.com/watch?v=${video.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            style={{
+                              display: 'block',
+                              position: 'relative',
+                              aspectRatio: '16 / 9',
+                              overflow: 'hidden',
+                              borderRadius: 8,
+                            }}
                           >
                             <img
                               src={`https://img.youtube.com/vi/${video.id}/hqdefault.jpg`}
                               alt={video.title}
-                              className="d-block w-100"
-                              style={{ borderRadius: "8px", objectFit: "cover" }}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                borderRadius: 8,
+                              }}
                             />
-                          </a>
-                          <Carousel.Caption>
-                            <p style={{ color: "white", backgroundColor: "rgba(0,0,0,0.6)", padding: "4px 8px", fontSize: "14px" }}>
+                            <div
+                              style={{
+                                position: 'absolute',
+                                bottom: 8,
+                                left: 8,
+                                right: 8,
+                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                padding: '6px 10px',
+                                fontSize: '13px',
+                                color: 'white',
+                                borderRadius: 4,
+                                textAlign: 'center',
+                              }}
+                            >
                               {video.title}
-                            </p>
-                          </Carousel.Caption>
-                        </Carousel.Item>
+                            </div>
+                          </a>
+                        </SwiperSlide>
                       ))}
-                    </Carousel>
+                    </Swiper>
                   </div>
                 )}
 
+                {/* Article Section */}
                 {articleResults.length > 0 && (
                   <div className="mt-4 px-4">
-                    <h3 style={{ color: "white", marginBottom: 8 }}>Related Articles</h3>
-                    <Carousel interval={4000} pause={false} key={articleResults.map(a => a.id || a.title).join("-")}>
+                    <h3 style={{ color: 'white', marginBottom: 8 }}>Related Articles</h3>
+                    <Swiper
+                      modules={[Autoplay]}
+                      autoplay={{ delay: 4000, disableOnInteraction: false }}
+                      dir="rtl"
+                      loop
+                      spaceBetween={20}
+                      slidesPerView={1}
+                    >
                       {articleResults.map((article, idx) => (
-                        <Carousel.Item key={idx}>
-                          <div className="p-3 bg-dark rounded d-flex flex-column align-items-center">
-                            {article.image && (
-                              <img
-                                src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${article.image}`}
-                                alt={article.title}
-                                className="mb-3"
-                                style={{ maxHeight: 200, borderRadius: 6, objectFit: "cover" }}
-                              />
-                            )}
-                            <a
-                              href={article.link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: "#32bea6", textDecoration: "none" }}
+                        <SwiperSlide key={idx}>
+                          <Link href={`/post/${article.title_slug}`}
+                            style={{
+                              display: 'block',
+                              position: 'relative',
+                              aspectRatio: '16 / 9',
+                              overflow: 'hidden',
+                              borderRadius: 8,
+                            }}
+                          >
+                            <img
+                              src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${article.image}`}
+                              alt={article.title}
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                borderRadius: 8,
+                              }}
+                            />
+                            <div
+                              style={{
+                                position: 'absolute',
+                                bottom: 8,
+                                left: 8,
+                                right: 8,
+                                backgroundColor: 'rgba(0,0,0,0.5)',
+                                padding: '6px 10px',
+                                fontSize: '13px',
+                                color: 'white',
+                                borderRadius: 4,
+                                textAlign: 'center',
+                              }}
                             >
-                              <h5 className="text-center" style={{ fontSize: "16px" }}>{article.title}</h5>
-                            </a>
-                            <p style={{ color: "white", marginTop: 4, textAlign: "center", fontSize: "14px" }}>
-                              {article.snippet}
-                            </p>
-                          </div>
-                        </Carousel.Item>
+                              {article.title}
+                            </div>
+                          </Link>
+                        </SwiperSlide>
                       ))}
-                    </Carousel>
+                    </Swiper>
                   </div>
                 )}
               </>

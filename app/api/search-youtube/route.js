@@ -42,29 +42,32 @@ export async function POST(req) {
     }
 
     // Step 2: Generate title using OpenAI
-    const openAiRes = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a summarization assistant. Given text from a magazine page, output the best, shortest, most relevant title. Reply ONLY with the title. No explanations.",
-          },
-          {
-            role: "user",
-            content: `Magazine page text:\n\n${cleanedText}\n\nExtract best title:`,
-          },
-        ],
-        max_tokens: 30,
-        temperature: 0.2,
-      }),
-    });
+    const openAiRes = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content:
+                "You are a summarization assistant. Given text from a magazine page, output the best, shortest, most relevant title. Reply ONLY with the title. No explanations.",
+            },
+            {
+              role: "user",
+              content: `Magazine page text:\n\n${cleanedText}\n\nExtract best title:`,
+            },
+          ],
+          max_tokens: 30,
+          temperature: 0.2,
+        }),
+      }
+    );
 
     const openAiData = await openAiRes.json();
     const optimizedTitle =
@@ -107,40 +110,41 @@ export async function POST(req) {
     // Step 4: Extract brand/company name using GPT and search posts (only in title)
     let postResults = [];
     try {
-      const brandRes = await fetch("https://api.openai.com/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You're a brand identifier. Given a title from a magazine article, return the most relevant brand, OEM, or company mentioned in it. If no clear brand is mentioned, return 'none'.",
-            },
-            {
-              role: "user",
-              content: `Title: "${optimizedTitle}"\n\nWhat is the main brand or company name mentioned?`,
-            },
-          ],
-          max_tokens: 20,
-          temperature: 0,
-        }),
-      });
+      const brandRes = await fetch(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content:
+                  "You're a brand identifier. Given a title from a magazine article, return the most relevant brand, OEM, or company mentioned in it. If no clear brand is mentioned, return 'none'.",
+              },
+              {
+                role: "user",
+                content: `Title: "${optimizedTitle}"\n\nWhat is the main brand or company name mentioned?`,
+              },
+            ],
+            max_tokens: 20,
+            temperature: 0,
+          }),
+        }
+      );
 
       const brandData = await brandRes.json();
       const brand =
         brandData?.choices?.[0]?.message?.content?.trim().toLowerCase() || "";
 
-      console.log("✅ Extracted brand:", brand);
-
       if (brand && brand !== "none") {
         const [rows] = await db.execute(
           `
-          SELECT id, title, summary, image_mid
+          SELECT id, title, title_slug, summary, image_mid
           FROM posts
           WHERE LOWER(title) LIKE ?
           ORDER BY id DESC
@@ -152,6 +156,7 @@ export async function POST(req) {
         postResults = rows.map((row) => ({
           id: row.id,
           title: row.title,
+          title_slug: row.title_slug,
           summary: row.summary,
           image: row.image_mid,
         }));
