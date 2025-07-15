@@ -77,7 +77,7 @@ export default function AdminInsightList() {
           {insights.map(insight => (
             <tr key={insight.id}>
               <td>{insight.id}</td>
-              <td dangerouslySetInnerHTML={{ __html: insight.title }} />
+              <Link href={`/insights/${insight.title_slug}?id=${insight.id}`}><td dangerouslySetInnerHTML={{ __html: insight.title }} /></Link>
               <td>
                 <Button
                   variant="primary"

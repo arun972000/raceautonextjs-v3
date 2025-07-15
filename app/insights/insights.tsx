@@ -111,7 +111,7 @@ export default function InsightsListPage() {
                   <Col key={insight.id}>
                     <Card className="h-100 shadow-sm border-0">
                       <Link
-                        href={`/insights/${insight.title}?id=${insight.id}`}
+                        href={`/insights/${insight.title_slug}?id=${insight.id}`}
                         className="text-decoration-none text-dark"
                       >
                         <Card.Img
@@ -181,7 +181,7 @@ export default function InsightsListPage() {
                     <div className="d-flex flex-column gap-2">
                       {categoryMap[cat.id].map((insight) => (
                         <Link
-                          href={`/insights/${insight.title}?id=${insight.id}`}
+                          href={`/insights/${insight.title_slug}?id=${insight.id}`}
                           key={insight.id}
                           className="text-decoration-none text-dark"
                         >
