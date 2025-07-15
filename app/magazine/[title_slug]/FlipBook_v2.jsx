@@ -63,6 +63,7 @@ function Test({ token, pdfData }) {
     ["admin", "ad team", "moderator"].includes(decoded.role) ||
     (subcriptionData.length !== 0 && new Date(subcriptionData[0].end_date) > new Date());
 
+
   // const pdfData = async () => {
   //   try {
   //     const res = await axios.get(
@@ -564,7 +565,7 @@ function Test({ token, pdfData }) {
                 {/* YouTube Section */}
                 {youtubeResults.length > 0 && (
                   <div className="mt-4 px-4">
-                    <h3 style={{ color: 'white', marginBottom: 8 }}>Related Videos</h3>
+                    <h3 style={{ color: 'white', marginBottom: 8 }} className="text-center">Related Videos</h3>
                     <Swiper
                       modules={[Autoplay]}
                       autoplay={{ delay: 4000, disableOnInteraction: false }}
@@ -622,8 +623,8 @@ function Test({ token, pdfData }) {
 
                 {/* Article Section */}
                 {articleResults.length > 0 && (
-                  <div className="mt-4 px-4">
-                    <h3 style={{ color: 'white', marginBottom: 8 }}>Related Articles</h3>
+                  <div className="mt-5 px-4" style={{ marginTop: 10 }}>
+                    <h3 style={{ color: 'white', marginBottom: 8 }} className="text-center">Related Articles</h3>
                     <Swiper
                       modules={[Autoplay]}
                       autoplay={{ delay: 4000, disableOnInteraction: false }}
