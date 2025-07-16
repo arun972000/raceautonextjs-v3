@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
     const title_slug = pathname.split("/").pop();
 
     const [results] = await db.execute<RowDataPacket[]>(
-      `SELECT id, title, image_big, image_default, image_mid, summary, is_recommended, image_description, keywords, content, category_id, created_at FROM posts WHERE title_slug = ?`,
+      `SELECT id, title, image_big, image_default, image_mid, pageviews, summary, is_recommended, image_description, keywords, content, category_id, created_at FROM posts WHERE title_slug = ?`,
       [title_slug]
     );
 
@@ -28,8 +28,6 @@ export async function GET(req: NextRequest) {
         [results[0].category_id]
       );
 
-
-
       const [main_category]: any = await db.execute(
         `SELECT * FROM categories WHERE id = ?`,
         [sub_category[0].parent_id]
@@ -47,8 +45,8 @@ export async function GET(req: NextRequest) {
           images,
           main_category: main_category[0].name,
           sub_category: sub_category[0].name,
-          main_category_color:main_category[0].color,
-          sub_category_color:sub_category[0].color,
+          main_category_color: main_category[0].color,
+          sub_category_color: sub_category[0].color,
         };
       });
       return NextResponse.json(result);

@@ -9,6 +9,8 @@ import { cookies } from "next/headers";
 import EditButton from "./AdminButtons";
 import Image from "next/image";
 import AdArticleMiddle from "@/components/GoogleAds/AdArticleMiddle";
+import { FaEye } from "react-icons/fa";
+import { Button } from "react-bootstrap";
 
 export type postsliderType = {
   image_default: string;
@@ -27,6 +29,7 @@ export type postType = {
   created_at: any;
   images: postsliderType[];
   image_description: string;
+  pageviews: number;
   content: string;
   image_big: string;
   image_default: string;
@@ -52,6 +55,29 @@ async function incrementPageView(pageUrl: string) {
   } catch (error) {
     console.error("Error incrementing page view:", error);
   }
+}
+
+function getBoostedPageViews(actualViews: number): number {
+  const ranges = [
+    { min: 0, max: 100, boostMin: 15000, boostMax: 17000 },
+    { min: 101, max: 250, boostMin: 37001, boostMax: 49000 },
+    { min: 251, max: 500, boostMin: 49001, boostMax: 52000 },
+    { min: 501, max: 750, boostMin: 62001, boostMax: 75000 },
+    { min: 751, max: 1000, boostMin: 95001, boostMax: 118000 },
+    { min: 1001, max: Infinity, boostMin: 58001, boostMax: 62000 },
+  ];
+
+  const match = ranges.find(
+    (r) => actualViews >= r.min && actualViews <= r.max
+  );
+  if (!match) return actualViews;
+
+  // Stable pseudo-random using sin hash
+  const seed = actualViews;
+  const pseudo = (Math.sin(seed) + 1) / 2;
+  const boosted = match.boostMin + pseudo * (match.boostMax - match.boostMin);
+
+  return Math.floor(boosted);
 }
 
 const Post = async ({
@@ -131,12 +157,20 @@ const Post = async ({
           </div>
 
           <p className="post-summary">{post.summary}</p>
+          <small className="d-block mb-2">
+            <FaEye /> {472 + post.pageviews} views
+          </small>
           <small className="">Date: {formatDate(post.created_at)} </small>
           <SocialButton title_slug={title} />
+          <Link href="https://www.linkedin.com/newsletters/7108421736664109056/">
+            <button className=" mt-3 btn btn-primary">
+              Subscribe on LinkedIn
+            </button>
+          </Link>
+
           <hr />
         </div>
         <PostSlider images={post.images} title={post.title} />
-       
 
         {/* Mobile Banner (1:1) */}
         <div

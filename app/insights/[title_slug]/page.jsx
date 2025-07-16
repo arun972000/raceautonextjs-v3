@@ -1,9 +1,10 @@
 import React from 'react'
-import InsightDetailPage from './Insight'
+
 import BreakingNews from '@/components/BreakingNews/BreakingNews'
 import Navbar_V2 from '@/components/Navbar/Navbar_v2'
 import MobileNavNew from '@/components/MobileNavbarNew/MobileNavNew'
 import Footer from '@/components/Footer/Footer'
+import InsightDetailPage from './Insight'
 
 export async function generateMetadata({ searchParams }) {
   const id = searchParams?.id;

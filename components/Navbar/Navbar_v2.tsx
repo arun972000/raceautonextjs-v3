@@ -10,6 +10,7 @@ import "@szhsin/react-menu/dist/index.css";
 import Subcategory from "./SubcategorySubmenu";
 import { FaBolt, FaChevronDown } from "react-icons/fa";
 import { BsBarChartLineFill } from "react-icons/bs";
+import MonthViewership from "./MonthlyViewrs";
 
 export type mainMenu = {
   id: number;
@@ -161,7 +162,8 @@ const Navbar_V2 = async () => {
 
           <div className={styles.header_icons}>
             <div className="d-flex align-items-center">
-              <ThemeToggle />
+              {/* <ThemeToggle /> */}
+              {/* <MonthViewership /> */}
               <Link href="/subscription">
                 <button className={`${styles.flash_link} nav-link mx-2 d-flex align-items-center`}>SUBSCRIBE</button>
               </Link>

@@ -77,6 +77,6 @@
     "app/api/admin/email-template-builder/route.js",
     "components/EventPage/Component/EventPage.tsx",
     "app/api/login/update-password/route.js"
-, "app/subscription/component/subscription-v2/SubscriptionCard.jsx", "app/api/register/route.js", "components/homeReports/homeReports.tsx", "app/page.jsx", "app/admin/subscription/[id]/edit.jsx", "app/categories/CategoriesPage.jsx", "app/api/admin/insights/comments/bulk-delete/route.js"  ],
+, "app/subscription/component/subscription-v2/SubscriptionCard.jsx", "app/api/register/route.js", "components/homeReports/homeReports.tsx", "app/page.jsx", "app/admin/subscription/[id]/edit.jsx", "app/categories/CategoriesPage.jsx", "app/api/admin/insights/comments/bulk-delete/route.js", "app/api/admin/insights/comments/like/route.js", "app/insights/[title_slug]/Insight.jsx"  ],
   "exclude": ["node_modules"]
 }

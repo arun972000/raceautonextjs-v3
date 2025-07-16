@@ -181,7 +181,7 @@ export default function InsightsListPage() {
                     <div className="d-flex flex-column gap-2">
                       {categoryMap[cat.id].map((insight) => (
                         <Link
-                          href={`/insights/${insight.title_slug}?id=${insight.id}`}
+                          href={`/insights/comment/${insight.title_slug}?id=${insight.id}`}
                           key={insight.id}
                           className="text-decoration-none text-dark"
                         >
