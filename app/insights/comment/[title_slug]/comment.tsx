@@ -276,6 +276,7 @@ export default function InsightBlogPage() {
       <Row className="mb-4">
         <Col>
           <h1 className="insight-title">{insight?.title}</h1>
+
           <p className="insight-snippet">
             {stripHtml(insight?.content || "").slice(0, 500)}
             {stripHtml(insight?.content || "").length > 500 && (
@@ -290,7 +291,9 @@ export default function InsightBlogPage() {
           </p>
         </Col>
       </Row>
-
+      <Link href="https://www.linkedin.com/newsletters/7108421736664109056/">
+        <button className=" my-2 btn btn-primary">Subscribe on LinkedIn</button>
+      </Link>
       <Row className="justify-content-center mb-5">
         <Col>
           <Card className="p-4">

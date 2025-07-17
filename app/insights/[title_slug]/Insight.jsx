@@ -26,6 +26,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { toast } from "react-toastify";
 import "./insight.css";
+import Link from "next/link";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#00c49f"];
 const badWords = [
@@ -358,7 +359,11 @@ export default function InsightDetailPage() {
           <div className="mb-3 pb-1 border-bottom mt-4">
             <h5>All Discussions</h5>
           </div>
-
+          <Link
+            href={`/insights/comment/${insight.title_slug}?id=${insight.id}`}
+            key={insight.id}
+            className="text-decoration-none text-dark"
+          ><p className="text-primary">View Threads</p></Link>
           {/* Comment Form at Top */}
           <form onSubmit={submitThought} className="p-3 bg-light rounded mb-3">
             {!userEmail && !emailConfirmed && (

@@ -157,10 +157,11 @@ const Post = async ({
           </div>
 
           <p className="post-summary">{post.summary}</p>
-          <small className="d-block mb-2">
-            <FaEye /> {472 + post.pageviews} views
+          <small className="d-block mb-2" style={{ fontStyle: "bold" }}>
+            <FaEye /> <b>{472 + post.pageviews}</b> views | Date:{" "}
+            {formatDate(post.created_at)}
           </small>
-          <small className="">Date: {formatDate(post.created_at)} </small>
+          {/* <small className=""> </small> */}
           <SocialButton title_slug={title} />
           <Link href="https://www.linkedin.com/newsletters/7108421736664109056/">
             <button className=" mt-3 btn btn-primary">

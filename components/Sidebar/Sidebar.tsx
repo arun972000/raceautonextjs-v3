@@ -3,7 +3,7 @@ import React from "react";
 import "./sidebar.css";
 import Image from "next/image";
 import LatestNewsSwiper from "./LatestNewsList";
-
+import SidebarAdSwiper from './SidebarAd'
 import { FaCrown } from "react-icons/fa";
 import ExclusiveNewsSwiper from "./ExclusiveNewsList";
 import AdSidebar from "../GoogleAds/AdSidebar";
@@ -73,7 +73,7 @@ const Sidebar = async () => {
             </div>
           </div>
         </div>
-        <div
+        {/* <div
           className="my-4"
           style={{ position: "relative", aspectRatio: "1/1", width: "100%" }}
         >
@@ -86,7 +86,8 @@ const Sidebar = async () => {
               fill
             />
           </Link>
-        </div>
+        </div> */}
+        <SidebarAdSwiper/>
         {/* <div className="col-12">
           <h6
             style={{
