@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -67,6 +67,8 @@ export default function InsightDetailPage() {
 
   // UI controls
   const [showRepliesMap, setShowRepliesMap] = useState({});
+  const [visibleCount, setVisibleCount] = useState(10);
+  const commentsContainerRef = useRef(null);
 
   const imageBase = process.env.NEXT_PUBLIC_S3_BUCKET_URL;
   const previewStyle = {
@@ -98,6 +100,24 @@ export default function InsightDetailPage() {
     setterFiles(files);
     setterPreviews(files.map(f => URL.createObjectURL(f)));
   }
+
+  // Infinite scroll for comments
+  useEffect(() => {
+    const container = commentsContainerRef.current;
+    if (!container) return;
+    const onScroll = () => {
+      if (
+        container.scrollHeight - container.scrollTop <=
+        container.clientHeight + 50
+      ) {
+        setVisibleCount(prev =>
+          Math.min(prev + 10, parentThoughts.length)
+        );
+      }
+    };
+    container.addEventListener("scroll", onScroll);
+    return () => container.removeEventListener("scroll", onScroll);
+  }, [thoughts]);
 
   // Initial data load & user detection
   useEffect(() => {
@@ -146,8 +166,12 @@ export default function InsightDetailPage() {
     fd.append("comment", sanitize(newThought));
     uploadMedia.forEach(f => fd.append("images[]", f));
     await fetch("/api/admin/insights/comments", { method: "POST", body: fd });
-    setNewThought(""); setUploadMedia([]); setPreviewUrls([]);
-    fetchThoughts(); toast.success("Posted!");
+    setNewThought("");
+    setUploadMedia([]);
+    setPreviewUrls([]);
+    setVisibleCount(10);
+    fetchThoughts();
+    toast.success("Posted!");
   }
 
   // Submit reply
@@ -162,8 +186,13 @@ export default function InsightDetailPage() {
     fd.append("parent_id", parentId);
     replyMedia.forEach(f => fd.append("images[]", f));
     await fetch("/api/admin/insights/comments", { method: "POST", body: fd });
-    setReplyText(""); setReplyMedia([]); setReplyPreviews([]); setReplyingTo(null);
-    fetchThoughts(); toast.success("Replied!");
+    setReplyText("");
+    setReplyMedia([]);
+    setReplyPreviews([]);
+    setReplyingTo(null);
+    setVisibleCount(10);
+    fetchThoughts();
+    toast.success("Replied!");
   }
 
   // Submit edit
@@ -174,8 +203,12 @@ export default function InsightDetailPage() {
     fd.append("comment", sanitize(editText));
     editMedia.forEach(f => fd.append("images[]", f));
     await fetch("/api/admin/insights/comments", { method: "PUT", body: fd });
-    setEditingId(null); setEditText(""); setEditMedia([]); setEditPreviews([]);
-    fetchThoughts(); toast.success("Edited!");
+    setEditingId(null);
+    setEditText("");
+    setEditMedia([]);
+    setEditPreviews([]);
+    fetchThoughts();
+    toast.success("Edited!");
   }
 
   // Delete comment/reply
@@ -186,7 +219,8 @@ export default function InsightDetailPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: commentId }),
     });
-    fetchThoughts(); toast.success("Deleted!");
+    fetchThoughts();
+    toast.success("Deleted!");
   }
 
   // Chart renderer
@@ -196,7 +230,10 @@ export default function InsightDetailPage() {
         return (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chart.data}>
-              <XAxis dataKey="name" /><YAxis /><Tooltip /><Legend />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
               <Bar dataKey="value" fill={COLORS[0]} />
             </BarChart>
           </ResponsiveContainer>
@@ -205,7 +242,10 @@ export default function InsightDetailPage() {
         return (
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chart.data}>
-              <XAxis dataKey="name" /><YAxis /><Tooltip /><Legend />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
               <Line type="monotone" dataKey="value" stroke={COLORS[1]} />
             </LineChart>
           </ResponsiveContainer>
@@ -238,11 +278,13 @@ export default function InsightDetailPage() {
 
   const parentThoughts = thoughts.filter(c => !c.parent_id);
   const getReplies = pid => thoughts.filter(c => c.parent_id === pid);
+  const displayedThoughts = parentThoughts.slice(0, visibleCount);
 
   return (
     <Container fluid className="mt-4">
       <Row>
         <Col md={8}>
+          {/* Main Insight Content */}
           <h3 dangerouslySetInnerHTML={{ __html: insight.title }} />
           <Button
             variant="primary"
@@ -256,6 +298,8 @@ export default function InsightDetailPage() {
           >
             Subscribe on LinkedIn
           </Button>
+
+          {/* Image/Video Slider */}
           {insight.images?.length > 0 && (
             <div className="mb-4" style={{ borderRadius: 10, overflow: "hidden" }}>
               <Swiper
@@ -285,11 +329,13 @@ export default function InsightDetailPage() {
             </div>
           )}
 
+          {/* Rich Content */}
           <div
             dangerouslySetInnerHTML={{ __html: insight.content }}
             className="quill-content mb-4"
           />
 
+          {/* Charts */}
           {insight.charts?.map((chart, i) => (
             <div key={i} className="p-3 border rounded bg-light mb-4">
               {chart.heading && <h5 className="mb-2">{chart.heading}</h5>}
@@ -297,6 +343,7 @@ export default function InsightDetailPage() {
             </div>
           ))}
 
+          {/* Quotes & Notes */}
           {insight.quotes && (
             <blockquote
               className="blockquote px-4 py-3 border-start border-4 border-primary mb-4"
@@ -307,191 +354,13 @@ export default function InsightDetailPage() {
         </Col>
 
         <Col md={4}>
+          {/* Discussion Header */}
           <div className="mb-3 pb-1 border-bottom mt-4">
             <h5>All Discussions</h5>
           </div>
 
-          {parentThoughts.map(t => {
-            const replies = getReplies(t.id);
-            return (
-              <div key={t.id} className="mb-4 bg-light p-3 rounded">
-                <strong className="text-primary">{t.user_email}</strong>
-
-                {editingId === t.id ? (
-                  <>
-                    <textarea
-                      className="form-control mb-2 mt-2"
-                      rows={2}
-                      value={editText}
-                      onChange={e => setEditText(e.target.value)}
-                    />
-                    <input
-                      type="file"
-                      accept="image/*,video/mp4"
-                      multiple
-                      className="form-control mb-2"
-                      onChange={e => handleMultipleMedia(e, setEditMedia, setEditPreviews)}
-                    />
-                    {editPreviews.length > 0 && (
-                      <div style={{ display: "flex", flexWrap: "wrap" }}>
-                        {editPreviews.map((url, i) =>
-                          editMedia[i].type.startsWith("image/") ? (
-                            <img
-                              key={i}
-                              src={url}
-                              alt=""
-                              style={previewStyle}
-                              onClick={() => window.open(url, "_blank")}
-                            />
-                          ) : (
-                            <video
-                              key={i}
-                              controls
-                              src={url}
-                              style={previewStyle}
-                              onClick={() => window.open(url, "_blank")}
-                            />
-                          )
-                        )}
-                      </div>
-                    )}
-                    <div>
-                      <Button variant="success" size="sm" className="me-2" onClick={() => handleEditSubmit(t.id)}>Save</Button>
-                      <Button variant="secondary" size="sm" onClick={() => setEditingId(null)}>Cancel</Button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p className="mt-2">{t.comment}</p>
-                    {t.images?.length > 0 && (
-                      <div style={{ display: "flex", flexWrap: "wrap" }}>
-                        {t.images.map((url, i) =>
-                          url.endsWith(".mp4") ? (
-                            <video
-                              key={i}
-                              controls
-                              style={previewStyle}
-                              onClick={() => window.open(imageBase + url, "_blank")}
-                            >
-                              <source src={`${imageBase}${url}`} />
-                            </video>
-                          ) : (
-                            <img
-                              key={i}
-                              src={`${imageBase}${url}`}
-                              alt=""
-                              style={previewStyle}
-                              onClick={() => window.open(imageBase + url, "_blank")}
-                            />
-                          )
-                        )}
-                      </div>
-                    )}
-                    <div className="mt-2">
-                      {userEmail !== t.user_email && guestEmail !== t.user_email && (
-                        <Button variant="link" size="sm" onClick={() => setReplyingTo(t.id)}>Reply</Button>
-                      )}
-                      {replies.length > 0 && (
-                        <Button variant="link" size="sm" onClick={() => toggleReplies(t.id)}>
-                          {showRepliesMap[t.id] ? `Hide Replies (${replies.length})` : `View Replies (${replies.length})`}
-                        </Button>
-                      )}
-                      {(userEmail === t.user_email || guestEmail === t.user_email) && (
-                        <>
-                          <Button variant="link" size="sm" className="text-warning" onClick={() => { setEditingId(t.id); setEditText(t.comment); }}>Edit</Button>
-                          <Button variant="link" size="sm" className="text-danger" onClick={() => handleDelete(t.id)}>Delete</Button>
-                        </>
-                      )}
-                    </div>
-
-                    {replyingTo === t.id && (
-                      <div className="mt-2">
-                        <textarea
-                          className="form-control mb-2"
-                          rows={2}
-                          placeholder="Write a reply..."
-                          value={replyText}
-                          onChange={e => setReplyText(e.target.value)}
-                        />
-                        <input
-                          type="file"
-                          accept="image/*,video/mp4"
-                          multiple
-                          className="form-control mb-2"
-                          onChange={e => handleMultipleMedia(e, setReplyMedia, setReplyPreviews)}
-                        />
-                        {replyPreviews.length > 0 && (
-                          <div style={{ display: "flex", flexWrap: "wrap" }}>
-                            {replyPreviews.map((url, i) =>
-                              replyMedia[i].type.startsWith("image/") ? (
-                                <img
-                                  key={i}
-                                  src={url}
-                                  alt=""
-                                  style={previewStyle}
-                                  onClick={() => window.open(url, "_blank")}
-                                />
-                              ) : (
-                                <video
-                                  key={i}
-                                  controls
-                                  src={url}
-                                  style={previewStyle}
-                                  onClick={() => window.open(url, "_blank")}
-                                />
-                              )
-                            )}
-                          </div>
-                        )}
-                        <Button size="sm" variant="outline-primary" onClick={() => submitReply(t.id)}>Post Reply</Button>
-                      </div>
-                    )}
-
-                    {showRepliesMap[t.id] &&
-                      replies.map(r => (
-                        <div key={r.id} className="ms-3 mt-3 ps-3 border-start border-3 border-primary">
-                          <strong>{r.user_email}</strong>
-                          <p className="mt-1 mb-2">{r.comment}</p>
-                          {r.images?.length > 0 && (
-                            <div style={{ display: "flex", flexWrap: "wrap" }}>
-                              {r.images.map((url, i) =>
-                                url.endsWith(".mp4") ? (
-                                  <video
-                                    key={i}
-                                    controls
-                                    style={previewStyle}
-                                    onClick={() => window.open(imageBase + url, "_blank")}
-                                  >
-                                    <source src={`${imageBase}${url}`} />
-                                  </video>
-                                ) : (
-                                  <img
-                                    key={i}
-                                    src={`${imageBase}${url}`}
-                                    alt=""
-                                    style={previewStyle}
-                                    onClick={() => window.open(imageBase + url, "_blank")}
-                                  />
-                                )
-                              )}
-                            </div>
-                          )}
-                          {(userEmail === r.user_email || guestEmail === r.user_email) && (
-                            <div className="mt-2">
-                              <Button variant="link" size="sm" className="text-warning" onClick={() => { setEditingId(r.id); setEditText(r.comment); }}>Edit</Button>
-                              <Button variant="link" size="sm" className="text-danger" onClick={() => handleDelete(r.id)}>Delete</Button>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                  </>
-                )}
-              </div>
-            );
-          })}
-
-          <div className="mb-3 border-bottom"><h5>Share Your Thoughts</h5></div>
-          <form onSubmit={submitThought} className="p-3 bg-light rounded mb-5">
+          {/* Comment Form at Top */}
+          <form onSubmit={submitThought} className="p-3 bg-light rounded mb-3">
             {!userEmail && !emailConfirmed && (
               <input
                 type="email"
@@ -540,6 +409,258 @@ export default function InsightDetailPage() {
             )}
             <Button type="submit" variant="primary">Post</Button>
           </form>
+
+          {/* Scrollable Comment List with Infinite Load */}
+          <div
+            ref={commentsContainerRef}
+            style={{ maxHeight: "90vh", overflowY: "auto" }}
+          >
+            {displayedThoughts.map(t => {
+              const replies = getReplies(t.id);
+              return (
+                <div key={t.id} className="mb-4 bg-light p-3 rounded">
+                  <strong className="text-primary">{t.user_email}</strong>
+                  {editingId === t.id ? (
+                    <>
+                      <textarea
+                        className="form-control mb-2 mt-2"
+                        rows={2}
+                        value={editText}
+                        onChange={e => setEditText(e.target.value)}
+                      />
+                      <input
+                        type="file"
+                        accept="image/*,video/mp4"
+                        multiple
+                        className="form-control mb-2"
+                        onChange={e => handleMultipleMedia(e, setEditMedia, setEditPreviews)}
+                      />
+                      {editPreviews.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap" }}>
+                          {editPreviews.map((url, i) =>
+                            editMedia[i].type.startsWith("image/") ? (
+                              <img
+                                key={i}
+                                src={url}
+                                alt=""
+                                style={previewStyle}
+                                onClick={() => window.open(url, "_blank")}
+                              />
+                            ) : (
+                              <video
+                                key={i}
+                                controls
+                                src={url}
+                                style={previewStyle}
+                                onClick={() => window.open(url, "_blank")}
+                              />
+                            )
+                          )}
+                        </div>
+                      )}
+                      <div>
+                        <Button
+                          variant="success"
+                          size="sm"
+                          className="me-2"
+                          onClick={() => handleEditSubmit(t.id)}
+                        >
+                          Save
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setEditingId(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className="mt-2">{t.comment}</p>
+                      {t.images?.length > 0 && (
+                        <div style={{ display: "flex", flexWrap: "wrap" }}>
+                          {t.images.map((url, i) =>
+                            url.endsWith(".mp4") ? (
+                              <video
+                                key={i}
+                                controls
+                                style={previewStyle}
+                                onClick={() => window.open(imageBase + url, "_blank")}
+                              >
+                                <source src={`${imageBase}${url}`} />
+                              </video>
+                            ) : (
+                              <img
+                                key={i}
+                                src={`${imageBase}${url}`}
+                                alt=""
+                                style={previewStyle}
+                                onClick={() => window.open(imageBase + url, "_blank")}
+                              />
+                            )
+                          )}
+                        </div>
+                      )}
+                      <div className="mt-2">
+                        {userEmail !== t.user_email && guestEmail !== t.user_email && (
+                          <Button
+                            variant="link"
+                            size="sm"
+                            onClick={() => setReplyingTo(t.id)}
+                          >
+                            Reply
+                          </Button>
+                        )}
+                        {replies.length > 0 && (
+                          <Button
+                            variant="link"
+                            size="sm"
+                            onClick={() => toggleReplies(t.id)}
+                          >
+                            {showRepliesMap[t.id]
+                              ? `Hide Replies (${replies.length})`
+                              : `View Replies (${replies.length})`}
+                          </Button>
+                        )}
+                        {(userEmail === t.user_email || guestEmail === t.user_email) && (
+                          <>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="text-warning"
+                              onClick={() => {
+                                setEditingId(t.id);
+                                setEditText(t.comment);
+                              }}
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="text-danger"
+                              onClick={() => handleDelete(t.id)}
+                            >
+                              Delete
+                            </Button>
+                          </>
+                        )}
+                      </div>
+
+                      {replyingTo === t.id && (
+                        <div className="mt-2">
+                          <textarea
+                            className="form-control mb-2"
+                            rows={2}
+                            placeholder="Write a reply..."
+                            value={replyText}
+                            onChange={e => setReplyText(e.target.value)}
+                          />
+                          <input
+                            type="file"
+                            accept="image/*,video/mp4"
+                            multiple
+                            className="form-control mb-2"
+                            onChange={e => handleMultipleMedia(e, setReplyMedia, setReplyPreviews)}
+                          />
+                          {replyPreviews.length > 0 && (
+                            <div style={{ display: "flex", flexWrap: "wrap" }}>
+                              {replyPreviews.map((url, i) =>
+                                replyMedia[i].type.startsWith("image/") ? (
+                                  <img
+                                    key={i}
+                                    src={url}
+                                    alt=""
+                                    style={previewStyle}
+                                    onClick={() => window.open(url, "_blank")}
+                                  />
+                                ) : (
+                                  <video
+                                    key={i}
+                                    controls
+                                    src={url}
+                                    style={previewStyle}
+                                    onClick={() => window.open(url, "_blank")}
+                                  />
+                                )
+                              )}
+                            </div>
+                          )}
+                          <Button
+                            size="sm"
+                            variant="outline-primary"
+                            onClick={() => submitReply(t.id)}
+                          >
+                            Post Reply
+                          </Button>
+                        </div>
+                      )}
+
+                      {showRepliesMap[t.id] &&
+                        replies.map(r => (
+                          <div
+                            key={r.id}
+                            className="ms-3 mt-3 ps-3 border-start border-3 border-primary"
+                          >
+                            <strong>{r.user_email}</strong>
+                            <p className="mt-1 mb-2">{r.comment}</p>
+                            {r.images?.length > 0 && (
+                              <div style={{ display: "flex", flexWrap: "wrap" }}>
+                                {r.images.map((url, i) =>
+                                  url.endsWith(".mp4") ? (
+                                    <video
+                                      key={i}
+                                      controls
+                                      style={previewStyle}
+                                      onClick={() => window.open(imageBase + url, "_blank")}
+                                    >
+                                      <source src={`${imageBase}${url}`} />
+                                    </video>
+                                  ) : (
+                                    <img
+                                      key={i}
+                                      src={`${imageBase}${url}`}
+                                      alt=""
+                                      style={previewStyle}
+                                      onClick={() => window.open(imageBase + url, "_blank")}
+                                    />
+                                  )
+                                )}
+                              </div>
+                            )}
+                            {(userEmail === r.user_email || guestEmail === r.user_email) && (
+                              <div className="mt-2">
+                                <Button
+                                  variant="link"
+                                  size="sm"
+                                  className="text-warning"
+                                  onClick={() => {
+                                    setEditingId(r.id);
+                                    setEditText(r.comment);
+                                  }}
+                                >
+                                  Edit
+                                </Button>
+                                <Button
+                                  variant="link"
+                                  size="sm"
+                                  className="text-danger"
+                                  onClick={() => handleDelete(r.id)}
+                                >
+                                  Delete
+                                </Button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </Col>
       </Row>
     </Container>

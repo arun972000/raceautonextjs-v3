@@ -287,12 +287,12 @@ const AdminSidebar = async () => {
               <span className="ms-1 d-none d-sm-inline">Insights</span>
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link href="/admin/insights/comment-group" className="nav-link px-0 align-middle">
               <TbReportAnalytics />{" "}
               <span className="ms-1 d-none d-sm-inline">Insights Comments</span>
             </Link>
-          </li>
+          </li> */}
           <li style={{ width: "100%" }}>
             <Link
               href="#eventmenu"
