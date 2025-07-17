@@ -519,6 +519,14 @@ const AdminSidebar = async () => {
                   </span>
                 </Link>
               </li>
+              <li className="w-100">
+                <Link href="/admin/adspace/sidebar" className="nav-link px-0">
+                  <FaAd className="text-primary" />{" "}
+                  <span className="d-none d-sm-inline text-primary">
+                    Sidebar Ads
+                  </span>
+                </Link>
+              </li>
             </ul>
           </li>
           <li>
