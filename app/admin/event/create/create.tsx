@@ -4,12 +4,14 @@
 
 import { useMemo, useState, useCallback } from "react";
 import { Form, Button } from "react-bootstrap";
-import { useDropzone } from "react-dropzone";
+import { useDropzone, FileError, FileRejection } from "react-dropzone";
 import axios from "axios";
 import { FaFileImage } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import Link from "next/link";
+
+const MAX_FILE_SIZE = 300 * 1024; // 300 KB
 
 const EventPost = () => {
   const categories = [
@@ -33,7 +35,7 @@ const EventPost = () => {
   const [endDate, setEndDate] = useState("");
   const [location, setLocation] = useState("");
   const [referenceLink, setReferenceLink] = useState("");
-  const [image_url, setImage_url] = useState<any>([]);
+  const [image_url, setImage_url] = useState<File | null>(null);
   const [preview, setPreview] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [selectedRegion, setSelectedRegion] = useState<number | null>(null);
@@ -41,16 +43,16 @@ const EventPost = () => {
   const baseStyle = {
     flex: 1,
     display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    flexDirection: "column" as const,
+    alignItems: "center" as const,
     padding: "20px",
     borderWidth: 2,
     borderRadius: 2,
     borderColor: "#eeee",
-    borderStyle: "dashed",
+    borderStyle: "dashed" as const,
     backgroundColor: "#fafafa",
     color: "#bdbdbd",
-    outline: "none",
+    outline: "none" as const,
     transition: "border .24s ease-in-out",
   };
 
@@ -58,17 +60,45 @@ const EventPost = () => {
   const acceptStyle = { borderColor: "#00e676" };
   const rejectStyle = { borderColor: "#ff1744" };
 
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setImage_url(acceptedFiles[0]);
-    setIsFileSelected(true);
-    setPreview(URL.createObjectURL(acceptedFiles[0]));
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles: File[], fileRejections: FileRejection[]) => {
+      // Handle rejected files (e.g. too large)
+      if (fileRejections.length > 0) {
+        fileRejections.forEach(({ file, errors }) => {
+          errors.forEach((err: FileError) => {
+            if (err.code === "file-too-large") {
+              toast.warn("File too large. Maximum size is 300 KB.", {
+                position: "top-right",
+                autoClose: 3000,
+              });
+            }
+          });
+        });
+        return;
+      }
 
-  const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
-    useDropzone({
-      accept: { "image/*": [] },
-      onDrop,
-    });
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        setImage_url(file);
+        setIsFileSelected(true);
+        setPreview(URL.createObjectURL(file));
+      }
+    },
+    []
+  );
+
+  const {
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    accept: { "image/*": [] },
+    onDrop,
+    maxSize: MAX_FILE_SIZE,
+    multiple: false,
+  });
 
   const style: any = useMemo(
     () => ({
@@ -102,8 +132,7 @@ const EventPost = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-  
-    // Simple validation
+
     if (
       !title ||
       !summary ||
@@ -121,12 +150,12 @@ const EventPost = () => {
       });
       return;
     }
-  
+
     const formData = new FormData();
     const formattedStart = formatDateWithSuffix(startDate);
     const formattedEnd = formatDateWithSuffix(endDate);
     const eventDateFormatted = `${formattedStart} - ${formattedEnd}`;
-  
+
     formData.append("title", title);
     formData.append("summary", summary);
     formData.append("event_date", eventDateFormatted);
@@ -135,18 +164,18 @@ const EventPost = () => {
     formData.append("image_url", image_url);
     formData.append("category", selectedCategory.toString());
     formData.append("region", selectedRegion.toString());
-  
+
     try {
       await axios.post(
         `${process.env.NEXT_PUBLIC_BACKEND_URL}api/admin/event`,
         formData
       );
-  
+
       toast.success("Event posted!", {
         position: "top-right",
         autoClose: 4000,
       });
-  
+
       // Reset form fields
       setTitle("");
       setSummary("");
@@ -154,7 +183,7 @@ const EventPost = () => {
       setEndDate("");
       setLocation("");
       setReferenceLink("");
-      setImage_url([]);
+      setImage_url(null);
       setPreview("");
       setIsFileSelected(false);
       setSelectedCategory(null);
@@ -164,16 +193,8 @@ const EventPost = () => {
         position: "top-right",
         autoClose: 5000,
       });
-      console.log(err);
+      console.error(err);
     }
-  };
-
-  const handleCategoryChange = (value: number | null) => {
-    setSelectedCategory(value);
-  };
-
-  const handleRegionChange = (value: number | null) => {
-    setSelectedRegion(value);
   };
 
   return (
@@ -184,6 +205,7 @@ const EventPost = () => {
         </Link>
         <div className="row justify-content-center">
           <div className="col-md-6">
+            {/* Title, Summary, Category, Region, Dates, Location, Reference Link */}
             <Form.Group controlId="formTitle" className="mb-3">
               <Form.Label>Title</Form.Label>
               <Form.Control
@@ -194,7 +216,6 @@ const EventPost = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formSummary" className="mb-3">
               <Form.Label>Summary</Form.Label>
               <Form.Control
@@ -205,26 +226,24 @@ const EventPost = () => {
                 required
               />
             </Form.Group>
-            <div className="mb-3">
-              <select
-                className="form-select mb-2"
-                onChange={(e) =>
-                  handleCategoryChange(parseInt(e.target.value) || null)
-                }
-                value={selectedCategory || ""}
-              >
-                <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
-            </div>
             <select
               className="form-select mb-3"
               onChange={(e) =>
-                handleRegionChange(parseInt(e.target.value) || null)
+                setSelectedCategory(parseInt(e.target.value) || null)
+              }
+              value={selectedCategory || ""}
+            >
+              <option value="">Select Category</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            <select
+              className="form-select mb-3"
+              onChange={(e) =>
+                setSelectedRegion(parseInt(e.target.value) || null)
               }
               value={selectedRegion || ""}
             >
@@ -244,7 +263,6 @@ const EventPost = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formEndDate" className="mb-3">
               <Form.Label>End Date</Form.Label>
               <Form.Control
@@ -254,7 +272,6 @@ const EventPost = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formLocation" className="mb-3">
               <Form.Label>Location</Form.Label>
               <Form.Control
@@ -265,7 +282,6 @@ const EventPost = () => {
                 required
               />
             </Form.Group>
-
             <Form.Group controlId="formReferenceLink" className="mb-3">
               <Form.Label>Reference Link</Form.Label>
               <Form.Control
@@ -277,6 +293,7 @@ const EventPost = () => {
               />
             </Form.Group>
 
+            {/* Preview */}
             {preview && (
               <Image
                 src={preview}
@@ -287,17 +304,18 @@ const EventPost = () => {
               />
             )}
 
+            {/* Image Dropzone */}
             <Form.Group controlId="formImage_url" className="mb-3">
-              <Form.Label>Select Image</Form.Label>
+              <Form.Label>Select Image (max 300 KB)</Form.Label>
               <div {...getRootProps({ style })}>
-                <input {...getInputProps()} style={{ display: "none" }} />
+                <input {...getInputProps()} />
                 {isFileSelected ? (
                   <p>Image file selected</p>
                 ) : (
                   <div className="text-center">
                     <FaFileImage className="mb-3" style={{ fontSize: 35 }} />
                     <p>
-                      Drag 'n' drop image files here, or click to select files
+                      Drag 'n' drop image here, or click to select files
                     </p>
                   </div>
                 )}

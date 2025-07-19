@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -41,7 +42,12 @@ const EventSwiper = () => {
       {loading ? (
         <div className="d-flex gap-2">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} height={250} width="100%" style={{ borderRadius: 10 }} />
+            <Skeleton
+              key={i}
+              height={250}
+              width="100%"
+              style={{ borderRadius: 10 }}
+            />
           ))}
         </div>
       ) : (
@@ -52,8 +58,8 @@ const EventSwiper = () => {
               768: { slidesPerView: 3 },
             }}
             spaceBetween={10}
-            loop={true}
-            centeredSlides={true}
+            loop
+            centeredSlides
             pagination={{ clickable: true }}
             autoplay={{
               delay: 2500,
@@ -70,10 +76,24 @@ const EventSwiper = () => {
                     index === activeIndex ? "active-slide" : "grayscale-slide"
                   }`}
                 >
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${src}`}
-                    alt={`slide-${index}`}
-                  />
+                  <div
+                    className="image-container"
+                    style={{
+                      position: "relative",
+                      width: "100%",
+                      height: "250px",
+                      borderRadius: 10,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_S3_BUCKET_URL}${src}`}
+                      alt={`slide-${index}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      style={{ objectFit: "cover" }}
+                    />
+                  </div>
                 </div>
               </SwiperSlide>
             ))}
